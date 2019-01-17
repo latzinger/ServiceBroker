@@ -11,7 +11,7 @@
 	<groupId>de.th-bingen.epro</groupId>
 	<artifactId>servicebroker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Projekt</name>
+	<name>EPRO-Projekt</name>
 	<description>Projekt EPRO WS18/19</description>
 
 	<properties>
