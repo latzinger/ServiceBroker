@@ -9,4 +9,3 @@ public class InvalidApiVersionException extends RuntimeException{
         super(message);
     }
 }
-

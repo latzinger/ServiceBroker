@@ -52,5 +52,4 @@ public abstract class BaseController {
         if(apiVersion.compareTo(API_VERSION) != 0)
             throw new InvalidApiVersionException();
     }
-
 }
