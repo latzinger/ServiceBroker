@@ -1,5 +1,5 @@
 /**
- * Containing services using repositories for database access.
+ * Containing serviceDefinitions using repositories for database access.
  *
  * @since 1.0
  * @author larsatzinger

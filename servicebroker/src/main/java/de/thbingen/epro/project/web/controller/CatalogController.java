@@ -8,24 +8,25 @@
 
 package de.thbingen.epro.project.web.controller;
 
+import de.thbingen.epro.project.web.services.CatalogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping(path = "/v2/catalog")
 public class CatalogController extends BaseController {
-
-    public static final String PATH = "/v2/catalog";
 
     private static final Logger LOG = LoggerFactory.getLogger(CatalogController.class);
 
-    @GetMapping(path = PATH)
+    //TODO implement interface
+    private CatalogService catalogService;
+
     public ResponseEntity<?> getCatalog() {
-        //TODO implement response => replace null with Catalog Object or method returning a Catalog Object
         LOG.debug("GET: /v2/catalog getCatalog()");
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(catalogService.getCatalog());
     }
 
 }

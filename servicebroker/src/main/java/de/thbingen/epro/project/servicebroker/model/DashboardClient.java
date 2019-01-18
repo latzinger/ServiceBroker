@@ -1,5 +1,5 @@
 /**
- * Contains the data necessary to activate the Dashboard SSO feature for specific Service.
+ * Contains the data necessary to activate the Dashboard SSO feature for specific ServiceDefinition.
  *
  * @author larsatzinger
  * @version 1.0
@@ -8,18 +8,18 @@
 
 package de.thbingen.epro.project.servicebroker.model;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@JsonAutoDetect
 public class DashboardClient implements Serializable {
 
     @NonNull
@@ -37,7 +37,7 @@ public class DashboardClient implements Serializable {
     private String redirectUri;
 
     @JsonProperty("metadata")
-    private Object metadata;
+    private Map<String, Object> metadata = new HashMap<>();
 
     @JsonProperty("free")
     private boolean free;

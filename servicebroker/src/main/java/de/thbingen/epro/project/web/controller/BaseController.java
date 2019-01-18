@@ -8,8 +8,8 @@
 
 package de.thbingen.epro.project.web.controller;
 
-import de.thbingen.epro.project.web.exception.ErrorMessage;
 import de.thbingen.epro.project.web.exception.InvalidRequestException;
+import de.thbingen.epro.project.web.response.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
