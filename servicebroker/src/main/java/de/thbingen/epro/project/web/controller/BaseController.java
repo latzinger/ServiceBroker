@@ -9,10 +9,12 @@
 package de.thbingen.epro.project.web.controller;
 
 import de.thbingen.epro.project.web.exception.ErrorMessage;
+import de.thbingen.epro.project.web.exception.InvalidRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -24,11 +26,25 @@ public abstract class BaseController {
     @ResponseBody
     public ResponseEntity<ErrorMessage> handleException(Exception e) {
         LOG.error("[Exception]", e.getMessage());
-        return geErrorMessageResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return getErrorMessageResponseEntity("Exception",e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    private ResponseEntity<ErrorMessage> geErrorMessageResponseEntity(String message, HttpStatus status) {
-        return new ResponseEntity<ErrorMessage>(new ErrorMessage("Exception", message), status);
+    private ResponseEntity<ErrorMessage> getErrorMessageResponseEntity(String error, String message, HttpStatus status) {
+        return new ResponseEntity<ErrorMessage>(new ErrorMessage(error, message), status);
     }
 
+
+
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ErrorMessage> handleInvalidRequestException(InvalidRequestException e){
+        LOG.debug("Invalid request catched", e);
+        ResponseEntity<ErrorMessage> invalidRequest = getErrorMessageResponseEntity("InvalidRequest", e.getMessage(), HttpStatus.BAD_REQUEST);
+        return invalidRequest;
+    }
+
+    public void checkRequestValidity(BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            throw new InvalidRequestException("Request has " + bindingResult.getErrorCount() + " invalid fields");
+        }
+    }
 }
