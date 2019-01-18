@@ -6,7 +6,7 @@
  * @since 1.0
  */
 
-package de.thbingen.epro.project.web.request;
+package de.thbingen.epro.project.web.request.servicebinding;
 
 public class GetServiceInstanceBindingRequest {
 }

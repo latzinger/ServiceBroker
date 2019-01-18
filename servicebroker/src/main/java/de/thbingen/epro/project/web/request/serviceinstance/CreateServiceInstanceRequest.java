@@ -1,4 +1,4 @@
-package de.thbingen.epro.project.web.request;
+package de.thbingen.epro.project.web.request.serviceinstance;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

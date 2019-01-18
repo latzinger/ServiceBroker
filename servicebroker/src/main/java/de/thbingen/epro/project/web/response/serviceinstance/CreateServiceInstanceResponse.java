@@ -1,4 +1,4 @@
-package de.thbingen.epro.project.web.response;
+package de.thbingen.epro.project.web.response.serviceinstance;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

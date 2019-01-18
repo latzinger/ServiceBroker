@@ -8,7 +8,7 @@
 
 package de.thbingen.epro.project.web.controller;
 
-import de.thbingen.epro.project.web.request.BindServiceInstanceRequest;
+import de.thbingen.epro.project.web.request.servicebinding.BindServiceInstanceRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;

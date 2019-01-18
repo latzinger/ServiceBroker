@@ -1,10 +1,9 @@
 package de.thbingen.epro.project.web.controller;
 
-import de.thbingen.epro.project.web.exception.InvalidRequestException;
-import de.thbingen.epro.project.web.request.CreateServiceInstanceRequest;
-import de.thbingen.epro.project.web.request.DeleteServiceInstanceRequest;
-import de.thbingen.epro.project.web.request.UpdateServiceInstanceRequest;
-import de.thbingen.epro.project.web.response.CreateServiceInstanceResponse;
+import de.thbingen.epro.project.web.request.serviceinstance.CreateServiceInstanceRequest;
+import de.thbingen.epro.project.web.request.serviceinstance.DeleteServiceInstanceRequest;
+import de.thbingen.epro.project.web.request.serviceinstance.UpdateServiceInstanceRequest;
+import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
