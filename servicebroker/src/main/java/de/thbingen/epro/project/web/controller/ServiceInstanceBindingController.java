@@ -24,7 +24,7 @@ public class ServiceInstanceBindingController extends BaseController {
             @RequestHeader("X-Broker-API-Version") String apiVersion,
             @PathVariable String instanceId,
             @PathVariable String bindingId) {
-        checkApiVerision(apiVersion);
+        checkApiVersion(apiVersion);
         //TODO implement method
         return null;
     }
@@ -37,7 +37,7 @@ public class ServiceInstanceBindingController extends BaseController {
             @RequestParam(value = "service_id") String serviceId,
             @RequestParam(value = "plan_id") String planId,
             @RequestParam(value = "accepts_incomplete", required = false) boolean acceptIncomplete) {
-        checkApiVerision(apiVersion);
+        checkApiVersion(apiVersion);
         //TODO implement method
         return null;
     }
@@ -49,7 +49,7 @@ public class ServiceInstanceBindingController extends BaseController {
             @PathVariable String bindingId,
             @RequestParam(value = "accepts_incomplete", required = false) boolean acceptIncomplete,
             @Valid @RequestBody BindServiceInstanceRequest request, BindingResult bindingResult) {
-        checkApiVerision(apiVersion);
+        checkApiVersion(apiVersion);
         checkRequestValidity(bindingResult);
         //TODO implement method
         return null;
@@ -63,7 +63,7 @@ public class ServiceInstanceBindingController extends BaseController {
             @RequestParam(value = "service_id", required = false) String serviceId,
             @RequestParam(value = "plan_id") String planId,
             @RequestParam(value = "operation", required = false) String operation) {
-        checkApiVerision(apiVersion);
+        checkApiVersion(apiVersion);
         //TODO implement method
         return null;
     }

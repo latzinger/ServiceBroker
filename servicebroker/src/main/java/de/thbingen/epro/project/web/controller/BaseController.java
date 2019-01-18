@@ -28,7 +28,7 @@ public abstract class BaseController {
     @ResponseBody
     public ResponseEntity<ErrorMessage> handleException(Exception e) {
         LOG.error("[Exception]", e.getMessage());
-        return getErrorMessageResponseEntity("Exception",e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return getErrorMessageResponseEntity("Exception", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private ResponseEntity<ErrorMessage> getErrorMessageResponseEntity(String error, String message, HttpStatus status) {
@@ -36,20 +36,22 @@ public abstract class BaseController {
     }
 
     @ExceptionHandler(InvalidRequestException.class)
-    public ResponseEntity<ErrorMessage> handleInvalidRequestException(InvalidRequestException e){
+    public ResponseEntity<ErrorMessage> handleInvalidRequestException(InvalidRequestException e) {
         LOG.debug("Invalid request catched", e);
         ResponseEntity<ErrorMessage> invalidRequest = getErrorMessageResponseEntity("InvalidRequest", e.getMessage(), HttpStatus.BAD_REQUEST);
         return invalidRequest;
     }
 
-    public void checkRequestValidity(BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+    public void checkRequestValidity(BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             throw new InvalidRequestException("Request has " + bindingResult.getErrorCount() + " invalid fields");
         }
     }
 
-    public void checkApiVerision(String apiVersion){
-        if(apiVersion.compareTo(API_VERSION) != 0)
-            throw new InvalidApiVersionException();
+    public void checkApiVersion(String apiVersion) {
+        if (apiVersion.compareTo(API_VERSION) != 0)
+            throw new InvalidApiVersionException("API version mismatch: Platform is using ["
+                    + "X-Broker-API-Version: " + apiVersion
+                    + "] but needed API-Version " + API_VERSION);
     }
 }
