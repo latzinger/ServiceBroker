@@ -8,6 +8,7 @@
 
 package de.thbingen.epro.project.web.controller;
 
+import de.thbingen.epro.project.web.exception.InvalidApiVersionException;
 import de.thbingen.epro.project.web.exception.InvalidRequestException;
 import de.thbingen.epro.project.web.response.ErrorMessage;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 public abstract class BaseController {
+    private static final String API_VERSION = "2.13";
 
     private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 
@@ -46,5 +48,10 @@ public abstract class BaseController {
         if(bindingResult.hasErrors()){
             throw new InvalidRequestException("Request has " + bindingResult.getErrorCount() + " invalid fields");
         }
+    }
+
+    public void checkApiVerision(String apiVersion){
+        if(apiVersion.compareTo(API_VERSION) != 0)
+            throw new InvalidApiVersionException();
     }
 }
