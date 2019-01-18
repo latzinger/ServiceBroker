@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/v2/catalog")
+@RequestMapping("/v2/catalog")
 public class CatalogController extends BaseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CatalogController.class);

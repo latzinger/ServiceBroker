@@ -8,29 +8,63 @@
 
 package de.thbingen.epro.project.web.controller;
 
+import de.thbingen.epro.project.web.request.BindServiceInstanceRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
-public class ServiceInstanceBindingController {
+@RequestMapping("/v2/service_instances")
+public class ServiceInstanceBindingController extends BaseController {
 
-    @GetMapping("/v2/service_instances/{instanceId}/service_bindings/{bindingId}")
-    public ResponseEntity<?> getServiceInstanceBinding(@PathVariable String instanceId, @PathVariable String bindingId) {
+    @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}")
+    public ResponseEntity<?> getServiceInstanceBinding(
+            @RequestHeader("X-Broker-API-Version") String apiVersion,
+            @PathVariable String instanceId,
+            @PathVariable String bindingId) {
+        checkApiVerision(apiVersion);
+        //TODO implement method
         return null;
     }
 
-    @DeleteMapping("/v2/service_instances/{instanceId}/service_bindings/{bindingId}")
-    public ResponseEntity<?> deleteServiceInstanceBinding(@PathVariable String instanceId, @PathVariable String bindingId) {
+    @DeleteMapping(path = "/{instanceId}/service_bindings/{bindingId}")
+    public ResponseEntity<?> deleteServiceInstanceBinding(
+            @RequestHeader("X-Broker-API-Version") String apiVersion,
+            @PathVariable String instanceId,
+            @PathVariable String bindingId,
+            @RequestParam(value = "service_id") String serviceId,
+            @RequestParam(value = "plan_id") String planId,
+            @RequestParam(value = "accepts_incomplete", required = false) boolean acceptIncomplete) {
+        checkApiVerision(apiVersion);
+        //TODO implement method
         return null;
     }
 
-    @PutMapping("/v2/service_instances/{instanceId}/service_bindings/{bindingId}")
-    public ResponseEntity<?> bindServiceInstance(@PathVariable String instanceId, @PathVariable String bindingId) {
+    @PutMapping(path = "/{instanceId}/service_bindings/{bindingId}")
+    public ResponseEntity<?> bindServiceInstance(
+            @RequestHeader("X-Broker-API-Version") String apiVersion,
+            @PathVariable String instanceId,
+            @PathVariable String bindingId,
+            @RequestParam(value = "accepts_incomplete", required = false) boolean acceptIncomplete,
+            @Valid @RequestBody BindServiceInstanceRequest request, BindingResult bindingResult) {
+        checkApiVerision(apiVersion);
+        checkRequestValidity(bindingResult);
+        //TODO implement method
         return null;
     }
 
-    @GetMapping("/v2/service_instances/{instanceId}/service_bindings/{bindingId}/last_operation")
-    public ResponseEntity<?> lastOperation(@PathVariable String instanceId, @PathVariable String bindingId) {
+    @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}/last_operation")
+    public ResponseEntity<?> lastOperation(
+            @RequestHeader("X-Broker-API-Version") String apiVersion,
+            @PathVariable String instanceId,
+            @PathVariable String bindingId,
+            @RequestParam(value = "service_id", required = false) String serviceId,
+            @RequestParam(value = "plan_id") String planId,
+            @RequestParam(value = "operation", required = false) String operation) {
+        checkApiVerision(apiVersion);
+        //TODO implement method
         return null;
     }
 
