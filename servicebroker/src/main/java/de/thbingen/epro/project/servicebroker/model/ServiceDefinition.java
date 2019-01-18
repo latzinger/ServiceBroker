@@ -1,5 +1,5 @@
 /**
- * Representing a Service Offering Object.
+ * Representing a ServiceDefinition Offering Object.
  *
  * @since 1.0
  * @author larsatzinger
@@ -9,21 +9,20 @@
 package de.thbingen.epro.project.servicebroker.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@JsonAutoDetect
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Service implements Serializable {
+public class ServiceDefinition implements Serializable {
 
     @NotEmpty
     @NonNull
@@ -58,7 +57,7 @@ public class Service implements Serializable {
     private boolean bindingsRetrievable;
 
     @JsonProperty("metadata")
-    private Object metadata;
+    private Map<String, Object> metadata = new HashMap<>();
 
     @JsonProperty("dashboard_client")
     private DashboardClient dashboardClient;

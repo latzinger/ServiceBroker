@@ -1,9 +1,9 @@
 /**
  * Web-Security Configuration.
  *
- * @since 1.0
  * @author larsatzinger
  * @version 1.0
+ * @since 1.0
  */
 
 package de.thbingen.epro.project.config;
@@ -26,10 +26,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //TODO add antMatchers and fullyAuthenticated
         http
                 .authorizeRequests().anyRequest()
-                .permitAll()
+                .fullyAuthenticated()
                 .and()
                 .httpBasic()
                 .and()

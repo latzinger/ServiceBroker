@@ -8,8 +8,6 @@
 
 package de.thbingen.epro.project.servicebroker.model;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -20,12 +18,10 @@ import java.util.List;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@JsonAutoDetect
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Catalog implements Serializable {
 
     @NonNull
-    @JsonProperty("services")
-    private List<Service> services = new ArrayList<>();
+    @JsonProperty("serviceDefinitions")
+    private List<ServiceDefinition> serviceDefinitions = new ArrayList<>();
 
 }

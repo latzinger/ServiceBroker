@@ -1,5 +1,5 @@
 /**
- * Representing a Service Plan for a Service Offering Object.
+ * Representing a ServiceDefinition Plan for a ServiceDefinition Offering Object.
  *
  * @since 1.0
  * @author larsatzinger
@@ -8,7 +8,6 @@
 
 package de.thbingen.epro.project.servicebroker.model;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -19,7 +18,6 @@ import java.io.Serializable;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@JsonAutoDetect
 public class Plan implements Serializable {
 
     @NonNull

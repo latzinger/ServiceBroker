@@ -8,7 +8,7 @@
 
 package de.thbingen.epro.project.web.controller;
 
-import de.thbingen.epro.project.web.exception.ErrorMessage;
+import de.thbingen.epro.project.web.response.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,10 +24,10 @@ public abstract class BaseController {
     @ResponseBody
     public ResponseEntity<ErrorMessage> handleException(Exception e) {
         LOG.error("[Exception]", e.getMessage());
-        return geErrorMessageResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return getErrorMessageResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    private ResponseEntity<ErrorMessage> geErrorMessageResponseEntity(String message, HttpStatus status) {
+    private ResponseEntity<ErrorMessage> getErrorMessageResponseEntity(String message, HttpStatus status) {
         return new ResponseEntity<ErrorMessage>(new ErrorMessage("Exception", message), status);
     }
 
