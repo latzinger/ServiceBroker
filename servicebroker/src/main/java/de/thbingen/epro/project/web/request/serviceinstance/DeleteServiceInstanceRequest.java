@@ -1,4 +1,6 @@
 package de.thbingen.epro.project.web.request.serviceinstance;
 
-public class DeleteServiceInstanceRequest {
+import de.thbingen.epro.project.web.request.OsbRequest;
+
+public class DeleteServiceInstanceRequest extends OsbRequest {
 }

@@ -1,6 +1,7 @@
 package de.thbingen.epro.project.web.request.serviceinstance;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import de.thbingen.epro.project.web.request.OsbRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
@@ -14,7 +15,7 @@ import java.util.Map;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Data
-public class CreateServiceInstanceRequest {
+public class CreateServiceInstanceRequest extends OsbRequest {
     @NotNull
     @NotEmpty
     @NonNull

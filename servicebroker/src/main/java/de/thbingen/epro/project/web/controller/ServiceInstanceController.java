@@ -4,6 +4,7 @@ import de.thbingen.epro.project.web.request.serviceinstance.CreateServiceInstanc
 import de.thbingen.epro.project.web.request.serviceinstance.DeleteServiceInstanceRequest;
 import de.thbingen.epro.project.web.request.serviceinstance.UpdateServiceInstanceRequest;
 import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -17,41 +18,57 @@ public class ServiceInstanceController extends BaseController {
 
     @GetMapping(value = "/{instanceId}")
     public ResponseEntity<?> fetchServiceInstance(
-            @RequestHeader("X-Broker-API-Version") String apiVersion,
+            @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId) {
+
+
         return null;
     }
 
     @PutMapping(value = "/{instanceId}")
     public ResponseEntity<CreateServiceInstanceResponse> createServiceInstance(
+            @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId,
             @RequestParam(value = "accepts_incomplete", required = false) boolean acceptIncomplete,
             @Valid @RequestBody CreateServiceInstanceRequest request,
             BindingResult bindingResult) {
-        checkRequestValidity(bindingResult);
+        checkAndComplete(httpHeaders, request, bindingResult);
 
         return null;
     }
 
     @DeleteMapping(value = "/{instanceId}")
-    public ResponseEntity<?> deleteServiceInstance(@PathVariable("instanceId") String instanceId, @Valid @RequestBody DeleteServiceInstanceRequest request, BindingResult bindingResult) {
+    public ResponseEntity<?> deleteServiceInstance(
+            @RequestHeader HttpHeaders httpHeaders,
+            @PathVariable("instanceId") String instanceId,
+            @Valid @RequestBody DeleteServiceInstanceRequest request,
+            BindingResult bindingResult) {
+        checkAndComplete(httpHeaders, request, bindingResult);
 
         return null;
     }
 
     @PatchMapping(value = "/{instanceId}")
-    public ResponseEntity<?> updateServiceInstance(@PathVariable("instanceId") String instanceId, @Valid @RequestBody UpdateServiceInstanceRequest request, BindingResult bindingResult) {
+    public ResponseEntity<?> updateServiceInstance(
+            @RequestHeader HttpHeaders httpHeaders,
+            @PathVariable("instanceId") String instanceId,
+            @Valid @RequestBody UpdateServiceInstanceRequest request,
+            BindingResult bindingResult) {
+        checkAndComplete(httpHeaders, request, bindingResult);
+
 
         return null;
     }
 
     @GetMapping(value = "/{instanceId}/last_operation")
     public ResponseEntity<?> lastOperation(
+            @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instance_id") String instanceId,
             @RequestParam(value = "service_id", required = false) String serviceId,
             @RequestParam(value = "plan_id", required = false) String planId,
-            @RequestParam(value = "operation", required = false) String operation
-            ) {
+            @RequestParam(value = "operation", required = false) String operation) {
+        checkApiVersion(httpHeaders);
+
         return null;
     }
 }
