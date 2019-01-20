@@ -13,8 +13,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -33,19 +31,5 @@ public class DashboardClient implements Serializable {
     @NotEmpty
     @JsonProperty("redirect_uri")
     private String redirectUri;
-
-    @JsonProperty("metadata")
-    private Map<String, Object> metadata = new HashMap<>();
-
-    @JsonProperty("free")
-    private boolean free;
-
-    @JsonProperty("bindable")
-    private boolean bindable;
-
-    @JsonProperty("plan_updateable")
-    private boolean planUpdateable;
-
-    //TODO implement schemas
 
 }
