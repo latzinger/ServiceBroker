@@ -6,7 +6,7 @@
  * @since 1.0
  */
 
-package de.thbingen.epro.project.web.request.servicebinding;
+package de.thbingen.epro.project.web.request.serviceinstancebinding;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.thbingen.epro.project.servicebroker.model.BindResource;

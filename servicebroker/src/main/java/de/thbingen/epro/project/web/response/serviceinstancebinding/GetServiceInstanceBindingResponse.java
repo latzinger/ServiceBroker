@@ -1,4 +1,4 @@
-package de.thbingen.epro.project.web.response.servicebinding;
+package de.thbingen.epro.project.web.response.serviceinstancebinding;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.thbingen.epro.project.servicebroker.model.VolumeMount;
@@ -16,7 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetServiceBindingResponse {
+public class GetServiceInstanceBindingResponse {
 
     @JsonProperty("credentials")
     private Map<String, String> credentials = new HashMap<>();

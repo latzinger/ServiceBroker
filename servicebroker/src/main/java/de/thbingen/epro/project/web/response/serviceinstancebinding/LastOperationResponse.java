@@ -1,4 +1,4 @@
-package de.thbingen.epro.project.web.response.servicebinding;
+package de.thbingen.epro.project.web.response.serviceinstancebinding;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

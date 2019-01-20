@@ -6,7 +6,7 @@
  * @since 1.0
  */
 
-package de.thbingen.epro.project.web.response.servicebinding;
+package de.thbingen.epro.project.web.response.serviceinstancebinding;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.thbingen.epro.project.servicebroker.model.VolumeMount;
