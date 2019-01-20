@@ -46,7 +46,6 @@ public class ServiceDefinition implements Serializable {
     private ArrayList<String> requires = new ArrayList<>();
 
     @NotEmpty
-    @NonNull
     @JsonProperty("bindable")
     private boolean bindable;
 

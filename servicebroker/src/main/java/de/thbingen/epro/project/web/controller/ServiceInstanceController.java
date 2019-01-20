@@ -68,7 +68,6 @@ public class ServiceInstanceController extends BaseController {
             @RequestParam(value = "plan_id", required = false) String planId,
             @RequestParam(value = "operation", required = false) String operation) {
         checkApiVersion(httpHeaders);
-
         return null;
     }
 }

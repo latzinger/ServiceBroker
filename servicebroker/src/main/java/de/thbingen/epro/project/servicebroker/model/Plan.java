@@ -17,7 +17,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class Plan implements Serializable {
 
     @NonNull
