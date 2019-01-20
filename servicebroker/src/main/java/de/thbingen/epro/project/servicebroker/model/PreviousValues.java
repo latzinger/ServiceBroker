@@ -1,12 +1,13 @@
 /**
- * Response for retrieving a Service Instance.
+ * Representing previous values.
  *
  * @author larsatzinger
  * @version 1.0
  * @since 1.0
  */
 
-package de.thbingen.epro.project.web.response.serviceinstance;
+
+package de.thbingen.epro.project.servicebroker.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -14,14 +15,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GetServiceInstanceResponse {
+public class PreviousValues implements Serializable {
 
     @JsonProperty("service_id")
     private String serviceId;
@@ -29,10 +29,10 @@ public class GetServiceInstanceResponse {
     @JsonProperty("plan_id")
     private String planId;
 
-    @JsonProperty("dashboard_url")
-    private String dashboardUrl;
+    @JsonProperty("organization_id")
+    private String organizationId;
 
-    @JsonProperty("parameters")
-    private Map<String, String> parameters = new HashMap<>();
+    @JsonProperty("space_id")
+    private String spaceId;
 
 }

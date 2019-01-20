@@ -13,10 +13,11 @@ import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Data
+@AllArgsConstructor
 public class Plan implements Serializable {
 
     @NonNull
@@ -33,5 +34,20 @@ public class Plan implements Serializable {
     @NotEmpty
     @JsonProperty("description")
     private String description;
+
+    @JsonProperty("metadata")
+    private Map<String, String> metadata = new HashMap<>();
+
+    @JsonProperty("free")
+    private boolean free;
+
+    @JsonProperty("bindable")
+    private boolean bindable;
+
+    @JsonProperty("plan_updateable")
+    private boolean planUpdateable;
+
+    @JsonProperty("schemas")
+    private Schemas schemas;
 
 }

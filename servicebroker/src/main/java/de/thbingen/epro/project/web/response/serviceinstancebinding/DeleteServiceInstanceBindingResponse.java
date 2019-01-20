@@ -1,12 +1,12 @@
 /**
- * Response for deleting a Service Instance.
+ * Rest controller for service binding request.
  *
  * @author larsatzinger
  * @version 1.0
  * @since 1.0
  */
 
-package de.thbingen.epro.project.web.response.serviceinstance;
+package de.thbingen.epro.project.web.response.serviceinstancebinding;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -15,10 +15,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class DeleteServiceInstanceResponse {
+public class DeleteServiceInstanceBindingResponse {
 
     @JsonProperty("operation")
     private String operation;

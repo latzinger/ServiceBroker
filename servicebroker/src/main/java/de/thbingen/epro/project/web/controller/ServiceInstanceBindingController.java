@@ -7,8 +7,8 @@
  */
 
 package de.thbingen.epro.project.web.controller;
-
-import de.thbingen.epro.project.web.request.servicebinding.BindServiceInstanceRequest;
+import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
+import de.thbingen.epro.project.web.services.ServiceInstanceBindingService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,6 +19,9 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/v2/service_instances")
 public class ServiceInstanceBindingController extends BaseController {
+
+    //TODO implement interface
+    private ServiceInstanceBindingService serviceInstanceBindingService;
 
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> getServiceInstanceBinding(
@@ -44,14 +47,14 @@ public class ServiceInstanceBindingController extends BaseController {
     }
 
     @PutMapping(path = "/{instanceId}/service_bindings/{bindingId}")
-    public ResponseEntity<?> bindServiceInstance(
+    public ResponseEntity<?> createServiceInstanceBinding(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId,
             @RequestParam(value = "accepts_incomplete", required = false) boolean acceptIncomplete,
-            @Valid @RequestBody BindServiceInstanceRequest request, BindingResult bindingResult) {
-        checkApiVersion(httpHeaders);
-        checkRequestValidity(bindingResult);
+            @Valid @RequestBody CreateServiceInstanceBindingRequest request,
+            BindingResult bindingResult) {
+        checkAndComplete(httpHeaders, request, bindingResult);
         //TODO implement method
         return null;
     }

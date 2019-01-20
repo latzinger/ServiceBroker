@@ -8,5 +8,5 @@ import java.util.Map;
 @Data
 public class OsbRequest {
     @JsonIgnore
-    private Map<String, String> headers;
+    private Map<String, String> httpHeaders;
 }

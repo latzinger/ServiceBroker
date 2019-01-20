@@ -1,23 +1,13 @@
-/**
- * Response for last operation.
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
-package de.thbingen.epro.project.web.response.serviceinstance;
+package de.thbingen.epro.project.web.response.serviceinstancebinding;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class LastOperationResponse {
 

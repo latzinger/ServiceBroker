@@ -12,6 +12,7 @@ import de.thbingen.epro.project.web.exception.InvalidApiVersionException;
 import de.thbingen.epro.project.web.exception.InvalidRequestException;
 import de.thbingen.epro.project.web.request.OsbRequest;
 import de.thbingen.epro.project.web.response.ErrorMessage;
+import io.netty.handler.codec.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -70,11 +71,11 @@ public abstract class BaseController {
         }
     }
 
-    public void checkAndComplete(HttpHeaders headers, OsbRequest request, BindingResult bindingResult) {
-        checkApiVersion(headers);
+    public void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request, BindingResult bindingResult) {
+        checkApiVersion(httpHeaders);
         checkRequestValidity(bindingResult);
 
-        request.setHeaders(headers.toSingleValueMap());
+        request.setHttpHeaders(httpHeaders.toSingleValueMap());
 
         LOG.debug("checkAndComplete successfully");
     }

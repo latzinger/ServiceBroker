@@ -1,9 +1,9 @@
 package de.thbingen.epro.project.web.controller;
 
 import de.thbingen.epro.project.web.request.serviceinstance.CreateServiceInstanceRequest;
-import de.thbingen.epro.project.web.request.serviceinstance.DeleteServiceInstanceRequest;
 import de.thbingen.epro.project.web.request.serviceinstance.UpdateServiceInstanceRequest;
 import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
+import de.thbingen.epro.project.web.services.ServiceInstanceService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,13 +15,15 @@ import javax.validation.Valid;
 @RequestMapping("/v2/service_instance")
 public class ServiceInstanceController extends BaseController {
 
+    //TODO implement interface
+    private ServiceInstanceService serviceInstanceService;
 
     @GetMapping(value = "/{instanceId}")
     public ResponseEntity<?> fetchServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId) {
-
-
+        checkApiVersion(httpHeaders);
+        //TODO implement method
         return null;
     }
 
@@ -33,18 +35,16 @@ public class ServiceInstanceController extends BaseController {
             @Valid @RequestBody CreateServiceInstanceRequest request,
             BindingResult bindingResult) {
         checkAndComplete(httpHeaders, request, bindingResult);
-
+        //TODO implement method
         return null;
     }
 
     @DeleteMapping(value = "/{instanceId}")
     public ResponseEntity<?> deleteServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
-            @PathVariable("instanceId") String instanceId,
-            @Valid @RequestBody DeleteServiceInstanceRequest request,
-            BindingResult bindingResult) {
-        checkAndComplete(httpHeaders, request, bindingResult);
-
+            @PathVariable("instanceId") String instanceId) {
+        checkApiVersion(httpHeaders);
+        //TODO implement method
         return null;
     }
 
@@ -55,8 +55,7 @@ public class ServiceInstanceController extends BaseController {
             @Valid @RequestBody UpdateServiceInstanceRequest request,
             BindingResult bindingResult) {
         checkAndComplete(httpHeaders, request, bindingResult);
-
-
+        //TODO implement method
         return null;
     }
 
@@ -68,6 +67,7 @@ public class ServiceInstanceController extends BaseController {
             @RequestParam(value = "plan_id", required = false) String planId,
             @RequestParam(value = "operation", required = false) String operation) {
         checkApiVersion(httpHeaders);
+        //TODO implement method
         return null;
     }
 }

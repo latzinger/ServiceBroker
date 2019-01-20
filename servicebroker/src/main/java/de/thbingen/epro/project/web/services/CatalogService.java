@@ -15,6 +15,8 @@ public interface CatalogService {
 
     Catalog getCatalog();
 
+    Iterable<ServiceDefinition> getServiceDefinitions();
+
     ServiceDefinition getServiceDefinition(String id);
 
 }
