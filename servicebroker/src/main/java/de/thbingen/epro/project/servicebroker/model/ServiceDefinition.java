@@ -1,14 +1,20 @@
 /**
  * Representing a ServiceDefinition Offering Object.
  *
- * @since 1.0
  * @author larsatzinger
  * @version 1.0
+ * @since 1.0
+ */
+/**
+ * Representing a Service Definition.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
  */
 
 package de.thbingen.epro.project.servicebroker.model;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 

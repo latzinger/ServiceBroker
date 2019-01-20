@@ -1,3 +1,11 @@
+/**
+ * Representing a Volume Mount.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
+
 package de.thbingen.epro.project.servicebroker.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,10 +14,11 @@ import lombok.Data;
 import lombok.NonNull;
 
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
-public class VolumeMount {
+public class VolumeMount implements Serializable{
 
     @NonNull
     @NotEmpty

@@ -1,3 +1,12 @@
+/**
+ * Representing previous values.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
+
+
 package de.thbingen.epro.project.servicebroker.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,11 +15,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PreviousValues {
+public class PreviousValues implements Serializable {
 
     @JsonProperty("service_id")
     private String serviceId;
