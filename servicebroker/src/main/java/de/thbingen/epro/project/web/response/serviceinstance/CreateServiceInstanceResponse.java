@@ -1,5 +1,6 @@
 package de.thbingen.epro.project.web.response.serviceinstance;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +13,12 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @Builder
 public class CreateServiceInstanceResponse {
+
     @NotEmpty
+    @JsonProperty("dashboard_url")
     private String dashboardUrl;
 
     @NotEmpty
+    @JsonProperty("operation")
     private String operation;
 }

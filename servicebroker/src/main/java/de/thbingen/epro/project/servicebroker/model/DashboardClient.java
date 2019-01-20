@@ -16,9 +16,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Data
 @AllArgsConstructor
 public class DashboardClient implements Serializable {
 
@@ -48,8 +46,6 @@ public class DashboardClient implements Serializable {
     @JsonProperty("plan_updateable")
     private boolean planUpdateable;
 
-    /*
-     * SCHEMAS NOT IMPLEMENTED
-     */
+    //TODO implement schemas
 
 }

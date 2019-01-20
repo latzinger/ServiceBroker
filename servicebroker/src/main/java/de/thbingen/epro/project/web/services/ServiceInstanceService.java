@@ -10,7 +10,10 @@ import de.thbingen.epro.project.web.response.serviceinstance.GetServiceInstanceR
 
 public interface ServiceInstanceService {
     CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request);
+
     DeleteServiceInstanceResponse deleteServiceInstance(DeleteServiceInstanceRequest request);
+
     UpdateServiceInstanceRequest updateServiceInstance(UpdateServiceInstanceRequest request);
+
     GetServiceInstanceResponse getServiceInstance(GetServiceInstanceRequest request);
 }

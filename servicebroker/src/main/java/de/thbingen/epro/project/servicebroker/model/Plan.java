@@ -14,9 +14,7 @@ import lombok.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Data
 @AllArgsConstructor
 public class Plan implements Serializable {
 

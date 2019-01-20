@@ -1,0 +1,24 @@
+package de.thbingen.epro.project.servicebroker.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NonNull;
+
+import javax.validation.constraints.NotEmpty;
+import java.util.HashMap;
+import java.util.Map;
+
+@Data
+@AllArgsConstructor
+public class Device {
+
+    @NonNull
+    @NotEmpty
+    @JsonProperty("volume_id")
+    private String volume_id;
+
+    @JsonProperty("mount_config")
+    private Map<String, String> mountConfig = new HashMap<>();
+
+}

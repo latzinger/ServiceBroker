@@ -8,7 +8,8 @@
 
 package de.thbingen.epro.project.web.controller;
 
-import de.thbingen.epro.project.web.request.servicebinding.BindServiceInstanceRequest;
+import de.thbingen.epro.project.web.request.servicebinding.CreateServiceInstanceBindingRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,49 +22,49 @@ public class ServiceInstanceBindingController extends BaseController {
 
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> getServiceInstanceBinding(
-            @RequestHeader("X-Broker-API-Version") String apiVersion,
+            @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId) {
-        checkApiVersion(apiVersion);
+        checkApiVersion(httpHeaders);
         //TODO implement method
         return null;
     }
 
     @DeleteMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> deleteServiceInstanceBinding(
-            @RequestHeader("X-Broker-API-Version") String apiVersion,
+            @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId,
             @RequestParam(value = "service_id") String serviceId,
             @RequestParam(value = "plan_id") String planId,
             @RequestParam(value = "accepts_incomplete", required = false) boolean acceptIncomplete) {
-        checkApiVersion(apiVersion);
+        checkApiVersion(httpHeaders);
         //TODO implement method
         return null;
     }
 
     @PutMapping(path = "/{instanceId}/service_bindings/{bindingId}")
-    public ResponseEntity<?> bindServiceInstance(
-            @RequestHeader("X-Broker-API-Version") String apiVersion,
+    public ResponseEntity<?> createServiceInstanceBinding(
+            @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId,
             @RequestParam(value = "accepts_incomplete", required = false) boolean acceptIncomplete,
-            @Valid @RequestBody BindServiceInstanceRequest request, BindingResult bindingResult) {
-        checkApiVersion(apiVersion);
-        checkRequestValidity(bindingResult);
+            @Valid @RequestBody CreateServiceInstanceBindingRequest request,
+            BindingResult bindingResult) {
+        checkAndComplete(httpHeaders, request, bindingResult);
         //TODO implement method
         return null;
     }
 
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}/last_operation")
     public ResponseEntity<?> lastOperation(
-            @RequestHeader("X-Broker-API-Version") String apiVersion,
+            @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId,
             @RequestParam(value = "service_id", required = false) String serviceId,
             @RequestParam(value = "plan_id") String planId,
             @RequestParam(value = "operation", required = false) String operation) {
-        checkApiVersion(apiVersion);
+        checkApiVersion(httpHeaders);
         //TODO implement method
         return null;
     }

@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Data
 @AllArgsConstructor
 public class ServiceDefinition implements Serializable {
 

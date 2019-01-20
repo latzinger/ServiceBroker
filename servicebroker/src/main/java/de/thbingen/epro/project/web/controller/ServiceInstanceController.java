@@ -20,8 +20,7 @@ public class ServiceInstanceController extends BaseController {
     public ResponseEntity<?> fetchServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId) {
-
-
+        checkApiVersion(httpHeaders);
         return null;
     }
 

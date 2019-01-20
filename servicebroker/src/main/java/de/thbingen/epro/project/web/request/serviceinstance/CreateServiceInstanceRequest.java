@@ -16,6 +16,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Data
 public class CreateServiceInstanceRequest extends OsbRequest {
+
     @NotNull
     @NotEmpty
     @NonNull
@@ -40,6 +41,6 @@ public class CreateServiceInstanceRequest extends OsbRequest {
     @JsonProperty("space_guid")
     private String spaceGuid;
 
-
+    @JsonProperty("parameters")
     private Map<String, String> parameters;
 }

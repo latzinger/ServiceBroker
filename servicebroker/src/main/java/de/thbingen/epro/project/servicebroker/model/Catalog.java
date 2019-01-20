@@ -15,12 +15,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Catalog implements Serializable {
 
-    @NonNull
     @JsonProperty("serviceDefinitions")
     private List<ServiceDefinition> serviceDefinitions = new ArrayList<>();
 
