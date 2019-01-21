@@ -16,6 +16,11 @@ spring:
     database: postgresql
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
 
 # Server configuration
 server:
