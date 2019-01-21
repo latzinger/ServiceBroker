@@ -21,7 +21,6 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class PreviousValues implements Serializable {
 
     @JsonProperty("service_id")
