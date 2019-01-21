@@ -9,8 +9,8 @@
 
 package de.thbingen.epro.project.web.services;
 
-import de.thbingen.epro.project.servicebroker.model.Catalog;
-import de.thbingen.epro.project.servicebroker.model.ServiceDefinition;
+import de.thbingen.epro.project.web.model.Catalog;
+import de.thbingen.epro.project.web.model.ServiceDefinition;
 import org.springframework.stereotype.Service;
 
 @Service

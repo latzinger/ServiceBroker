@@ -10,7 +10,7 @@
 package de.thbingen.epro.project.web.request.serviceinstancebinding;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.thbingen.epro.project.servicebroker.model.BindResource;
+import de.thbingen.epro.project.web.model.BindResource;
 import de.thbingen.epro.project.web.request.OsbRequest;
 import lombok.*;
 

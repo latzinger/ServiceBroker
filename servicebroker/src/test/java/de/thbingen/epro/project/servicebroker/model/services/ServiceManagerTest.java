@@ -9,6 +9,7 @@
 
 package de.thbingen.epro.project.servicebroker.model.services;
 
+import de.thbingen.epro.project.servicebroker.services.ServiceManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

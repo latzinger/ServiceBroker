@@ -9,7 +9,7 @@
 
 package de.thbingen.epro.project.web.services;
 
-import de.thbingen.epro.project.servicebroker.model.ServiceDefinition;
+import de.thbingen.epro.project.web.model.ServiceDefinition;
 
 public interface Service {
 

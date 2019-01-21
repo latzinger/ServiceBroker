@@ -7,7 +7,7 @@
  * @since 1.0
  */
 
-package de.thbingen.epro.project.servicebroker.model;
+package de.thbingen.epro.project.web.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -15,15 +15,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InputParametersSchema implements Serializable {
+public class ServiceInstanceSchema implements Serializable {
 
-    @JsonProperty("parameters")
-    private Map<String, Object> parameters = new HashMap<>();
+    @JsonProperty("create")
+    private InputParametersSchema create;
+
+    @JsonProperty("update")
+    private InputParametersSchema update;
 
 }

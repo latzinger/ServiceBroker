@@ -8,7 +8,7 @@
  */
 
 
-package de.thbingen.epro.project.servicebroker.model;
+package de.thbingen.epro.project.web.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

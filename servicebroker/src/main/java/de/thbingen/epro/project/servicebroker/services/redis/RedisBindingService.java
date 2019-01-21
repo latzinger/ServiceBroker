@@ -7,7 +7,7 @@
  * @since 1.0
  */
 
-package de.thbingen.epro.project.servicebroker.model.services.redis;
+package de.thbingen.epro.project.servicebroker.services.redis;
 
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;

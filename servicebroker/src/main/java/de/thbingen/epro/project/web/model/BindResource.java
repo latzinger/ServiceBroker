@@ -7,7 +7,7 @@
  * @since 1.0
  */
 
-package de.thbingen.epro.project.servicebroker.model;
+package de.thbingen.epro.project.web.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -19,9 +19,12 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceBindingSchema implements Serializable {
+public class BindResource implements Serializable{
 
-    @JsonProperty("create")
-    private InputParametersSchema create;
+    @JsonProperty("app_guid")
+    private String appGuid;
+
+    @JsonProperty("route")
+    private String route;
 
 }
