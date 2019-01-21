@@ -1,7 +1,8 @@
 /**
- * Contains the data necessary to activate the Dashboard SSO feature for specific ServiceDefinition.
+ * TODO add description
  *
  * @author larsatzinger
+ * @author jonashueg
  * @version 1.0
  * @since 1.0
  */

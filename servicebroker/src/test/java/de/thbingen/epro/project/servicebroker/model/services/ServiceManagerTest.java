@@ -1,3 +1,12 @@
+/**
+ * TODO add description
+ *
+ * @author larsatzinger
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
+
 package de.thbingen.epro.project.servicebroker.model.services;
 
 import org.junit.Test;
@@ -23,5 +32,6 @@ public class ServiceManagerTest {
 
     @Test
     public void getService() {
+        //TODO implement test
     }
 }

@@ -1,14 +1,8 @@
 /**
- * Representing a ServiceDefinition Offering Object.
+ * TODO add description
  *
  * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-/**
- * Representing a Service Definition.
- *
- * @author larsatzinger
+ * @author jonashueg
  * @version 1.0
  * @since 1.0
  */
@@ -50,6 +44,7 @@ public class ServiceDefinition implements Serializable {
     private ArrayList<String> requires = new ArrayList<>();
 
     @NotEmpty
+    @NonNull
     @JsonProperty("bindable")
     private boolean bindable;
 
