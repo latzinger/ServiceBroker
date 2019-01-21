@@ -10,9 +10,7 @@
 package de.thbingen.epro.project.servicebroker.model.services;
 
 import de.thbingen.epro.project.web.services.Service;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;

@@ -11,13 +11,21 @@ package de.thbingen.epro.project.web.services;
 
 import de.thbingen.epro.project.servicebroker.model.Catalog;
 import de.thbingen.epro.project.servicebroker.model.ServiceDefinition;
+import org.springframework.stereotype.Service;
 
-public interface CatalogService {
+@Service
+public class CatalogService {
 
-    Catalog getCatalog();
+    public Catalog getCatalog() {
+        return null;
+    }
 
-    Iterable<ServiceDefinition> getServiceDefinitions();
+    public Iterable<ServiceDefinition> getServiceDefinitions() {
+        return null;
+    }
 
-    ServiceDefinition getServiceDefinition(String id);
+    public ServiceDefinition getServiceDefinition(String id) {
+        return null;
+    }
 
 }

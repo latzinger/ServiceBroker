@@ -20,12 +20,16 @@ public class RedisService implements de.thbingen.epro.project.web.services.Servi
     public static final String SERVICE_ID = "";
 
     //TODO implement RedisInstanceService
-    @Autowired
     private RedisInstanceService redisInstanceService;
 
     //TODO implement RedisBindingService
-    @Autowired
     private RedisBindingService redisBindingService;
+
+    @Autowired
+    public RedisService(RedisInstanceService instanceService, RedisBindingService bindingService){
+        redisInstanceService = instanceService;
+        redisBindingService = bindingService;
+    }
 
     //TODO implement method
     @Override
