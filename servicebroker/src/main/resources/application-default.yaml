@@ -6,8 +6,4 @@ database:
     base: postgres
 
     user: postgres
-    password: postgres
-
-  mongodb:
-    host: localhost
-    database: test
+    password:

@@ -10,12 +10,13 @@
 package de.thbingen.epro.project.servicebroker.services.redis;
 
 import de.thbingen.epro.project.web.model.ServiceDefinition;
+import de.thbingen.epro.project.web.services.OsbService;
 import de.thbingen.epro.project.web.services.ServiceInstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RedisService implements de.thbingen.epro.project.web.services.Service {
+public class RedisService implements OsbService {
 
     public static final String SERVICE_ID = "";
 

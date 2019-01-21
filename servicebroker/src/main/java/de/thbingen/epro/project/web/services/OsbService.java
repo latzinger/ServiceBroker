@@ -11,7 +11,7 @@ package de.thbingen.epro.project.web.services;
 
 import de.thbingen.epro.project.web.model.ServiceDefinition;
 
-public interface Service {
+public interface OsbService {
 
     ServiceDefinition getServiceDefiniton();
 
