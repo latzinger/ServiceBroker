@@ -28,11 +28,11 @@ public class ServiceManagerTest {
 
     @Test
     public void getDefinedServices() {
-        assertThat(serviceManager.getDefinedServices(), not(0));
+        assertThat(serviceManager.getDefinedServices().size(), not(0));
     }
 
     @Test
     public void getService() {
-        //TODO implement test
+
     }
 }

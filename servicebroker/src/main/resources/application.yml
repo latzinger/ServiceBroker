@@ -1,11 +1,10 @@
 # Spring Profile
 spring:
   profiles:
-    active: "development"
+    active: "default"
 ---
 # Spring Boot configuration
 spring:
-  profiles: development
   # Database
   datasource:
     url: jdbc:postgresql://${database.postgres.host}:${database.postgres.port}/${database.postgres.base}
