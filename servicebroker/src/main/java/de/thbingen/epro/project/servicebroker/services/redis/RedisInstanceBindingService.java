@@ -18,7 +18,7 @@ import de.thbingen.epro.project.web.services.ServiceInstanceBindingService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RedisBindingService implements ServiceInstanceBindingService {
+public class RedisInstanceBindingService implements ServiceInstanceBindingService {
 
     @Override
     public CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request) {

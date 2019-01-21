@@ -23,12 +23,12 @@ public class RedisService implements de.thbingen.epro.project.web.services.Servi
     private RedisInstanceService redisInstanceService;
 
     //TODO implement RedisBindingService
-    private RedisBindingService redisBindingService;
+    private RedisInstanceBindingService redisInstanceBindingService;
 
     @Autowired
-    public RedisService(RedisInstanceService instanceService, RedisBindingService bindingService){
+    public RedisService(RedisInstanceService instanceService, RedisInstanceBindingService bindingService){
         redisInstanceService = instanceService;
-        redisBindingService = bindingService;
+        redisInstanceBindingService = bindingService;
     }
 
     //TODO implement method
