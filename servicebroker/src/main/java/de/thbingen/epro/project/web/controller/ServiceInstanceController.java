@@ -48,7 +48,6 @@ public class ServiceInstanceController extends BaseController {
             BindingResult bindingResult) {
         checkAndComplete(httpHeaders, request, bindingResult, params);
         //TODO implement method
-        HttpRequest a;
         return null;
     }
 
