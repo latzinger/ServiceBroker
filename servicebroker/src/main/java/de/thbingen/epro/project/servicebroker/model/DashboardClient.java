@@ -16,6 +16,7 @@ import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Data
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class DashboardClient implements Serializable {
 

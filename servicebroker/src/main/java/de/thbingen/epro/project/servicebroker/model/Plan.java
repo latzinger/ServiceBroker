@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class Plan implements Serializable {
 

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class Device implements Serializable {
 
