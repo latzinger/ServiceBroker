@@ -21,7 +21,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @Builder
-public class CreateServiceInstanceBindingRequest extends OsbRequest {
+public class CreateServiceInstanceBindingRequest extends ServiceInstanceBindingReuquest {
 
     @JsonProperty("context")
     private Map<String, String> context = new HashMap<>();

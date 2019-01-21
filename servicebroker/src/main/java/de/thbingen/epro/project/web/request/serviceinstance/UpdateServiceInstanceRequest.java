@@ -22,7 +22,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @Builder
-public class UpdateServiceInstanceRequest extends OsbRequest {
+public class UpdateServiceInstanceRequest extends ServiceInstanceRequest {
 
     @JsonProperty("context")
     private Map<String, String> context = new HashMap<>();
