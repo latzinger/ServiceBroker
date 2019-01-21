@@ -22,7 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Data
 @Builder
-public class CreateServiceInstanceRequest extends OsbRequest {
+public class CreateServiceInstanceRequest extends ServiceInstanceRequest {
 
     @NotNull
     @NotEmpty

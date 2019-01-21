@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class BaseController {
@@ -73,6 +74,10 @@ public abstract class BaseController {
     }
 
     public void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request, BindingResult bindingResult) {
+        checkAndComplete(httpHeaders, request, bindingResult, new HashMap<>());
+    }
+
+    public void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request, BindingResult bindingResult, Map<String, String> parameters) {
         checkApiVersion(httpHeaders);
         checkRequestValidity(bindingResult);
 

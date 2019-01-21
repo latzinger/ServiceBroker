@@ -15,7 +15,10 @@ import lombok.Data;
 import java.util.Map;
 
 @Data
-public class OsbRequest {
+public abstract class OsbRequest {
     @JsonIgnore
     private Map<String, String> httpHeaders;
+
+    @JsonIgnore
+    private Map<String, String> parameters;
 }
