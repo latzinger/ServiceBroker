@@ -8,29 +8,41 @@
  */
 
 package de.thbingen.epro.project.web.controller;
+
+import de.thbingen.epro.project.servicebroker.services.ServiceManager;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
-import de.thbingen.epro.project.web.services.ServiceInstanceBindingService;
+import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
+import de.thbingen.epro.project.web.request.serviceinstancebinding.GetServiceInstanceBindingRequest;
+import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/v2/service_instances")
 public class ServiceInstanceBindingController extends BaseController {
 
-    //TODO implement interface
-    private ServiceInstanceBindingService serviceInstanceBindingService;
+    @Autowired
+    private ServiceManager serviceManager;
 
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> getServiceInstanceBinding(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId) {
+
         checkApiVersion(httpHeaders);
+
+        GetServiceInstanceBindingRequest request =
+                new GetServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
+
         //TODO implement method
+
         return null;
     }
 
@@ -39,11 +51,16 @@ public class ServiceInstanceBindingController extends BaseController {
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId,
-            @RequestParam(value = "service_id") String serviceId,
-            @RequestParam(value = "plan_id") String planId,
-            @RequestParam(value = "accepts_incomplete", required = false) boolean acceptIncomplete) {
+            @RequestParam Map<String, String> parameters) {
+
         checkApiVersion(httpHeaders);
+
+        DeleteServiceInstanceBindingRequest request =
+                new DeleteServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
+        request.setParameters(parameters);
+
         //TODO implement method
+
         return null;
     }
 
@@ -52,10 +69,15 @@ public class ServiceInstanceBindingController extends BaseController {
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId,
-            @RequestParam(value = "accepts_incomplete", required = false) boolean acceptIncomplete,
+            @RequestParam Map<String, String> parameters,
             @Valid @RequestBody CreateServiceInstanceBindingRequest request,
             BindingResult bindingResult) {
-        checkAndComplete(httpHeaders, request, bindingResult);
+
+        checkApiVersion(httpHeaders);
+        checkRequestValidity(bindingResult);
+        request.setHttpHeaders(httpHeaders.toSingleValueMap());
+        request.setParameters(parameters);
+
         //TODO implement method
         return null;
     }
@@ -65,10 +87,14 @@ public class ServiceInstanceBindingController extends BaseController {
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId,
-            @RequestParam(value = "service_id", required = false) String serviceId,
-            @RequestParam(value = "plan_id") String planId,
-            @RequestParam(value = "operation", required = false) String operation) {
+            @RequestParam Map<String, String> parameters) {
+
         checkApiVersion(httpHeaders);
+
+        LastOperationRequest request =
+                new LastOperationRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
+        request.setParameters(parameters);
+
         //TODO implement method
         return null;
     }

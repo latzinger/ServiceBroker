@@ -18,9 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Builder
-public class CreateServiceInstanceBindingRequest extends ServiceInstanceBindingReuquest {
+public class CreateServiceInstanceBindingRequest extends ServiceInstanceBindingRequest {
 
     @JsonProperty("context")
     private Map<String, String> context = new HashMap<>();
@@ -44,4 +44,9 @@ public class CreateServiceInstanceBindingRequest extends ServiceInstanceBindingR
     @JsonProperty("parameters")
     private Map<String, String> parameters = new HashMap<>();
 
+    public CreateServiceInstanceBindingRequest(@NonNull Map<String, String> httpHeaders, @NonNull String instanceId, @NonNull String bindingId, @NonNull @NotEmpty String serviceId, @NonNull @NotEmpty String planId) {
+        super(httpHeaders, instanceId, bindingId);
+        this.serviceId = serviceId;
+        this.planId = planId;
+    }
 }

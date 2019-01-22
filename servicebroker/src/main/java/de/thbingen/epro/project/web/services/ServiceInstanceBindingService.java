@@ -10,6 +10,9 @@
 package de.thbingen.epro.project.web.services;
 
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
+import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
+import de.thbingen.epro.project.web.request.serviceinstancebinding.GetServiceInstanceBindingRequest;
+import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationRequest;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.GetServiceInstanceBindingResponse;
@@ -19,10 +22,10 @@ public interface ServiceInstanceBindingService {
 
     CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request);
 
-    DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding();
+    DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request);
 
-    GetServiceInstanceBindingResponse getServiceInstanceBinding();
+    GetServiceInstanceBindingResponse getServiceInstanceBinding(GetServiceInstanceBindingRequest request);
 
-    LastOperationResponse lastOperation();
+    LastOperationResponse lastOperation(LastOperationRequest request);
 
 }

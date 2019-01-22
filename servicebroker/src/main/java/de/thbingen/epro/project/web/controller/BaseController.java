@@ -82,7 +82,9 @@ public abstract class BaseController {
         checkRequestValidity(bindingResult);
 
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
+        request.setParameters(parameters);
 
         LOG.debug("checkAndComplete successfully");
     }
+
 }

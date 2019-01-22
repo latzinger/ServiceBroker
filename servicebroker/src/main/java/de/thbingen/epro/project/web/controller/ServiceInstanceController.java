@@ -9,10 +9,12 @@
 
 package de.thbingen.epro.project.web.controller;
 
+import de.thbingen.epro.project.servicebroker.services.ServiceManager;
 import de.thbingen.epro.project.web.request.serviceinstance.CreateServiceInstanceRequest;
 import de.thbingen.epro.project.web.request.serviceinstance.UpdateServiceInstanceRequest;
 import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
 import de.thbingen.epro.project.web.services.ServiceInstanceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +28,14 @@ import java.util.Map;
 @RequestMapping("/v2/service_instance")
 public class ServiceInstanceController extends BaseController {
 
-    //TODO implement interface
-    private ServiceInstanceService serviceInstanceService;
+    @Autowired
+    private ServiceManager serviceManager;
 
     @GetMapping(value = "/{instanceId}")
     public ResponseEntity<?> fetchServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId,
-            @RequestParam Map<String, String> params) {
+            @RequestParam Map<String, String> parameters) {
         checkApiVersion(httpHeaders);
         //TODO implement method
         return null;
@@ -43,10 +45,10 @@ public class ServiceInstanceController extends BaseController {
     public ResponseEntity<CreateServiceInstanceResponse> createServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId,
-            @RequestParam Map<String, String> params,
+            @RequestParam Map<String, String> parameters,
             @Valid @RequestBody CreateServiceInstanceRequest request,
             BindingResult bindingResult) {
-        checkAndComplete(httpHeaders, request, bindingResult, params);
+        checkAndComplete(httpHeaders, request, bindingResult, parameters);
         //TODO implement method
         return null;
     }
@@ -55,7 +57,7 @@ public class ServiceInstanceController extends BaseController {
     public ResponseEntity<?> deleteServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId,
-            @RequestParam Map<String, String> params) {
+            @RequestParam Map<String, String> parameters) {
         checkApiVersion(httpHeaders);
         //TODO implement method
         return null;
@@ -65,10 +67,10 @@ public class ServiceInstanceController extends BaseController {
     public ResponseEntity<?> updateServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId,
-            @RequestParam Map<String, String> params,
+            @RequestParam Map<String, String> parameters,
             @Valid @RequestBody UpdateServiceInstanceRequest request,
             BindingResult bindingResult) {
-        checkAndComplete(httpHeaders, request, bindingResult, params);
+        checkAndComplete(httpHeaders, request, bindingResult, parameters);
         //TODO implement method
         return null;
     }
@@ -77,7 +79,7 @@ public class ServiceInstanceController extends BaseController {
     public ResponseEntity<?> lastOperation(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instance_id") String instanceId,
-            @RequestParam Map<String, String> params) {
+            @RequestParam Map<String, String> parameters) {
         checkApiVersion(httpHeaders);
         //TODO implement method
         return null;
