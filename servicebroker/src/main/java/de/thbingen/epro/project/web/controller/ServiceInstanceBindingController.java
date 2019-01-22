@@ -13,7 +13,7 @@ import de.thbingen.epro.project.servicebroker.services.ServiceManager;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.GetServiceInstanceBindingRequest;
-import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationRequest;
+import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +26,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/v2/service_instances")
 public class ServiceInstanceBindingController extends BaseController {
-
-    @Autowired
-    private ServiceManager serviceManager;
 
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> getServiceInstanceBinding(
@@ -91,8 +88,8 @@ public class ServiceInstanceBindingController extends BaseController {
 
         checkApiVersion(httpHeaders);
 
-        LastOperationRequest request =
-                new LastOperationRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
+        LastOperationServiceInstanceBindingRequest request =
+                new LastOperationServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
         request.setParameters(parameters);
 
         //TODO implement method

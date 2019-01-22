@@ -9,8 +9,7 @@
 
 package de.thbingen.epro.project.servicebroker.services.redis;
 
-import de.thbingen.epro.project.web.request.serviceinstance.CreateServiceInstanceRequest;
-import de.thbingen.epro.project.web.request.serviceinstance.UpdateServiceInstanceRequest;
+import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.*;
 import de.thbingen.epro.project.web.services.ServiceInstanceService;
 import org.springframework.stereotype.Service;
@@ -30,17 +29,19 @@ public class RedisInstanceService implements ServiceInstanceService {
     }
 
     @Override
-    public GetServiceInstanceResponse getServiceInstance() {
+    public GetServiceInstanceResponse getServiceInstance(GetServiceInstanceRequest request) {
         return null;
     }
 
     @Override
-    public DeleteServiceInstanceResponse deleteServiceInstance() {
+    public DeleteServiceInstanceResponse deleteServiceInstance(DeleteServiceInstanceRequest request) {
         return null;
     }
 
     @Override
-    public LastOperationServiceInstanceResponse lastOperation() {
+    public LastOperationServiceInstanceResponse lastOperation(LastOperationServiceInstanceRequest request) {
         return null;
     }
+
+
 }

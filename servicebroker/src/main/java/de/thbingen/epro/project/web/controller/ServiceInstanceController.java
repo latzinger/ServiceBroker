@@ -31,9 +31,6 @@ import java.util.Map;
 @RequestMapping("/v2/service_instance")
 public class ServiceInstanceController extends BaseController {
 
-    @Autowired
-    private ServiceManager serviceManager;
-
     @GetMapping(value = "/{instanceId}")
     public ResponseEntity<?> fetchServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,

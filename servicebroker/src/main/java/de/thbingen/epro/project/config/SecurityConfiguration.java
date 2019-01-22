@@ -57,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @SuppressWarnings("deprecation")
     @Bean
-    public static NoOpPasswordEncoder noOpPasswordEncoder() {
+    public NoOpPasswordEncoder noOpPasswordEncoder() {
         return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
     }
 

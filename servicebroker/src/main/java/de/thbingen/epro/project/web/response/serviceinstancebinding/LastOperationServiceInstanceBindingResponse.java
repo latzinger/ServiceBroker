@@ -18,7 +18,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LastOperationResponse {
+public class LastOperationServiceInstanceBindingResponse {
 
     @NonNull
     @NotEmpty

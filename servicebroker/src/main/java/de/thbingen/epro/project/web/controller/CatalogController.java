@@ -23,7 +23,6 @@ public class CatalogController extends BaseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CatalogController.class);
 
-    //TODO implement interface
     private CatalogService catalogService;
 
     @Autowired

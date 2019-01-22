@@ -12,11 +12,11 @@ package de.thbingen.epro.project.web.services;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.GetServiceInstanceBindingRequest;
-import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationRequest;
+import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.GetServiceInstanceBindingResponse;
-import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationResponse;
+import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
 
 public interface ServiceInstanceBindingService {
 
@@ -26,6 +26,6 @@ public interface ServiceInstanceBindingService {
 
     GetServiceInstanceBindingResponse getServiceInstanceBinding(GetServiceInstanceBindingRequest request);
 
-    LastOperationResponse lastOperation(LastOperationRequest request);
+    LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request);
 
 }
