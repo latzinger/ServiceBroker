@@ -10,7 +10,7 @@
 package de.thbingen.epro.project.web.response.serviceinstancebinding;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.thbingen.epro.project.web.model.VolumeMount;
+import de.thbingen.epro.project.web.schema.VolumeMount;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -10,8 +10,7 @@
 package de.thbingen.epro.project.web.request.serviceinstance;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.thbingen.epro.project.web.model.PreviousValues;
-import de.thbingen.epro.project.web.request.OsbRequest;
+import de.thbingen.epro.project.web.schema.PreviousValues;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

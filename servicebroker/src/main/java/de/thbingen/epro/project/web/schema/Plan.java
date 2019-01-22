@@ -7,15 +7,13 @@
  * @since 1.0
  */
 
-package de.thbingen.epro.project.web.model;
+package de.thbingen.epro.project.web.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 @Data
 @RequiredArgsConstructor
@@ -38,10 +36,10 @@ public class Plan implements Serializable {
     private String description;
 
     @JsonProperty("metadata")
-    private Map<String, String> metadata = new HashMap<>();
+    private PlanMetadata metadata;
 
     @JsonProperty("free")
-    private boolean free;
+    private boolean free = true;
 
     @JsonProperty("bindable")
     private boolean bindable;

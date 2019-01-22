@@ -9,7 +9,7 @@
 package de.thbingen.epro.project.servicebroker.model.services;
 
 import de.thbingen.epro.project.servicebroker.services.ServiceManager;
-import de.thbingen.epro.project.web.model.ServiceDefinition;
+import de.thbingen.epro.project.web.schema.ServiceDefinition;
 import de.thbingen.epro.project.web.services.OsbService;
 import de.thbingen.epro.project.web.services.ServiceInstanceService;
 import org.junit.Test;

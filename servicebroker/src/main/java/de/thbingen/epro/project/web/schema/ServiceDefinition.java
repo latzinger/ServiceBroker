@@ -7,21 +7,37 @@
  * @since 1.0
  */
 
-package de.thbingen.epro.project.web.model;
+package de.thbingen.epro.project.web.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class ServiceDefinition implements Serializable {
+
+    public enum Permissions {
+        SYSLOG_DRAIN("syslog_drain"),
+        ROUTE_FORWARDING("route_forwarding"),
+        VOLUME_MOUNT("volume_mount");
+
+        private final String permission;
+
+        Permissions(String permission) {
+            this.permission = permission;
+        }
+
+        @JsonValue
+        public String getPermission() {
+            return permission;
+        }
+    }
 
     @NotEmpty
     @NonNull
@@ -42,7 +58,7 @@ public class ServiceDefinition implements Serializable {
     private ArrayList<String> tags = new ArrayList<>();
 
     @JsonProperty("requires")
-    private ArrayList<String> requires = new ArrayList<>();
+    private ArrayList<Permissions> requires = new ArrayList<>();
 
     @NotEmpty
     @NonNull
@@ -56,7 +72,7 @@ public class ServiceDefinition implements Serializable {
     private boolean bindingsRetrievable;
 
     @JsonProperty("metadata")
-    private Map<String, Object> metadata = new HashMap<>();
+    private ServiceMetadata metadata;
 
     @JsonProperty("dashboard_client")
     private DashboardClient dashboardClient;

@@ -9,7 +9,7 @@
 
 package de.thbingen.epro.project.web.services;
 
-import de.thbingen.epro.project.web.model.ServiceDefinition;
+import de.thbingen.epro.project.web.schema.ServiceDefinition;
 
 public interface OsbService {
 
