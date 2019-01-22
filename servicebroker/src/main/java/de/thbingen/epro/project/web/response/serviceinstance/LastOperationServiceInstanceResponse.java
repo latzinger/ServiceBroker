@@ -20,7 +20,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @AllArgsConstructor
 @Builder
-public class LastOperationResponse {
+public class LastOperationServiceInstanceResponse {
 
     @NonNull
     @NotEmpty

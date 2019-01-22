@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
+@NoArgsConstructor
 public abstract class OsbRequest {
 
     @NonNull

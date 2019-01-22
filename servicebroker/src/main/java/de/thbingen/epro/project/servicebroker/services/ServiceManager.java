@@ -11,13 +11,14 @@ package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.web.services.OsbService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@org.springframework.stereotype.Service
+@Service
 public class ServiceManager {
     private List<? extends OsbService> definedServices;
     private Map<String, OsbService> services;
@@ -28,8 +29,17 @@ public class ServiceManager {
     }
 
     @PostConstruct
-    private void mapServices(){
+    private void mapServices() {
         services = new HashMap<>();
+
+        long count = definedServices.stream()
+                .map(o -> o.getServiceId())
+                .distinct()
+                .count();
+
+        if(definedServices.size() > count)
+            throw new IllegalStateException("There are " + (definedServices.size() - count) + " Services with same serviceId");
+
         definedServices.forEach(service -> services.put(service.getServiceId(), service));
     }
 
@@ -50,7 +60,7 @@ public class ServiceManager {
         this.services = services;
     }
 
-    public OsbService getService(String serviceId){
+    public OsbService getService(String serviceId) {
         return services.get(serviceId);
     }
 }

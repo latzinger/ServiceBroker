@@ -40,7 +40,7 @@ public class RedisInstanceService implements ServiceInstanceService {
     }
 
     @Override
-    public LastOperationResponse lastOperation() {
+    public LastOperationServiceInstanceResponse lastOperation() {
         return null;
     }
 }

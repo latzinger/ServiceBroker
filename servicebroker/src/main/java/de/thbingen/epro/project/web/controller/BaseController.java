@@ -9,13 +9,17 @@
 
 package de.thbingen.epro.project.web.controller;
 
+import de.thbingen.epro.project.servicebroker.services.ServiceManager;
 import de.thbingen.epro.project.web.exception.InvalidApiVersionException;
 import de.thbingen.epro.project.web.exception.InvalidRequestException;
+import de.thbingen.epro.project.web.exception.ServiceNotFoundException;
 import de.thbingen.epro.project.web.request.OsbRequest;
 import de.thbingen.epro.project.web.response.ErrorMessage;
+import de.thbingen.epro.project.web.services.OsbService;
 import io.netty.handler.codec.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +35,9 @@ public abstract class BaseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 
+    @Autowired
+    private ServiceManager serviceManager;
+
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<ErrorMessage> handleException(Exception e) {
@@ -38,9 +45,6 @@ public abstract class BaseController {
         return getErrorMessageResponseEntity("Exception", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    private ResponseEntity<ErrorMessage> getErrorMessageResponseEntity(String error, String message, HttpStatus status) {
-        return new ResponseEntity<ErrorMessage>(new ErrorMessage(error, message), status);
-    }
 
     @ExceptionHandler(InvalidRequestException.class)
     public ResponseEntity<ErrorMessage> handleInvalidRequestException(InvalidRequestException e) {
@@ -49,8 +53,22 @@ public abstract class BaseController {
         return invalidRequest;
     }
 
+
+    @ExceptionHandler(ServiceNotFoundException.class)
+    public ResponseEntity<ErrorMessage> handleInvalidRequestException(ServiceNotFoundException e) {
+        LOG.debug("Service " + e.getServiceId() + " not found");
+
+        ResponseEntity<ErrorMessage> serviceNotFound = getErrorMessageResponseEntity("ServiceNotFound", "Service wit id" + e.getServiceId() + " not found", HttpStatus.BAD_REQUEST);
+        return serviceNotFound;
+    }
+
+
+    private ResponseEntity<ErrorMessage> getErrorMessageResponseEntity(String error, String message, HttpStatus status) {
+        return new ResponseEntity<ErrorMessage>(new ErrorMessage(error, message), status);
+    }
+
     public void checkRequestValidity(BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult != null && bindingResult.hasErrors()) {
             throw new InvalidRequestException("Request has " + bindingResult.getErrorCount() + " invalid fields");
         }
     }
@@ -87,4 +105,12 @@ public abstract class BaseController {
         LOG.debug("checkAndComplete successfully");
     }
 
+    protected OsbService getService(String serviceId){
+        OsbService service = serviceManager.getService(serviceId);
+
+        if(service == null)
+            throw new ServiceNotFoundException(serviceId);
+
+        return service;
+    }
 }
