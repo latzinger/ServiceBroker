@@ -19,6 +19,8 @@ import static org.junit.Assert.*;
 @AutoConfigureMockMvc
 public class CatalogControllerTest {
 
+    private static final String API_VERSION = "2.14";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -32,7 +34,10 @@ public class CatalogControllerTest {
 
     @Test
     public void getCatalog() throws Exception {
-        mockMvc.perform(get("/v2/catalog")).andDo(print()).andExpect(status().isOk());
+        mockMvc.perform(get("/v2/catalog").header("X-Broker-API-Version", API_VERSION))
+                .andDo(print())
+                .andExpect(status().isOk());
+
     }
 
 
