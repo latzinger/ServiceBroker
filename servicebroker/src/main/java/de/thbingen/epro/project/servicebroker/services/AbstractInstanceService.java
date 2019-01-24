@@ -13,9 +13,6 @@ public abstract class AbstractInstanceService implements InstanceService {
     public abstract UpdateServiceInstanceResponse updateServiceInstance(UpdateServiceInstanceRequest request);
 
     @Override
-    public abstract GetServiceInstanceResponse getServiceInstance(GetServiceInstanceRequest request);
-
-    @Override
     public abstract DeleteServiceInstanceResponse deleteServiceInstance(DeleteServiceInstanceRequest request);
 
     @Override

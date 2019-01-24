@@ -29,11 +29,6 @@ public class RedisInstanceService extends AbstractInstanceService {
     }
 
     @Override
-    public GetServiceInstanceResponse getServiceInstance(GetServiceInstanceRequest request) {
-        return null;
-    }
-
-    @Override
     public DeleteServiceInstanceResponse deleteServiceInstance(DeleteServiceInstanceRequest request) {
         return null;
     }

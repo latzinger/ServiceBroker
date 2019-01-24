@@ -18,8 +18,6 @@ public interface InstanceService {
 
     UpdateServiceInstanceResponse updateServiceInstance(UpdateServiceInstanceRequest request);
 
-    GetServiceInstanceResponse getServiceInstance(GetServiceInstanceRequest request);
-
     DeleteServiceInstanceResponse deleteServiceInstance(DeleteServiceInstanceRequest request);
 
     LastOperationServiceInstanceResponse lastOperation(LastOperationServiceInstanceRequest request);
