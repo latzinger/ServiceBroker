@@ -8,6 +8,7 @@
 
 package de.thbingen.epro.project.servicebroker.model.services;
 
+import de.thbingen.epro.project.servicebroker.services.BindingService;
 import de.thbingen.epro.project.servicebroker.services.ServiceManager;
 import de.thbingen.epro.project.web.schema.ServiceDefinition;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
@@ -61,6 +62,11 @@ class TestService implements OsbService{
 
     @Override
     public InstanceService getInstanceService() {
+        return null;
+    }
+
+    @Override
+    public BindingService getBindingService() {
         return null;
     }
 

@@ -12,7 +12,7 @@ import java.util.Map;
 public class ServiceInstanceBinding extends AbstractEntity {
 
     @NonNull
-    @Column
+    @ManyToOne
     private ServiceInstance serviceInstance;
 
     @ElementCollection
