@@ -18,8 +18,6 @@ import javax.persistence.SequenceGenerator;
 import java.io.Serializable;
 
 @MappedSuperclass
-@Data
-@SequenceGenerator(name = "seq_gen", sequenceName = "hibernate_sequence")
 public abstract class AbstractLongId implements Serializable {
 
     @Id
