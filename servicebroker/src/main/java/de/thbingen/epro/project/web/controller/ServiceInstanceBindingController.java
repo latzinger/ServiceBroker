@@ -36,8 +36,6 @@ public class ServiceInstanceBindingController extends BaseController {
 
         checkApiVersion(httpHeaders);
 
-        GetServiceInstanceBindingRequest request =
-                new GetServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
 
         //TODO implement method
 

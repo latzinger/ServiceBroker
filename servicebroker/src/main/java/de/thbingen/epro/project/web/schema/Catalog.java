@@ -19,6 +19,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Catalog implements Serializable {
 
     @JsonProperty("serviceDefinitions")

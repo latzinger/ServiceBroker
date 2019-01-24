@@ -10,10 +10,7 @@
 package de.thbingen.epro.project.web.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
@@ -23,6 +20,7 @@ import java.util.Map;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Device implements Serializable {
 
     @NonNull

@@ -9,7 +9,6 @@
 
 package de.thbingen.epro.project.web.controller;
 
-import de.thbingen.epro.project.web.schema.Catalog;
 import de.thbingen.epro.project.servicebroker.services.CatalogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,7 @@ public class CatalogController extends BaseController {
 
     public ResponseEntity<?> getCatalog() {
         LOG.debug("GET: /v2/catalog getCatalog()");
-        return ResponseEntity.ok(new Catalog(catalogService.getServiceDefinitions()));
+        return ResponseEntity.ok(catalogService.getCatalog());
     }
 
 }
