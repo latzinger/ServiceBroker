@@ -9,6 +9,7 @@
 
 package de.thbingen.epro.project.servicebroker.services.redis;
 
+import de.thbingen.epro.project.servicebroker.services.BindingService;
 import de.thbingen.epro.project.web.schema.ServiceDefinition;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
 import de.thbingen.epro.project.servicebroker.services.ServiceInstanceService;
@@ -27,7 +28,7 @@ public class RedisService implements OsbService {
     private RedisInstanceBindingService redisInstanceBindingService;
 
     @Autowired
-    public RedisService(RedisInstanceService instanceService, RedisInstanceBindingService bindingService){
+    public RedisService(RedisInstanceService instanceService, RedisInstanceBindingService bindingService) {
         redisInstanceService = instanceService;
         redisInstanceBindingService = bindingService;
     }
@@ -41,6 +42,11 @@ public class RedisService implements OsbService {
     @Override
     public ServiceInstanceService getServiceInstanceService() {
         return redisInstanceService;
+    }
+
+    @Override
+    public BindingService getBindingService() {
+        return redisInstanceBindingService;
     }
 
     @Override

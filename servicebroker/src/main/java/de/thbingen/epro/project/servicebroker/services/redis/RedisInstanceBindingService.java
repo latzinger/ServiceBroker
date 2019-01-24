@@ -32,7 +32,7 @@ public class RedisInstanceBindingService extends AbstractServiceInstanceBindingS
     public DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request) {
         return null;
     }
-    
+
     @Override
     public GetServiceInstanceBindingResponse getServiceInstanceBinding(GetServiceInstanceBindingRequest request) {
         return null;
