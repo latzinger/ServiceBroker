@@ -9,6 +9,7 @@
 
 package de.thbingen.epro.project.servicebroker.services.redis;
 
+import de.thbingen.epro.project.data.service.ServiceInstanceBindingRepository;
 import de.thbingen.epro.project.servicebroker.services.AbstractServiceInstanceBindingService;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
@@ -18,11 +19,15 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServic
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.GetServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-
 public class RedisInstanceBindingService extends AbstractServiceInstanceBindingService {
+
+    @Autowired
+    private ServiceInstanceBindingRepository serviceInstanceBindingRepository;
+
     @Override
     public CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request) {
         return null;
