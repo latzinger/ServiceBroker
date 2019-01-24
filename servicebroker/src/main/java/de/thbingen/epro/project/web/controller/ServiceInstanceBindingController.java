@@ -11,6 +11,7 @@ package de.thbingen.epro.project.web.controller;
 
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.data.repository.ServiceInstanceBindingRepository;
+import de.thbingen.epro.project.data.service.ServiceInstanceBindingService;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.GetServiceInstanceBindingRequest;
@@ -28,7 +29,7 @@ import java.util.Map;
 public class ServiceInstanceBindingController extends BaseController {
 
     @Autowired
-    private ServiceInstanceBindingRepository serviceInstanceBindingRepository;
+    private ServiceInstanceBindingService serviceInstanceBindingService;
 
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> getServiceInstanceBinding(
