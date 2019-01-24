@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public abstract class ServiceInstanceBindingRequest extends OsbRequest {
 
     @NonNull
