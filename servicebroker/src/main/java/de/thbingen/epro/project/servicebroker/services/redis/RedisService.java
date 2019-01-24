@@ -10,8 +10,8 @@
 package de.thbingen.epro.project.servicebroker.services.redis;
 
 import de.thbingen.epro.project.web.schema.ServiceDefinition;
-import de.thbingen.epro.project.web.services.OsbService;
-import de.thbingen.epro.project.web.services.ServiceInstanceService;
+import de.thbingen.epro.project.servicebroker.services.OsbService;
+import de.thbingen.epro.project.servicebroker.services.ServiceInstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

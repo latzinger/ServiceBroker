@@ -1,13 +1,4 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
-package de.thbingen.epro.project.web.services;
+package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
@@ -18,14 +9,17 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServic
 import de.thbingen.epro.project.web.response.serviceinstancebinding.GetServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
 
-public interface BindingService {
+public abstract class AbstractServiceInstanceBindingService implements BindingService {
 
-    CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request);
+    @Override
+    public abstract CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request);
 
-    DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request);
+    @Override
+    public abstract DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request);
 
-    GetServiceInstanceBindingResponse getServiceInstanceBinding(GetServiceInstanceBindingRequest request);
+    @Override
+    public abstract GetServiceInstanceBindingResponse getServiceInstanceBinding(GetServiceInstanceBindingRequest request);
 
-    LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request);
-
+    @Override
+    public abstract LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request);
 }

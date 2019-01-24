@@ -1,3 +1,12 @@
+/**
+ * TODO add description
+ *
+ * @author larsatzinger
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
+
 package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
@@ -8,28 +17,15 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServic
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.GetServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
-import de.thbingen.epro.project.web.services.BindingService;
-import org.springframework.stereotype.Service;
 
-public abstract class BindingServiceImpl implements BindingService {
+public interface BindingService {
 
-    @Override
-    public CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request) {
-        return null;
-    }
+    CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request);
 
-    @Override
-    public DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request) {
-        return null;
-    }
+    DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request);
 
-    @Override
-    public GetServiceInstanceBindingResponse getServiceInstanceBinding(GetServiceInstanceBindingRequest request) {
-        return null;
-    }
+    GetServiceInstanceBindingResponse getServiceInstanceBinding(GetServiceInstanceBindingRequest request);
 
-    @Override
-    public LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request) {
-        return null;
-    }
+    LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request);
+
 }

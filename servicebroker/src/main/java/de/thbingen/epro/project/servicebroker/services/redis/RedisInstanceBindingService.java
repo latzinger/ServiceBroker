@@ -9,7 +9,7 @@
 
 package de.thbingen.epro.project.servicebroker.services.redis;
 
-import de.thbingen.epro.project.servicebroker.services.BindingServiceImpl;
+import de.thbingen.epro.project.servicebroker.services.AbstractServiceInstanceBindingService;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.GetServiceInstanceBindingRequest;
@@ -18,10 +18,27 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServic
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.GetServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
-import de.thbingen.epro.project.web.services.BindingService;
 import org.springframework.stereotype.Service;
 
-public class RedisInstanceBindingService extends BindingServiceImpl {
+@Service
+public class RedisInstanceBindingService extends AbstractServiceInstanceBindingService {
+    @Override
+    public CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request) {
+        return null;
+    }
 
+    @Override
+    public DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request) {
+        return null;
+    }
 
+    @Override
+    public GetServiceInstanceBindingResponse getServiceInstanceBinding(GetServiceInstanceBindingRequest request) {
+        return null;
+    }
+
+    @Override
+    public LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request) {
+        return null;
+    }
 }
