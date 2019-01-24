@@ -25,9 +25,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class RedisInstanceBindingService extends AbstractServiceInstanceBindingService {
 
-    @Autowired
-    private ServiceInstanceBindingRepository serviceInstanceBindingRepository;
-
     @Override
     public CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request) {
         return null;
