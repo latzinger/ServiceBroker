@@ -2,34 +2,38 @@ package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.web.schema.Catalog;
 import de.thbingen.epro.project.web.schema.ServiceDefinition;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Getter
 @Setter
 public class CatalogServiceImpl implements CatalogService {
 
+    @Autowired
+    private ServiceManager serviceManager;
+
     private Catalog catalog;
 
     @Override
     public Catalog getCatalog() {
-        return catalog;
+
+        List<ServiceDefinition> serviceDefinitions = serviceManager.getDefinedServices()
+                .stream()
+                .map(o -> ((OsbService) o).getServiceDefiniton())
+                .collect(Collectors.toList());
+
+        return (catalog = new Catalog(serviceDefinitions));
     }
 
     @Override
-    public ArrayList<ServiceDefinition> getServiceDefinitions() {
-        return null;
-    }
-
-    @Override
-    public ServiceDefinition getServiceDefinition(String id) {
-        return null;
+    public List<ServiceDefinition> getServiceDefinitions() {
+        return catalog.getServiceDefinitions();
     }
 
 }

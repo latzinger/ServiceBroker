@@ -20,6 +20,7 @@ import java.util.ArrayList;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ServiceDefinition implements Serializable {
 
     public enum Permissions {

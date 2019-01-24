@@ -14,13 +14,12 @@ import de.thbingen.epro.project.web.schema.ServiceDefinition;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface CatalogService {
 
     Catalog getCatalog();
 
-    ArrayList<ServiceDefinition> getServiceDefinitions();
-
-    ServiceDefinition getServiceDefinition(String id);
+    List<ServiceDefinition> getServiceDefinitions();
 
 }
