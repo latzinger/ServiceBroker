@@ -1,7 +1,6 @@
 /**
  * TODO add description
  *
- * @author larsatzinger
  * @author jonashueg
  * @version 1.0
  * @since 1.0
@@ -9,22 +8,35 @@
 
 package de.thbingen.epro.project.web.controller;
 
+import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.service.ServiceInstanceService;
+import de.thbingen.epro.project.servicebroker.services.OsbService;
+import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
 import de.thbingen.epro.project.servicebroker.services.InstanceService;
+import de.thbingen.epro.project.web.response.serviceinstance.DeleteServiceInstanceResponse;
+import de.thbingen.epro.project.web.response.serviceinstance.LastOperationServiceInstanceResponse;
+import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstanceResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/v2/service_instance")
 public class ServiceInstanceController extends BaseController {
+    private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 
     @Autowired
     private ServiceInstanceService serviceInstanceService;
@@ -35,9 +47,10 @@ public class ServiceInstanceController extends BaseController {
             @PathVariable("instanceId") String instanceId,
             @RequestParam Map<String, String> parameters) {
         checkApiVersion(httpHeaders);
-        //TODO implement method
 
-        return null;
+        ServiceInstance serviceInstance = getServiceInstance(instanceId);
+
+        return ResponseEntity.ok(serviceInstance);
     }
 
     @PutMapping(value = "/{instanceId}")
@@ -47,13 +60,15 @@ public class ServiceInstanceController extends BaseController {
             @RequestParam Map<String, String> parameters,
             @Valid @RequestBody CreateServiceInstanceRequest request) {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
-        //TODO implement method
 
-        InstanceService serviceInstanceService = getServiceInstanceService(request.getServiceId());
-        CreateServiceInstanceResponse createResponse = serviceInstanceService.createServiceInstance(request);
+        ServiceInstance serviceInstance = serviceInstanceService.getServiceInstance(instanceId);
+        if(serviceInstance != null)
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
+        InstanceService instanceService = getInstanceService(request.getServiceId());
+        CreateServiceInstanceResponse createResponse = instanceService.createServiceInstance(request);
 
-        return null;
+        return ResponseEntity.ok(createResponse);
     }
 
     @DeleteMapping(value = "/{instanceId}")
@@ -63,8 +78,13 @@ public class ServiceInstanceController extends BaseController {
             @RequestParam Map<String, String> parameters) {
         DeleteServiceInstanceRequest request = new DeleteServiceInstanceRequest();
         checkAndComplete(httpHeaders, request, parameters);
-        //TODO implement method
-        return null;
+
+        ServiceInstance serviceInstance = getServiceInstance(instanceId);
+        InstanceService instanceService = getInstanceService(serviceInstance.getServiceId());
+
+        DeleteServiceInstanceResponse response = instanceService.deleteServiceInstance(request);
+
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping(value = "/{instanceId}")
@@ -74,8 +94,14 @@ public class ServiceInstanceController extends BaseController {
             @RequestParam Map<String, String> parameters,
             @Valid @RequestBody UpdateServiceInstanceRequest request) {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
+
+        ServiceInstance serviceInstance = getServiceInstance(instanceId);
+        InstanceService instanceService = getInstanceService(serviceInstance.getServiceId());
+
+        UpdateServiceInstanceResponse response = instanceService.updateServiceInstance(request);
+
         //TODO implement method
-        return null;
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(value = "/{instanceId}/last_operation")
@@ -85,21 +111,38 @@ public class ServiceInstanceController extends BaseController {
             @RequestParam Map<String, String> parameters) {
         LastOperationServiceInstanceRequest request = new LastOperationServiceInstanceRequest();
         checkAndComplete(httpHeaders, request, instanceId, parameters);
-        //TODO implement method
-        return null;
+
+        ServiceInstance serviceInstance = getServiceInstance(instanceId);
+        InstanceService instanceService = getInstanceService(serviceInstance.getServiceId());
+
+        LastOperationServiceInstanceResponse response = instanceService.lastOperation(request);
+
+        return ResponseEntity.ok(response);
     }
 
-    public void checkAndComplete(HttpHeaders httpHeaders, ServiceInstanceRequest request, String instanceId) {
-        this.checkAndComplete(httpHeaders, request, instanceId, new HashMap<>());
-    }
 
-    public void checkAndComplete(HttpHeaders httpHeaders, ServiceInstanceRequest request, String instanceId, Map<String, String> parameters) {
+    private void checkAndComplete(HttpHeaders httpHeaders, ServiceInstanceRequest request, String instanceId, Map<String, String> parameters) {
         super.checkAndComplete(httpHeaders, request, parameters);
 
         request.setInstanceId(instanceId);
     }
 
-    private InstanceService getServiceInstanceService(String serviceId) {
+    private InstanceService getInstanceService(String serviceId) {
         return getService(serviceId).getInstanceService();
     }
+
+    private ServiceInstance getServiceInstance(String instanceId){
+        ServiceInstance serviceInstance = serviceInstanceService.getServiceInstance(instanceId);
+        if(serviceInstance == null)
+            throw new ServiceInstanceNotFoundException();
+
+        return serviceInstance;
+    }
+
+    @ExceptionHandler(ServiceInstanceNotFoundException.class)
+    private ResponseEntity<?> handleServiceInstanceNotFoundException(ServiceInstanceNotFoundException e){
+        LOG.debug("ServiceInstance not found: " + e.getServiceInstanceId());
+        return ResponseEntity.notFound().build();
+    }
+
 }

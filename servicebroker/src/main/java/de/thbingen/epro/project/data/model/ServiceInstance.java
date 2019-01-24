@@ -3,15 +3,18 @@ package de.thbingen.epro.project.data.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Entity
 @Data
 public class ServiceInstance extends AbstractEntity {
-    @Column
+    @Column(nullable = false)
+    @NotNull
     private String serviceId;
 
-    @Column
+    @Column(nullable = false)
+    @NotNull
     private String planId;
 
     @Column
