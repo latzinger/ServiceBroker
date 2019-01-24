@@ -24,6 +24,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -53,6 +55,15 @@ public abstract class BaseController {
         return invalidRequest;
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> handleException(MethodArgumentNotValidException ex) {
+        BindingResult result = ex.getBindingResult();
+        String message = "Missing required fields:";
+        for (FieldError error : result.getFieldErrors()) {
+            message += " " + error.getField();
+        }
+        return getErrorMessageResponseEntity("MissingFields", message, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(ServiceNotFoundException.class)
     public ResponseEntity<ErrorMessage> handleInvalidRequestException(ServiceNotFoundException e) {
@@ -65,12 +76,6 @@ public abstract class BaseController {
 
     private ResponseEntity<ErrorMessage> getErrorMessageResponseEntity(String error, String message, HttpStatus status) {
         return new ResponseEntity<ErrorMessage>(new ErrorMessage(error, message), status);
-    }
-
-    public void checkRequestValidity(BindingResult bindingResult) {
-        if (bindingResult != null && bindingResult.hasErrors()) {
-            throw new InvalidRequestException("Request has " + bindingResult.getErrorCount() + " invalid fields");
-        }
     }
 
     public void checkApiVersion(HttpHeaders headers) {
@@ -91,13 +96,12 @@ public abstract class BaseController {
         }
     }
 
-    public void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request, BindingResult bindingResult) {
-        checkAndComplete(httpHeaders, request, bindingResult, new HashMap<>());
+    public void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request) {
+        checkAndComplete(httpHeaders, request, new HashMap<>());
     }
 
-    public void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request, BindingResult bindingResult, Map<String, String> parameters) {
+    public void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request, Map<String, String> parameters) {
         checkApiVersion(httpHeaders);
-        checkRequestValidity(bindingResult);
 
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
         request.setParameters(parameters);
@@ -105,10 +109,10 @@ public abstract class BaseController {
         LOG.debug("checkAndComplete successfully");
     }
 
-    protected OsbService getService(String serviceId){
+    protected OsbService getService(String serviceId) {
         OsbService service = serviceManager.getService(serviceId);
 
-        if(service == null)
+        if (service == null)
             throw new ServiceNotFoundException(serviceId);
 
         return service;

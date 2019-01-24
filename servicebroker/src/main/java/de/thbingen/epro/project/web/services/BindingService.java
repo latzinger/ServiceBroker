@@ -18,7 +18,7 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServic
 import de.thbingen.epro.project.web.response.serviceinstancebinding.GetServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
 
-public interface ServiceInstanceBindingService {
+public interface BindingService {
 
     CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request);
 

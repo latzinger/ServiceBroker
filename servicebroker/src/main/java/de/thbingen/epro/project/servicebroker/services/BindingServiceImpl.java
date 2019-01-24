@@ -1,15 +1,5 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
+package de.thbingen.epro.project.servicebroker.services;
 
-package de.thbingen.epro.project.servicebroker.services.redis;
-
-import de.thbingen.epro.project.servicebroker.services.BindingServiceImpl;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.GetServiceInstanceBindingRequest;
@@ -21,7 +11,25 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperatio
 import de.thbingen.epro.project.web.services.BindingService;
 import org.springframework.stereotype.Service;
 
-public class RedisInstanceBindingService extends BindingServiceImpl {
+public abstract class BindingServiceImpl implements BindingService {
 
+    @Override
+    public CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request) {
+        return null;
+    }
 
+    @Override
+    public DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request) {
+        return null;
+    }
+
+    @Override
+    public GetServiceInstanceBindingResponse getServiceInstanceBinding(GetServiceInstanceBindingRequest request) {
+        return null;
+    }
+
+    @Override
+    public LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request) {
+        return null;
+    }
 }

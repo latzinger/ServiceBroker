@@ -13,19 +13,14 @@ import de.thbingen.epro.project.web.schema.Catalog;
 import de.thbingen.epro.project.web.schema.ServiceDefinition;
 import org.springframework.stereotype.Service;
 
-@Service
-public class CatalogService {
+import java.util.ArrayList;
 
-    public Catalog getCatalog() {
-        return null;
-    }
+public interface CatalogService {
 
-    public Iterable<ServiceDefinition> getServiceDefinitions() {
-        return null;
-    }
+    Catalog getCatalog();
 
-    public ServiceDefinition getServiceDefinition(String id) {
-        return null;
-    }
+    ArrayList<ServiceDefinition> getServiceDefinitions();
+
+    ServiceDefinition getServiceDefinition(String id);
 
 }
