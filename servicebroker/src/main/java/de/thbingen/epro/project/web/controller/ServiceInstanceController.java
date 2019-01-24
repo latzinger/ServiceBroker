@@ -9,10 +9,11 @@
 
 package de.thbingen.epro.project.web.controller;
 
-import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
+import de.thbingen.epro.project.data.service.ServiceInstanceService;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
-import de.thbingen.epro.project.servicebroker.services.ServiceInstanceService;
+import de.thbingen.epro.project.servicebroker.services.InstanceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,8 @@ import java.util.Map;
 @RequestMapping("/v2/service_instance")
 public class ServiceInstanceController extends BaseController {
 
-    private ServiceInstanceRepository serviceInstanceRepository;
+    @Autowired
+    private ServiceInstanceService serviceInstanceService;
 
     @GetMapping(value = "/{instanceId}")
     public ResponseEntity<?> fetchServiceInstance(
@@ -47,7 +49,7 @@ public class ServiceInstanceController extends BaseController {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
         //TODO implement method
 
-        ServiceInstanceService serviceInstanceService = getServiceInstanceService(request.getServiceId());
+        InstanceService serviceInstanceService = getServiceInstanceService(request.getServiceId());
         CreateServiceInstanceResponse createResponse = serviceInstanceService.createServiceInstance(request);
 
 
@@ -97,7 +99,7 @@ public class ServiceInstanceController extends BaseController {
         request.setInstanceId(instanceId);
     }
 
-    private ServiceInstanceService getServiceInstanceService(String serviceId) {
-        return getService(serviceId).getServiceInstanceService();
+    private InstanceService getServiceInstanceService(String serviceId) {
+        return getService(serviceId).getInstanceService();
     }
 }

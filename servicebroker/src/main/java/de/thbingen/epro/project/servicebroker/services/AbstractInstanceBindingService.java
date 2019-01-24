@@ -9,7 +9,7 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServic
 import de.thbingen.epro.project.web.response.serviceinstancebinding.GetServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
 
-public abstract class AbstractServiceInstanceBindingService implements BindingService {
+public abstract class AbstractInstanceBindingService implements BindingService {
 
     @Override
     public abstract CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request);

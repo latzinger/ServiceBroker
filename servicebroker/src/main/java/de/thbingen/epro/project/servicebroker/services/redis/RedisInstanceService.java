@@ -9,14 +9,14 @@
 
 package de.thbingen.epro.project.servicebroker.services.redis;
 
-import de.thbingen.epro.project.servicebroker.services.AbstractServiceInstanceService;
+import de.thbingen.epro.project.servicebroker.services.AbstractInstanceService;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.*;
 import org.springframework.stereotype.Service;
 
 @Service
 
-public class RedisInstanceService extends AbstractServiceInstanceService {
+public class RedisInstanceService extends AbstractInstanceService {
 
     @Override
     public CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) {

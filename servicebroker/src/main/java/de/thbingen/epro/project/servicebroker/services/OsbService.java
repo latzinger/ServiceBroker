@@ -15,7 +15,7 @@ public interface OsbService {
 
     ServiceDefinition getServiceDefiniton();
 
-    ServiceInstanceService getServiceInstanceService();
+    InstanceService getInstanceService();
 
     BindingService getBindingService();
 
