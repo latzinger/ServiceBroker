@@ -9,7 +9,7 @@
 
 package de.thbingen.epro.project.servicebroker.services.redis;
 
-import de.thbingen.epro.project.data.service.ServiceInstanceBindingRepository;
+import de.thbingen.epro.project.data.repository.ServiceInstanceBindingRepository;
 import de.thbingen.epro.project.servicebroker.services.AbstractServiceInstanceBindingService;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
