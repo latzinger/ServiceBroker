@@ -18,6 +18,7 @@ import java.io.Serializable;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 public class DashboardClient implements Serializable {
 
     @NonNull

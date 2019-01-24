@@ -10,6 +10,7 @@
 package de.thbingen.epro.project.web.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
+@Builder
 public class Costs implements Serializable {
 
     @NonNull
