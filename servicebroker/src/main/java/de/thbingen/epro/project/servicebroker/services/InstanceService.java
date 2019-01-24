@@ -12,7 +12,7 @@ package de.thbingen.epro.project.servicebroker.services;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.*;
 
-public interface ServiceInstanceService {
+public interface InstanceService {
 
     CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request);
 

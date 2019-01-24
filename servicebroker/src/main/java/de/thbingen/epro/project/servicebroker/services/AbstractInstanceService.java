@@ -4,7 +4,7 @@ package de.thbingen.epro.project.servicebroker.services;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.*;
 
-public abstract class AbstractServiceInstanceService implements ServiceInstanceService {
+public abstract class AbstractInstanceService implements InstanceService {
 
     @Override
     public abstract CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request);

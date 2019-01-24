@@ -11,7 +11,7 @@ package de.thbingen.epro.project.servicebroker.model.services;
 import de.thbingen.epro.project.servicebroker.services.ServiceManager;
 import de.thbingen.epro.project.web.schema.ServiceDefinition;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
-import de.thbingen.epro.project.servicebroker.services.ServiceInstanceService;
+import de.thbingen.epro.project.servicebroker.services.InstanceService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ class TestService implements OsbService{
     }
 
     @Override
-    public ServiceInstanceService getServiceInstanceService() {
+    public InstanceService getInstanceService() {
         return null;
     }
 
