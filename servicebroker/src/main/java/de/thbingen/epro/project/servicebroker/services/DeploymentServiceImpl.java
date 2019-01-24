@@ -4,7 +4,6 @@ package de.thbingen.epro.project.servicebroker.services;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.*;
 import de.thbingen.epro.project.web.services.ServiceInstanceService;
-import org.springframework.stereotype.Service;
 
 public abstract class DeploymentServiceImpl implements ServiceInstanceService {
 

@@ -21,7 +21,9 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperatio
 import de.thbingen.epro.project.web.services.BindingService;
 import org.springframework.stereotype.Service;
 
+@Service
 public class RedisInstanceBindingService extends BindingServiceImpl {
+
 
 
 }
