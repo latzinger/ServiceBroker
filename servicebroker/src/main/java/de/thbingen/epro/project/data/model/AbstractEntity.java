@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.util.UUID;
 
@@ -12,5 +13,6 @@ import java.util.UUID;
 @Getter
 @EqualsAndHashCode
 public class AbstractEntity {
+    @Id
     private String id = UUID.randomUUID().toString();
 }

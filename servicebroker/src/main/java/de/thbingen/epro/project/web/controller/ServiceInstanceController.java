@@ -9,6 +9,7 @@
 
 package de.thbingen.epro.project.web.controller;
 
+import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
 import de.thbingen.epro.project.servicebroker.services.ServiceInstanceService;
@@ -24,6 +25,8 @@ import java.util.Map;
 @RequestMapping("/v2/service_instance")
 public class ServiceInstanceController extends BaseController {
 
+    private ServiceInstanceRepository serviceInstanceRepository;
+
     @GetMapping(value = "/{instanceId}")
     public ResponseEntity<?> fetchServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
@@ -31,7 +34,6 @@ public class ServiceInstanceController extends BaseController {
             @RequestParam Map<String, String> parameters) {
         checkApiVersion(httpHeaders);
         //TODO implement method
-
 
         return null;
     }
