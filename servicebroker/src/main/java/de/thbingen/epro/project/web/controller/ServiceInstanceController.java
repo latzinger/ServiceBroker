@@ -107,7 +107,7 @@ public class ServiceInstanceController extends BaseController {
     @GetMapping(value = "/{instanceId}/last_operation")
     public ResponseEntity<?> lastOperation(
             @RequestHeader HttpHeaders httpHeaders,
-            @PathVariable("instance_id") String instanceId,
+            @PathVariable("instanceId") String instanceId,
             @RequestParam Map<String, String> parameters) {
         LastOperationServiceInstanceRequest request = new LastOperationServiceInstanceRequest();
         checkAndComplete(httpHeaders, request, instanceId, parameters);
