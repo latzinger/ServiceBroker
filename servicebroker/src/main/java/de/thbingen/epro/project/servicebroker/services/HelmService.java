@@ -8,18 +8,21 @@
 
 package de.thbingen.epro.project.servicebroker.services;
 
+import hapi.chart.ChartOuterClass;
+import hapi.release.ReleaseOuterClass;
 import hapi.services.tiller.Tiller;
-import hapi.version.VersionOuterClass;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import org.microbean.helm.ReleaseManager;
 import org.microbean.helm.TillerInstaller;
+import org.microbean.helm.chart.AbstractChartLoader;
+import org.microbean.helm.chart.URLChartLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
+import java.net.URL;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -35,7 +38,51 @@ public class HelmService {
         tillerInstaller.init(upgradeVersion, connectionTimeout);
     }
 
-    public void installChart(URI path) {
+    public void installChart(URL path) {
+        installChart(path, "osb");
+    }
+
+    public void installChart(URL path, String name) {
+
+        org.microbean.helm.Tiller tiller = null;
+
+        try {
+            tiller = getTiller();
+            LOG.debug("Tiller Version: " + tiller.getVersion().getSemVer());
+
+            if (tiller != null) {
+
+                ReleaseManager manager = new ReleaseManager(tiller);
+
+                hapi.services.tiller.Tiller.InstallReleaseRequest.Builder builder =
+                        hapi.services.tiller.Tiller.InstallReleaseRequest.newBuilder();
+
+                builder.setTimeout(300L);
+                builder.setName(name);
+                builder.setWait(false);
+
+                ChartOuterClass.Chart.Builder chartBuilder = null;
+
+                try (final AbstractChartLoader<URL> loader = new URLChartLoader()) {
+                    chartBuilder = loader.load(path);
+                }
+
+                if (chartBuilder != null) {
+
+                    Future<hapi.services.tiller.Tiller.InstallReleaseResponse> releaseFuture =
+                            manager.install(builder, chartBuilder);
+
+                    ReleaseOuterClass.Release release = releaseFuture.get().getRelease();
+
+                }
+
+            }
+
+
+        } catch (IOException | InterruptedException | ExecutionException e) {
+            LOG.error(e.getMessage());
+        }
+
     }
 
     public void deleteChart(String name) {
