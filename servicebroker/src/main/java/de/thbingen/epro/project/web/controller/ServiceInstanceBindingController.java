@@ -12,6 +12,8 @@ import de.thbingen.epro.project.data.service.ServiceInstanceBindingService;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ import java.util.Map;
 @RequestMapping("/v2/service_instances")
 public class ServiceInstanceBindingController extends BaseController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceInstanceBindingController.class);
+
     @Autowired
     private ServiceInstanceBindingService serviceInstanceBindingService;
 
@@ -34,6 +38,7 @@ public class ServiceInstanceBindingController extends BaseController {
             @PathVariable String bindingId) {
 
         checkApiVersion(httpHeaders);
+
 
 
         //TODO implement method

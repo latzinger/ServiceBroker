@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public abstract class BaseController {
     private static final String API_VERSION = "2.14";
@@ -57,10 +59,13 @@ public abstract class BaseController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> handleException(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
-        String message = "Missing required fields:";
-        for (FieldError error : result.getFieldErrors()) {
-            message += " " + error.getField();
-        }
+
+        String message = result
+                .getFieldErrors()
+                .stream()
+                .map(fieldError -> fieldError.getField())
+                .collect(Collectors.joining(" "));
+
         return getErrorMessageResponseEntity("MissingFields", message, HttpStatus.BAD_REQUEST);
     }
 
