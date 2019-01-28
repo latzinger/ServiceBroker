@@ -9,14 +9,25 @@
 
 package de.thbingen.epro.project.servicebroker.services;
 
+import de.thbingen.epro.project.data.service.ServiceInstanceBindingService;
+import de.thbingen.epro.project.data.service.ServiceInstanceService;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 
 public abstract class AbstractInstanceBindingService implements BindingService {
+
+    @Autowired
+    protected ServiceInstanceService serviceInstanceService;
+
+    @Autowired
+    protected ServiceInstanceBindingService serviceInstanceBindingService;
 
     @Override
     public abstract CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request);
@@ -26,4 +37,5 @@ public abstract class AbstractInstanceBindingService implements BindingService {
 
     @Override
     public abstract LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request);
+
 }

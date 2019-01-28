@@ -8,10 +8,12 @@
 
 package de.thbingen.epro.project.web.controller;
 
-import de.thbingen.epro.project.data.service.ServiceInstanceBindingService;
+import de.thbingen.epro.project.servicebroker.services.redis.RedisService;
+import de.thbingen.epro.project.web.exception.*;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
+import de.thbingen.epro.project.web.response.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +31,16 @@ public class ServiceInstanceBindingController extends BaseController {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceInstanceBindingController.class);
 
     @Autowired
-    private ServiceInstanceBindingService serviceInstanceBindingService;
+    private RedisService redisService;
 
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> getServiceInstanceBinding(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
-            @PathVariable String bindingId) {
+            @PathVariable String bindingId)
+            throws InvalidApiVersionException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException {
 
         checkApiVersion(httpHeaders);
-
-
-
-        //TODO implement method
 
         return null;
     }
@@ -51,7 +50,8 @@ public class ServiceInstanceBindingController extends BaseController {
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId,
-            @RequestParam Map<String, String> parameters) {
+            @RequestParam Map<String, String> parameters)
+            throws InvalidApiVersionException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException {
 
         checkApiVersion(httpHeaders);
 
@@ -70,7 +70,8 @@ public class ServiceInstanceBindingController extends BaseController {
             @PathVariable String instanceId,
             @PathVariable String bindingId,
             @RequestParam Map<String, String> parameters,
-            @Valid @RequestBody CreateServiceInstanceBindingRequest request) {
+            @Valid @RequestBody CreateServiceInstanceBindingRequest request)
+            throws InvalidApiVersionException, InvalidRequestException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException {
 
         checkApiVersion(httpHeaders);
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
@@ -85,7 +86,8 @@ public class ServiceInstanceBindingController extends BaseController {
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId,
-            @RequestParam Map<String, String> parameters) {
+            @RequestParam Map<String, String> parameters)
+            throws InvalidApiVersionException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException {
 
         checkApiVersion(httpHeaders);
 
@@ -95,6 +97,18 @@ public class ServiceInstanceBindingController extends BaseController {
 
         //TODO implement method
         return null;
+    }
+
+    @ExceptionHandler(ServiceInstanceNotFoundException.class)
+    private ResponseEntity<?> handleServiceInstanceNotFoundException(ServiceInstanceNotFoundException e) {
+        LOG.debug("ServiceInstance not found: " + e.getServiceInstanceId());
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(ServiceInstanceBindingNotFoundException.class)
+    private ResponseEntity<ErrorMessage> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingNotFoundException e) {
+        LOG.debug(e.getMessage());
+        return ResponseEntity.notFound().build();
     }
 
 }

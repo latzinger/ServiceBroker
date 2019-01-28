@@ -9,12 +9,17 @@
 package de.thbingen.epro.project.servicebroker.services.redis;
 
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceService;
-import de.thbingen.epro.project.web.request.serviceinstance.*;
-import de.thbingen.epro.project.web.response.serviceinstance.*;
+import de.thbingen.epro.project.web.request.serviceinstance.CreateServiceInstanceRequest;
+import de.thbingen.epro.project.web.request.serviceinstance.DeleteServiceInstanceRequest;
+import de.thbingen.epro.project.web.request.serviceinstance.LastOperationServiceInstanceRequest;
+import de.thbingen.epro.project.web.request.serviceinstance.UpdateServiceInstanceRequest;
+import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
+import de.thbingen.epro.project.web.response.serviceinstance.DeleteServiceInstanceResponse;
+import de.thbingen.epro.project.web.response.serviceinstance.LastOperationServiceInstanceResponse;
+import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstanceResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-
 public class RedisInstanceService extends AbstractInstanceService {
 
     @Override

@@ -9,6 +9,7 @@
 package de.thbingen.epro.project.web.controller;
 
 import de.thbingen.epro.project.servicebroker.services.CatalogService;
+import de.thbingen.epro.project.web.exception.InvalidApiVersionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class CatalogController extends BaseController {
         this.catalogService = catalogService;
     }
 
-    @GetMapping
-    public ResponseEntity<?> getCatalog(@RequestHeader HttpHeaders httpHeaders) {
+    @GetMapping(value = {"/", ""})
+    public ResponseEntity<?> getCatalog(@RequestHeader HttpHeaders httpHeaders) throws InvalidApiVersionException {
         LOG.debug("GET: /v2/catalog getCatalog()");
         checkApiVersion(httpHeaders);
         return ResponseEntity.ok(catalogService.getCatalog());
