@@ -9,8 +9,11 @@
 
 package de.thbingen.epro.project.servicebroker.services;
 
+import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.data.service.ServiceInstanceBindingService;
 import de.thbingen.epro.project.data.service.ServiceInstanceService;
+import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
+import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
@@ -38,4 +41,12 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     @Override
     public abstract LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request);
 
+    @Override
+    public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId)
+            throws ServiceInstanceNotFoundException, ServiceInstanceBindingNotFoundException {
+
+        
+
+        return null;
+    }
 }

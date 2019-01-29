@@ -27,13 +27,9 @@ public class RedisService implements OsbService {
     //TODO implement RedisInstanceService
     private RedisInstanceService redisInstanceService;
 
-    //TODO implement RedisBindingService
-    private RedisInstanceBindingService redisInstanceBindingService;
-
     @Autowired
-    public RedisService(RedisInstanceService instanceService, RedisInstanceBindingService bindingService) {
+    public RedisService(RedisInstanceService instanceService) {
         redisInstanceService = instanceService;
-        redisInstanceBindingService = bindingService;
     }
 
     @Override
@@ -73,11 +69,6 @@ public class RedisService implements OsbService {
     @Override
     public InstanceService getInstanceService() {
         return redisInstanceService;
-    }
-
-    @Override
-    public BindingService getBindingService() {
-        return redisInstanceBindingService;
     }
 
     @Override

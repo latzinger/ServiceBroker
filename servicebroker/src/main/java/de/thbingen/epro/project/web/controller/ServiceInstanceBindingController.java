@@ -8,7 +8,8 @@
 
 package de.thbingen.epro.project.web.controller;
 
-import de.thbingen.epro.project.servicebroker.services.redis.RedisService;
+import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
+import de.thbingen.epro.project.servicebroker.services.AbstractInstanceBindingService;
 import de.thbingen.epro.project.web.exception.*;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
@@ -31,7 +32,7 @@ public class ServiceInstanceBindingController extends BaseController {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceInstanceBindingController.class);
 
     @Autowired
-    private RedisService redisService;
+    private AbstractInstanceBindingService bindingService;
 
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> getServiceInstanceBinding(
@@ -42,7 +43,10 @@ public class ServiceInstanceBindingController extends BaseController {
 
         checkApiVersion(httpHeaders);
 
-        return null;
+        ServiceInstanceBinding serviceInstanceBinding =
+                bindingService.getServiceInstanceBinding(instanceId, bindingId);
+
+        return ResponseEntity.ok(serviceInstanceBinding);
     }
 
     @DeleteMapping(path = "/{instanceId}/service_bindings/{bindingId}")
