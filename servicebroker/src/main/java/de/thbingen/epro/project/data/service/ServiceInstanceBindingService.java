@@ -8,6 +8,7 @@
 
 package de.thbingen.epro.project.data.service;
 
+import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.data.repository.ServiceInstanceBindingRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
@@ -31,35 +32,43 @@ public class ServiceInstanceBindingService {
     @Autowired
     private ServiceInstanceRepository serviceInstanceRepository;
 
+    public ServiceInstanceBinding getServiceInstanceBinding(String bindingId, String instanceId)
+            throws ServiceInstanceBindingNotFoundException {
 
-    public ServiceInstanceBinding getServiceInstanceBinding(String serviceId, String bindingId)
+        ServiceInstanceBinding serviceInstanceBinding = serviceInstanceBindingRepository.getOne(bindingId);
+        ServiceInstance serviceInstance = serviceInstanceRepository.getOne(instanceId);
+
+        if(serviceInstanceBinding == null)
+            throw new ServiceInstanceBindingNotFoundException(bindingId);
+
+        boolean sameServiceInstance = serviceInstanceBinding.getServiceInstance().equals(serviceInstance);
+
+        if(serviceInstance == null || !sameServiceInstance)
+            throw new ServiceInstanceBindingNotFoundException(bindingId);
+
+        return serviceInstanceBinding;
+    }
+
+    public ServiceInstanceBinding createServiceInstanceBinding(String serviceId, String bindingId)
             throws ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException {
 
 
         return null;
     }
 
-    public ServiceInstanceBinding createServiceInstanceBinding(String serviceId, String bindingId)
-            throws ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException{
-
-
-        return null;
-    }
-
     public void deleteServiceInstanceBinding(String serviceId, String bindingId)
-            throws ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException{
+            throws ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException {
 
 
         return;
     }
 
     public void lastOperationServiceInstanceBinding(String serviceId, String bindingId)
-            throws ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException{
+            throws ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException {
 
 
         return;
     }
-
 
 
 }

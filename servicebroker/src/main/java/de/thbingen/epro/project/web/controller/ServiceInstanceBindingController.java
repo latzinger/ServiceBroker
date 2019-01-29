@@ -103,12 +103,6 @@ public class ServiceInstanceBindingController extends BaseController {
         return null;
     }
 
-    @ExceptionHandler(ServiceInstanceNotFoundException.class)
-    private ResponseEntity<?> handleServiceInstanceNotFoundException(ServiceInstanceNotFoundException e) {
-        LOG.debug("ServiceInstance not found: " + e.getServiceInstanceId());
-        return ResponseEntity.notFound().build();
-    }
-
     @ExceptionHandler(ServiceInstanceBindingNotFoundException.class)
     private ResponseEntity<ErrorMessage> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingNotFoundException e) {
         LOG.debug(e.getMessage());

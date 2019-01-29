@@ -26,7 +26,4 @@ public interface BindingService {
 
     LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request);
 
-    ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId)
-            throws ServiceInstanceNotFoundException, ServiceInstanceBindingNotFoundException;
-
 }

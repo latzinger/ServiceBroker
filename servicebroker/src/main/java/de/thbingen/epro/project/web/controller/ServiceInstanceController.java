@@ -134,14 +134,14 @@ public class ServiceInstanceController extends BaseController {
     private ServiceInstance getServiceInstance(String instanceId) throws ServiceInstanceNotFoundException {
         ServiceInstance serviceInstance = serviceInstanceService.getServiceInstance(instanceId);
         if (serviceInstance == null)
-            throw new ServiceInstanceNotFoundException();
+            throw new ServiceInstanceNotFoundException(instanceId);
 
         return serviceInstance;
     }
 
     @ExceptionHandler(ServiceInstanceNotFoundException.class)
     private ResponseEntity<?> handleServiceInstanceNotFoundException(ServiceInstanceNotFoundException e) {
-        LOG.debug("ServiceInstance not found: " + e.getServiceInstanceId());
+        LOG.debug("ServiceInstance not found: " + e.getInstanceId());
         return ResponseEntity.notFound().build();
     }
 

@@ -27,9 +27,6 @@ import org.springframework.stereotype.Service;
 public abstract class AbstractInstanceBindingService implements BindingService {
 
     @Autowired
-    protected ServiceInstanceService serviceInstanceService;
-
-    @Autowired
     protected ServiceInstanceBindingService serviceInstanceBindingService;
 
     @Override
@@ -41,12 +38,8 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     @Override
     public abstract LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request);
 
-    @Override
     public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId)
-            throws ServiceInstanceNotFoundException, ServiceInstanceBindingNotFoundException {
-
-        
-
-        return null;
+            throws ServiceInstanceBindingNotFoundException {
+        return serviceInstanceBindingService.getServiceInstanceBinding(instanceId, bindingId);
     }
 }
