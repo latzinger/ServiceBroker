@@ -21,6 +21,6 @@ import lombok.NoArgsConstructor;
 public class DeleteServiceInstanceBindingResponse {
 
     @JsonProperty("operation")
-    private String operation;
+    private String operation = "{}";
 
 }

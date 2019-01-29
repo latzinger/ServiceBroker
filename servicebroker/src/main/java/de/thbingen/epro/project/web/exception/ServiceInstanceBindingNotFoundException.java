@@ -1,14 +1,12 @@
 package de.thbingen.epro.project.web.exception;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class ServiceInstanceBindingNotFoundException extends RuntimeException {
 
-    @NonNull
     private String bindingId;
 
     @Override

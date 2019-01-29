@@ -15,10 +15,14 @@ import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateService
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.response.ErrorMessage;
+import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
+import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
+import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +50,7 @@ public class ServiceInstanceBindingController extends BaseController {
         ServiceInstanceBinding serviceInstanceBinding =
                 bindingService.getServiceInstanceBinding(instanceId, bindingId);
 
-        return ResponseEntity.ok(serviceInstanceBinding);
+        return new ResponseEntity<>(serviceInstanceBinding, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{instanceId}/service_bindings/{bindingId}")
@@ -63,9 +67,10 @@ public class ServiceInstanceBindingController extends BaseController {
                 new DeleteServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
         request.setParameters(parameters);
 
-        //TODO implement method
+        DeleteServiceInstanceBindingResponse response =
+                bindingService.deleteServiceInstanceBinding(request);
 
-        return null;
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping(path = "/{instanceId}/service_bindings/{bindingId}")
@@ -81,8 +86,10 @@ public class ServiceInstanceBindingController extends BaseController {
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
         request.setParameters(parameters);
 
-        //TODO implement method
-        return null;
+        CreateServiceInstanceBindingResponse response =
+                bindingService.createServiceInstanceBinding(request);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}/last_operation")
@@ -99,14 +106,28 @@ public class ServiceInstanceBindingController extends BaseController {
                 new LastOperationServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
         request.setParameters(parameters);
 
-        //TODO implement method
-        return null;
+        LastOperationServiceInstanceBindingResponse response =
+                bindingService.lastOperation(request);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler(ServiceInstanceBindingNotFoundException.class)
     private ResponseEntity<ErrorMessage> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingNotFoundException e) {
         LOG.debug(e.getMessage());
         return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(ServiceInstanceBindingDoesNotExistException.class)
+    private ResponseEntity<ErrorMessage> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingDoesNotExistException e) {
+        LOG.debug(e.getMessage());
+        return getErrorMessageResponseEntity("ServiceInstanceBindingNotFoundException", e.getMessage(), HttpStatus.GONE);
+    }
+
+    @ExceptionHandler(ServiceInstanceBindingBadRequestException.class)
+    private ResponseEntity<ErrorMessage> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingBadRequestException e) {
+        LOG.debug(e.getMessage());
+        return getErrorMessageResponseEntity("ServiceInstanceBindingNotFoundException", e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }

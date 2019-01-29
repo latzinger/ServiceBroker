@@ -12,6 +12,8 @@ package de.thbingen.epro.project.servicebroker.services;
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.data.service.ServiceInstanceBindingService;
 import de.thbingen.epro.project.data.service.ServiceInstanceService;
+import de.thbingen.epro.project.web.exception.ServiceInstanceBindingBadRequestException;
+import de.thbingen.epro.project.web.exception.ServiceInstanceBindingDoesNotExistException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
@@ -30,13 +32,16 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     protected ServiceInstanceBindingService serviceInstanceBindingService;
 
     @Override
-    public abstract CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request);
+    public abstract CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request)
+            throws ServiceInstanceBindingBadRequestException;
 
     @Override
-    public abstract DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request);
+    public abstract DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request)
+            throws ServiceInstanceBindingBadRequestException, ServiceInstanceBindingDoesNotExistException;
 
     @Override
-    public abstract LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request);
+    public abstract LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request)
+            throws ServiceInstanceBindingBadRequestException, ServiceInstanceBindingDoesNotExistException;
 
     public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId)
             throws ServiceInstanceBindingNotFoundException {

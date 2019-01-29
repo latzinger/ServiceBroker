@@ -75,7 +75,7 @@ public abstract class BaseController {
     }
 
 
-    private ResponseEntity<ErrorMessage> getErrorMessageResponseEntity(String error, String message, HttpStatus status) {
+    protected ResponseEntity<ErrorMessage> getErrorMessageResponseEntity(String error, String message, HttpStatus status) {
         return new ResponseEntity<ErrorMessage>(new ErrorMessage(error, message), status);
     }
 

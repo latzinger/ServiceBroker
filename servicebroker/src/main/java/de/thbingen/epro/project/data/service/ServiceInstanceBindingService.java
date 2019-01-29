@@ -32,39 +32,33 @@ public class ServiceInstanceBindingService {
     @Autowired
     private ServiceInstanceRepository serviceInstanceRepository;
 
-    public ServiceInstanceBinding getServiceInstanceBinding(String bindingId, String instanceId)
+    public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId)
             throws ServiceInstanceBindingNotFoundException {
 
-        ServiceInstanceBinding serviceInstanceBinding = serviceInstanceBindingRepository.getOne(bindingId);
-        ServiceInstance serviceInstance = serviceInstanceRepository.getOne(instanceId);
+        ServiceInstanceBinding serviceInstanceBinding = serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId);
 
-        if(serviceInstanceBinding == null)
-            throw new ServiceInstanceBindingNotFoundException(bindingId);
-
-        boolean sameServiceInstance = serviceInstanceBinding.getServiceInstance().equals(serviceInstance);
-
-        if(serviceInstance == null || !sameServiceInstance)
+        if (serviceInstanceBinding == null)
             throw new ServiceInstanceBindingNotFoundException(bindingId);
 
         return serviceInstanceBinding;
     }
 
     public ServiceInstanceBinding createServiceInstanceBinding(String serviceId, String bindingId)
-            throws ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException {
+            throws ServiceInstanceBindingNotFoundException {
 
 
         return null;
     }
 
     public void deleteServiceInstanceBinding(String serviceId, String bindingId)
-            throws ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException {
+            throws ServiceInstanceBindingNotFoundException {
 
 
         return;
     }
 
     public void lastOperationServiceInstanceBinding(String serviceId, String bindingId)
-            throws ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException {
+            throws ServiceInstanceBindingNotFoundException {
 
 
         return;

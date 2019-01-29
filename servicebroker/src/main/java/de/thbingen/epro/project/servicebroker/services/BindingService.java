@@ -9,6 +9,8 @@
 package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
+import de.thbingen.epro.project.web.exception.ServiceInstanceBindingBadRequestException;
+import de.thbingen.epro.project.web.exception.ServiceInstanceBindingDoesNotExistException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
@@ -20,10 +22,13 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperatio
 
 public interface BindingService {
 
-    CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request);
+    CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request)
+            throws ServiceInstanceBindingBadRequestException;
 
-    DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request);
+    DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request)
+            throws ServiceInstanceBindingBadRequestException, ServiceInstanceBindingDoesNotExistException;
 
-    LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request);
+    LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request)
+            throws ServiceInstanceBindingBadRequestException, ServiceInstanceBindingDoesNotExistException;
 
 }
