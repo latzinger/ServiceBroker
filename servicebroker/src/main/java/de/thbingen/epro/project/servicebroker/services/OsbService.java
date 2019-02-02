@@ -17,8 +17,6 @@ public interface OsbService {
 
     InstanceService getInstanceService();
 
-    BindingService getBindingService();
-
     String getServiceId();
 
 }

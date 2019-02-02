@@ -15,7 +15,6 @@ import de.thbingen.epro.project.web.exception.InvalidRequestException;
 import de.thbingen.epro.project.web.exception.ServiceNotFoundException;
 import de.thbingen.epro.project.web.request.OsbRequest;
 import de.thbingen.epro.project.web.response.ErrorMessage;
-import de.thbingen.epro.project.servicebroker.services.OsbService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +22,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public abstract class BaseController {
     private static final String API_VERSION = "2.14";
@@ -37,7 +36,7 @@ public abstract class BaseController {
     private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 
     @Autowired
-    private ServiceManager serviceManager;
+    protected ServiceManager serviceManager;
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
@@ -57,15 +56,18 @@ public abstract class BaseController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> handleException(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
-        String message = "Missing required fields:";
-        for (FieldError error : result.getFieldErrors()) {
-            message += " " + error.getField();
-        }
+
+        String message = result
+                .getFieldErrors()
+                .stream()
+                .map(fieldError -> fieldError.getField())
+                .collect(Collectors.joining(" "));
+
         return getErrorMessageResponseEntity("MissingFields", message, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ServiceNotFoundException.class)
-    public ResponseEntity<ErrorMessage> handleInvalidRequestException(ServiceNotFoundException e) {
+    public ResponseEntity<ErrorMessage> handleServiceNotFoundException(ServiceNotFoundException e) {
         LOG.debug("Service " + e.getServiceId() + " not found");
 
         ResponseEntity<ErrorMessage> serviceNotFound = getErrorMessageResponseEntity("ServiceNotFound", "Service wit id" + e.getServiceId() + " not found", HttpStatus.BAD_REQUEST);
@@ -77,7 +79,7 @@ public abstract class BaseController {
         return new ResponseEntity<ErrorMessage>(new ErrorMessage(error, message), status);
     }
 
-    public void checkApiVersion(HttpHeaders headers) {
+    public void checkApiVersion(HttpHeaders headers) throws InvalidApiVersionException {
         String apiVersion = headers.toSingleValueMap().get("X-Broker-API-Version");
 
         if (apiVersion != null) {
@@ -99,7 +101,7 @@ public abstract class BaseController {
         checkAndComplete(httpHeaders, request, new HashMap<>());
     }
 
-    public void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request, Map<String, String> parameters) {
+    public void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request, Map<String, String> parameters) throws InvalidApiVersionException {
         checkApiVersion(httpHeaders);
 
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
@@ -108,12 +110,4 @@ public abstract class BaseController {
         LOG.debug("checkAndComplete successfully");
     }
 
-    protected OsbService getService(String serviceId) {
-        OsbService service = serviceManager.getService(serviceId);
-
-        if (service == null)
-            throw new ServiceNotFoundException(serviceId);
-
-        return service;
-    }
 }

@@ -9,6 +9,8 @@
 
 package de.thbingen.epro.project.servicebroker.services;
 
+import de.thbingen.epro.project.data.service.ServiceInstanceService;
+import de.thbingen.epro.project.web.exception.ServiceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,9 @@ import java.util.Map;
 
 @Service
 public class ServiceManager {
+
     private List<? extends OsbService> definedServices;
+
     private Map<String, OsbService> services;
 
     @Autowired
@@ -36,7 +40,7 @@ public class ServiceManager {
                 .distinct()
                 .count();
 
-        if(definedServices.size() > count)
+        if (definedServices.size() > count)
             throw new IllegalStateException("There are " + (definedServices.size() - count) + " Services with same serviceId");
 
         definedServices.forEach(service -> services.put(service.getServiceId(), service));
@@ -59,7 +63,13 @@ public class ServiceManager {
         this.services = services;
     }
 
-    public OsbService getService(String serviceId) {
-        return services.get(serviceId);
+    public OsbService getService(String serviceId) throws ServiceNotFoundException {
+
+        OsbService service = services.get(serviceId);
+
+        if (service == null)
+            throw new ServiceNotFoundException(serviceId);
+
+        return service;
     }
 }

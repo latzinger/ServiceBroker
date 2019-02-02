@@ -62,7 +62,7 @@ public class ServiceInstanceController extends BaseController {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
         ServiceInstance serviceInstance = serviceInstanceService.getServiceInstance(instanceId);
-        if(serviceInstance != null)
+        if (serviceInstance != null)
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
         InstanceService instanceService = getInstanceService(request.getServiceId());
@@ -128,19 +128,19 @@ public class ServiceInstanceController extends BaseController {
     }
 
     private InstanceService getInstanceService(String serviceId) {
-        return getService(serviceId).getInstanceService();
+        return serviceManager.getService(serviceId).getInstanceService();
     }
 
-    private ServiceInstance getServiceInstance(String instanceId){
+    private ServiceInstance getServiceInstance(String instanceId) throws ServiceInstanceNotFoundException {
         ServiceInstance serviceInstance = serviceInstanceService.getServiceInstance(instanceId);
-        if(serviceInstance == null)
+        if (serviceInstance == null)
             throw new ServiceInstanceNotFoundException();
 
         return serviceInstance;
     }
 
     @ExceptionHandler(ServiceInstanceNotFoundException.class)
-    private ResponseEntity<?> handleServiceInstanceNotFoundException(ServiceInstanceNotFoundException e){
+    private ResponseEntity<?> handleServiceInstanceNotFoundException(ServiceInstanceNotFoundException e) {
         LOG.debug("ServiceInstance not found: " + e.getServiceInstanceId());
         return ResponseEntity.notFound().build();
     }
