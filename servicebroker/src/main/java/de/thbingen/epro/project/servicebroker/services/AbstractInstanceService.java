@@ -24,9 +24,6 @@ import org.springframework.stereotype.Service;
 
 public abstract class AbstractInstanceService implements InstanceService {
 
-    @Autowired
-    protected ServiceInstanceService serviceInstanceService;
-
     @Override
     public abstract CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request);
 

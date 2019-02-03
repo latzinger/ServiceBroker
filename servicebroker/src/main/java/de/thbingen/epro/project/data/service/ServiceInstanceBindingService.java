@@ -8,12 +8,10 @@
 
 package de.thbingen.epro.project.data.service;
 
-import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.data.repository.ServiceInstanceBindingRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
-import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +33,8 @@ public class ServiceInstanceBindingService {
     public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId)
             throws ServiceInstanceBindingNotFoundException {
 
-        ServiceInstanceBinding serviceInstanceBinding = serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId);
+        ServiceInstanceBinding serviceInstanceBinding =
+                serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId);
 
         if (serviceInstanceBinding == null)
             throw new ServiceInstanceBindingNotFoundException(bindingId);

@@ -66,11 +66,6 @@ class TestService implements OsbService{
     }
 
     @Override
-    public BindingService getBindingService() {
-        return null;
-    }
-
-    @Override
     public String getServiceId() {
         return SERVICE_ID;
     }

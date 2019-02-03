@@ -1,6 +1,7 @@
 package de.thbingen.epro.project.data.model;
 
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
+import de.thbingen.epro.project.servicebroker.services.redis.RedisService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class ServiceInstanceTest {
 
     @Test
     public void testElementCollection(){
-        ServiceInstance serviceInstance = new ServiceInstance();
+        ServiceInstance serviceInstance = new ServiceInstance(RedisService.SERVICE_ID, "000-xxx-000");
 
         HashMap<String, String> parameters = new HashMap<>();
         parameters.put("param1", "value1");

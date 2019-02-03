@@ -16,8 +16,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface ServiceInstanceBindingRepository extends JpaRepository<ServiceInstanceBinding, String> {
 
-    @Query("")
-    public ServiceInstanceBinding getServiceInstanceBinding(@Param("instanceid") String instanceId,
-                                                            @Param("bindingid") String bindingId);
+    @Query("FROM ServiceInstanceBinding s WHERE s.id = :bindingId and s.serviceInstance.id = :instanceId")
+    ServiceInstanceBinding getServiceInstanceBinding(@Param("instanceId") String instanceId,
+                                                     @Param("bindingId") String bindingId);
 
 }

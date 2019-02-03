@@ -9,7 +9,9 @@
 package de.thbingen.epro.project.data.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashMap;
@@ -17,6 +19,8 @@ import java.util.Map;
 
 @Entity
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class ServiceInstanceBinding extends AbstractEntity {
 
     @NonNull
@@ -34,5 +38,6 @@ public class ServiceInstanceBinding extends AbstractEntity {
     @MapKeyJoinColumn(name = "PARAMETERS_KEY")
     @Column(name = "PARAMETERS_VALUE")
     private Map<String, String> parameters;
+
 
 }
