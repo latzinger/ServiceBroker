@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 
 import java.util.HashMap;
+import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -21,11 +22,8 @@ public class ServiceInstanceTest {
 
     @Test
     @Ignore
-    public void testElementCollection(){
-        ServiceInstance serviceInstance = new ServiceInstance(RedisService.SERVICE_ID, "000-xxx-000");
-
-        serviceInstance.setServiceId("000-xxx-000");
-        serviceInstance.setPlanId("000-yyy-000");
+    public void testElementCollection() {
+        ServiceInstance serviceInstance = new ServiceInstance(RedisService.SERVICE_ID, UUID.randomUUID().toString());
 
         HashMap<String, String> parameters = new HashMap<>();
         parameters.put("param1", "value1");

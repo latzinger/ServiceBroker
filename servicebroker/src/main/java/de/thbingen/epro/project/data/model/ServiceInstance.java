@@ -36,7 +36,7 @@ public class ServiceInstance extends AbstractEntity {
     @Column
     private String dashboardURL;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "SERVICE_INSTANCE_PARAMETERS")
     @MapKeyJoinColumn(name = "PARAMETER_KEY")
     @Column(name = "VALUE")

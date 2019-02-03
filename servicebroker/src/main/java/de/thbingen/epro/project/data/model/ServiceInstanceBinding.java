@@ -27,13 +27,13 @@ public class ServiceInstanceBinding extends AbstractEntity {
     @ManyToOne
     private ServiceInstance serviceInstance;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "SERVICE_INSTANCE_BINDING_CREDENTIALS")
     @MapKeyJoinColumn(name = "CREDENTIALS_KEY")
     @Column(name = "CREDENTIALS_VALUE")
     private Map<String, String> credentials = new HashMap<>();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "SERVICE_INSTANCE_BINDING_PARAMETERS")
     @MapKeyJoinColumn(name = "PARAMETERS_KEY")
     @Column(name = "PARAMETERS_VALUE")
