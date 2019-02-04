@@ -24,14 +24,6 @@ public class RedisService implements OsbService {
 
     public static final String SERVICE_ID = "4a30cd4f-914b-4082-8818-e9e9691fa1ce";
 
-    //TODO implement RedisInstanceService
-    private RedisInstanceService redisInstanceService;
-
-    @Autowired
-    public RedisService(RedisInstanceService instanceService) {
-        redisInstanceService = instanceService;
-    }
-
     @Override
     public ServiceDefinition getServiceDefiniton() {
 
@@ -64,11 +56,6 @@ public class RedisService implements OsbService {
                 .build();
 
         return serviceDefinition;
-    }
-
-    @Override
-    public InstanceService getInstanceService() {
-        return redisInstanceService;
     }
 
     @Override

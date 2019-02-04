@@ -23,6 +23,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class RedisInstanceService extends AbstractInstanceService {
 
+    @Autowired
+    private RedisService redisService;
+
     @Override
     public CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) {
         return null;

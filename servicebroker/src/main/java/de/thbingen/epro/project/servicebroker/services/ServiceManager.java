@@ -9,7 +9,6 @@
 
 package de.thbingen.epro.project.servicebroker.services;
 
-import de.thbingen.epro.project.data.service.ServiceInstanceService;
 import de.thbingen.epro.project.web.exception.ServiceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

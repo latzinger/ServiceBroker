@@ -61,11 +61,6 @@ class TestService implements OsbService{
     }
 
     @Override
-    public InstanceService getInstanceService() {
-        return null;
-    }
-
-    @Override
     public String getServiceId() {
         return SERVICE_ID;
     }

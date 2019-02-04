@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 
 public abstract class AbstractInstanceService implements InstanceService {
 
+    @Autowired
+    private ServiceInstanceService serviceInstanceService;
+
     @Override
     public abstract CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request);
 
@@ -36,4 +39,11 @@ public abstract class AbstractInstanceService implements InstanceService {
     @Override
     public abstract LastOperationServiceInstanceResponse lastOperation(LastOperationServiceInstanceRequest request);
 
+    public ServiceInstanceService getServiceInstanceService() {
+        return serviceInstanceService;
+    }
+
+    public void setServiceInstanceService(ServiceInstanceService serviceInstanceService) {
+        this.serviceInstanceService = serviceInstanceService;
+    }
 }

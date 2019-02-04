@@ -10,6 +10,7 @@ package de.thbingen.epro.project.web.controller;
 
 import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.service.ServiceInstanceService;
+import de.thbingen.epro.project.servicebroker.services.AbstractInstanceService;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
@@ -39,7 +40,7 @@ public class ServiceInstanceController extends BaseController {
     private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 
     @Autowired
-    private ServiceInstanceService serviceInstanceService;
+    private AbstractInstanceService instanceService;
 
     @GetMapping(value = "/{instanceId}")
     public ResponseEntity<?> fetchServiceInstance(
@@ -61,11 +62,10 @@ public class ServiceInstanceController extends BaseController {
             @Valid @RequestBody CreateServiceInstanceRequest request) {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
-        ServiceInstance serviceInstance = serviceInstanceService.getServiceInstance(instanceId);
+        ServiceInstance serviceInstance = instanceService.getServiceInstanceService().getServiceInstance(instanceId);
         if (serviceInstance != null)
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
-        InstanceService instanceService = getInstanceService(request.getServiceId());
         CreateServiceInstanceResponse createResponse = instanceService.createServiceInstance(request);
 
         return ResponseEntity.ok(createResponse);
@@ -80,7 +80,6 @@ public class ServiceInstanceController extends BaseController {
         checkAndComplete(httpHeaders, request, parameters);
 
         ServiceInstance serviceInstance = getServiceInstance(instanceId);
-        InstanceService instanceService = getInstanceService(serviceInstance.getServiceId());
 
         DeleteServiceInstanceResponse response = instanceService.deleteServiceInstance(request);
 
@@ -96,7 +95,6 @@ public class ServiceInstanceController extends BaseController {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
         ServiceInstance serviceInstance = getServiceInstance(instanceId);
-        InstanceService instanceService = getInstanceService(serviceInstance.getServiceId());
 
         UpdateServiceInstanceResponse response = instanceService.updateServiceInstance(request);
 
@@ -113,13 +111,11 @@ public class ServiceInstanceController extends BaseController {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
         ServiceInstance serviceInstance = getServiceInstance(instanceId);
-        InstanceService instanceService = getInstanceService(serviceInstance.getServiceId());
 
         LastOperationServiceInstanceResponse response = instanceService.lastOperation(request);
 
         return ResponseEntity.ok(response);
     }
-
 
     private void checkAndComplete(HttpHeaders httpHeaders, ServiceInstanceRequest request, String instanceId, Map<String, String> parameters) {
         super.checkAndComplete(httpHeaders, request, parameters);
@@ -127,12 +123,8 @@ public class ServiceInstanceController extends BaseController {
         request.setInstanceId(instanceId);
     }
 
-    private InstanceService getInstanceService(String serviceId) {
-        return serviceManager.getService(serviceId).getInstanceService();
-    }
-
     private ServiceInstance getServiceInstance(String instanceId) throws ServiceInstanceNotFoundException {
-        ServiceInstance serviceInstance = serviceInstanceService.getServiceInstance(instanceId);
+        ServiceInstance serviceInstance = instanceService.getServiceInstanceService().getServiceInstance(instanceId);
         if (serviceInstance == null)
             throw new ServiceInstanceNotFoundException(instanceId);
 

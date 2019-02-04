@@ -10,6 +10,7 @@ package de.thbingen.epro.project.web.controller;
 
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceBindingService;
+import de.thbingen.epro.project.servicebroker.services.BindingService;
 import de.thbingen.epro.project.web.exception.*;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
