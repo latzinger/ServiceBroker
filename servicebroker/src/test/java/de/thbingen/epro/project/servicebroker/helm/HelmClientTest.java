@@ -37,7 +37,7 @@ public class HelmClientTest {
 
     @Test
     public void A1_installChart() throws IOException, InstallFailedException {
-        ReleaseOuterClass.Release release = helmClient.installChart(new URL(chartURL), instanceId);
+        Release release = helmClient.installChart(new URL(chartURL), instanceId);
 
         assertThat(release, notNullValue());
         assertThat("Installation/Initialization failed unexpected", release.isInitialized(), is(true));
@@ -45,9 +45,9 @@ public class HelmClientTest {
 
     @Test
     public void A2_uninstallChart() throws IOException, UninstallFailedException {
-        ReleaseOuterClass.Release release = helmClient.uninstallChart(instanceId);
+        Release release = helmClient.uninstallChart(instanceId);
 
         assertThat(release, notNullValue());
-        assertThat("Uninstallation failed unexpected", release.getInfo().hasDeleted(), is(true));
+        assertThat("Uninstallation failed unexpected", release.hasDeleted(), is(true));
     }
 }
