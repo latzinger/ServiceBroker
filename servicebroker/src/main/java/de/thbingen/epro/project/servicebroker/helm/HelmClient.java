@@ -9,56 +9,54 @@ import hapi.services.tiller.Tiller.InstallReleaseResponse;
 import hapi.services.tiller.Tiller.UninstallReleaseRequest;
 import hapi.services.tiller.Tiller.UninstallReleaseResponse;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import lombok.extern.slf4j.Slf4j;
 import org.microbean.helm.ReleaseManager;
 import org.microbean.helm.Tiller;
 import org.microbean.helm.TillerInstaller;
 import org.microbean.helm.chart.URLChartLoader;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+@Slf4j
 @Service
 public class HelmClient {
-
 
     public void installTiller() {
         TillerInstaller tillerInstaller = new TillerInstaller();
         tillerInstaller.init();
     }
 
-    public ChartOuterClass.Chart.Builder loadChart(URL chartURL) throws IOException {
+    public ChartBuilder loadChart(URL chartURL) throws IOException {
         ChartOuterClass.Chart.Builder chart = null;
 
         try (URLChartLoader chartLoader = new URLChartLoader()) {
             chart = chartLoader.load(chartURL);
         }
 
-        return chart;
+        return new ChartBuilder(chart);
     }
 
 
-    public ReleaseOuterClass.Release installChart(URL chartURL, String instanceId) throws IOException, InstallFailedException {
+    public Release installChart(URL chartURL, String instanceId) throws IOException, InstallFailedException {
         return installChart(chartURL, instanceId, 300L);
     }
 
-    public ReleaseOuterClass.Release installChart(URL chartURL, String instanceId, long timeout) throws IOException, InstallFailedException {
-        ChartOuterClass.Chart.Builder chart = loadChart(chartURL);
+    public Release installChart(URL chartURL, String instanceId, long timeout) throws IOException, InstallFailedException {
+        ChartBuilder chart = loadChart(chartURL);
 
         return installChart(chart, instanceId, timeout);
     }
 
 
-    public ReleaseOuterClass.Release installChart(ChartOuterClass.Chart.Builder chart, String instanceId) throws IOException, InstallFailedException {
+    public Release installChart(ChartBuilder chart, String instanceId) throws IOException, InstallFailedException {
         return installChart(chart, instanceId, 300L);
     }
 
-    @NotNull
-    public ReleaseOuterClass.Release installChart(ChartOuterClass.Chart.Builder chart, String instanceId, long timeout) throws IOException, InstallFailedException {
+    public Release installChart(ChartBuilder chart, String instanceId, long timeout) throws IOException, InstallFailedException {
 
         try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient();
              Tiller tiller = new Tiller(kubernetesClient);
@@ -69,10 +67,11 @@ public class HelmClient {
             requestBuilder.setName(instanceId);
             requestBuilder.setWait(true);
 
-            Future<InstallReleaseResponse> installResponseFuture = releaseManager.install(requestBuilder, chart);
+            Future<InstallReleaseResponse> installResponseFuture = releaseManager.install(requestBuilder, chart.getChartBuilder());
 
             InstallReleaseResponse installResponse = installResponseFuture.get();   //Throws InterruptedException and ExecutionException
-            return installResponse.getRelease();
+            Release release = new Release(installResponse.getRelease());
+            return release;
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -82,12 +81,11 @@ public class HelmClient {
         throw new InstallFailedException("Unknown reason");
     }
 
-    public ReleaseOuterClass.Release uninstallChart(String instanceId) throws IOException, UninstallFailedException {
+    public Release uninstallChart(String instanceId) throws IOException, UninstallFailedException {
         return uninstallChart(instanceId, 300);
     }
 
-    @NotNull
-    public ReleaseOuterClass.Release uninstallChart(String instanceId, long timeout) throws IOException, UninstallFailedException {
+    public Release uninstallChart(String instanceId, long timeout) throws IOException, UninstallFailedException {
 
         try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient();
              Tiller tiller = new Tiller(kubernetesClient);
@@ -100,7 +98,8 @@ public class HelmClient {
 
             Future<UninstallReleaseResponse> uninstallResponseFuture = releaseManager.uninstall(requestBuilder.build());
             ReleaseOuterClass.Release release = uninstallResponseFuture.get().getRelease();
-            return release;
+            Release releaseRet = new Release(release);
+            return releaseRet;
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

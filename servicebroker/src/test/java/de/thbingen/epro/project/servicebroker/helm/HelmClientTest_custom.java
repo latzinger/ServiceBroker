@@ -46,9 +46,9 @@ public class HelmClientTest_custom {
     public void A1_installChart() throws IOException, InstallFailedException {
 //        ReleaseOuterClass.Release release = helmClient.installChart(new URL(chartURL), instanceId);
 
-        ChartOuterClass.Chart.Builder chart = helmClient.loadChart(new URL(chartURL));
+        ChartBuilder chart = helmClient.loadChart(new URL(chartURL));
 
-        String rawConf = chart.getValues().getRaw();
+        String rawConf = chart.getChartBuilder().getValues().getRaw();
 
         Map<String, Object> confMap = new Yaml().load(rawConf);
 
@@ -73,10 +73,10 @@ public class HelmClientTest_custom {
 
         ConfigOuterClass.Config conf = ConfigOuterClass.Config.newBuilder().setRaw(raw).build();
 
-        chart.setValues(conf);
+        chart.getChartBuilder().setValues(conf);
 
 
-        ReleaseOuterClass.Release release = helmClient.installChart(chart, instanceId);
+        Release release = helmClient.installChart(chart, instanceId);
 
         assertThat(release, notNullValue());
         assertThat("Installation/Initialization failed, is not initialized", release.isInitialized(), is(true));
@@ -84,9 +84,9 @@ public class HelmClientTest_custom {
 
     @Test
     public void A2_uninstallChart() throws IOException, UninstallFailedException {
-        ReleaseOuterClass.Release release = helmClient.uninstallChart(instanceId);
+        Release release = helmClient.uninstallChart(instanceId);
 
         assertThat(release, notNullValue());
-        assertThat("Uninstallation failed, has not deleted", release.getInfo().hasDeleted(), is(true));
+        assertThat("Uninstallation failed, has not deleted", release.hasDeleted(), is(true));
     }
 }
