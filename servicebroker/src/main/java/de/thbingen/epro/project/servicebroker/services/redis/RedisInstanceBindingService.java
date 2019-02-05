@@ -10,18 +10,20 @@ package de.thbingen.epro.project.servicebroker.services.redis;
 
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceBindingService;
-import de.thbingen.epro.project.web.exception.ServiceInstanceBindingBadRequestException;
-import de.thbingen.epro.project.web.exception.ServiceInstanceBindingDoesNotExistException;
-import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
+import de.thbingen.epro.project.web.exception.*;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
+import de.thbingen.epro.project.web.schema.Plan;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -31,20 +33,42 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
     private RedisService redisService;
 
     @Override
-    public CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request)
+    public CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request)
             throws ServiceInstanceBindingBadRequestException {
+
+        ServiceInstanceBinding serviceInstanceBinding =
+                serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId);
+
+        if (serviceInstanceBinding != null) {
+
+            Map<String, String> parameters = serviceInstanceBinding.getParameters();
+            Map<String, String> requestedParam = request.getParameters();
+
+            if (parameters.equals(requestedParam))
+                throw new ServiceInstanceBindingAlreadyExistsException(serviceInstanceBinding, true);
+            else
+                throw new ServiceInstanceBindingAlreadyExistsException(serviceInstanceBinding, false);
+
+        }
+
+        if (request.getServiceId() != redisService.getServiceId())
+            throw new ServiceInstanceBindingBadRequestException(bindingId, request.toString());
+
+        CreateServiceInstanceBindingResponse response =
+                CreateServiceInstanceBindingResponse.builder()
+                        .credentials(serviceInstanceBinding.getCredentials())
+                        .build();
+
+        return response;
+    }
+
+    @Override
+    public DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(String bindingId, String instanceId, DeleteServiceInstanceBindingRequest request) {
         return null;
     }
 
     @Override
-    public DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request)
-            throws ServiceInstanceBindingBadRequestException, ServiceInstanceBindingDoesNotExistException {
-        return null;
-    }
-
-    @Override
-    public LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request)
-            throws ServiceInstanceBindingBadRequestException, ServiceInstanceBindingDoesNotExistException {
+    public LastOperationServiceInstanceBindingResponse lastOperation(String bindingId, String instanceId, LastOperationServiceInstanceBindingRequest request) {
         return null;
     }
 

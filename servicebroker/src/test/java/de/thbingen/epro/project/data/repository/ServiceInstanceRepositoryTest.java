@@ -3,7 +3,9 @@ package de.thbingen.epro.project.data.repository;
 import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.servicebroker.services.redis.RedisService;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,15 +17,11 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ServiceInstanceBindingRepositoryTest {
-
-    @Autowired
-    private ServiceInstanceBindingRepository serviceInstanceBindingRepository;
+public class ServiceInstanceRepositoryTest {
 
     @Autowired
     private ServiceInstanceRepository serviceInstanceRepository;
 
-    private String bindingId;
     private String instanceId;
 
     @Before
@@ -34,31 +32,20 @@ public class ServiceInstanceBindingRepositoryTest {
         instanceId = serviceInstance.getId();
 
         serviceInstanceRepository.save(serviceInstance);
-
-        ServiceInstanceBinding serviceInstanceBinding =
-                new ServiceInstanceBinding(serviceInstance);
-
-        bindingId = serviceInstanceBinding.getId();
-
-        serviceInstanceBindingRepository.save(serviceInstanceBinding);
-
     }
 
     @Test
-    public void testGetServiceInstanceBinding() {
+    public void testGetServiceInstance() {
 
-        ServiceInstanceBinding serviceInstanceBinding =
-                serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId);
+        ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
 
-        assertNotNull(serviceInstanceBinding);
-        assertTrue(serviceInstanceBinding.getId().equals(bindingId));
-        assertTrue(serviceInstanceBinding.getServiceInstance().getId().equals(instanceId));
+        assertNotNull(serviceInstance);
+        assertTrue(serviceInstance.getId().equals(instanceId));
     }
+
 
     @After
     public void tearDown() throws Exception {
-        serviceInstanceBindingRepository.deleteById(bindingId);
         serviceInstanceRepository.deleteById(instanceId);
     }
-
 }

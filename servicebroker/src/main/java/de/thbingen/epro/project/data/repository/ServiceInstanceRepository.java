@@ -14,4 +14,6 @@ import org.springframework.stereotype.Repository;
 
 public interface ServiceInstanceRepository extends JpaRepository<ServiceInstance, String> {
 
+    ServiceInstance getServiceInstanceById(String instanceId);
+
 }

@@ -9,13 +9,10 @@
 package de.thbingen.epro.project.web.controller;
 
 import de.thbingen.epro.project.data.model.ServiceInstance;
-import de.thbingen.epro.project.data.service.ServiceInstanceService;
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceService;
-import de.thbingen.epro.project.servicebroker.services.OsbService;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
-import de.thbingen.epro.project.servicebroker.services.InstanceService;
 import de.thbingen.epro.project.web.response.serviceinstance.DeleteServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.LastOperationServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstanceResponse;
@@ -29,11 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/v2/service_instance")
@@ -64,7 +57,7 @@ public class ServiceInstanceController extends BaseController {
             @Valid @RequestBody CreateServiceInstanceRequest request) {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
-        ServiceInstance serviceInstance = instanceService.getServiceInstanceService().getServiceInstance(instanceId);
+        ServiceInstance serviceInstance = instanceService.getServiceInstance(instanceId);
         if (serviceInstance != null)
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
@@ -126,7 +119,7 @@ public class ServiceInstanceController extends BaseController {
     }
 
     private ServiceInstance getServiceInstance(String instanceId) throws ServiceInstanceNotFoundException {
-        ServiceInstance serviceInstance = instanceService.getServiceInstanceService().getServiceInstance(instanceId);
+        ServiceInstance serviceInstance = instanceService.getServiceInstance(instanceId);
         if (serviceInstance == null)
             throw new ServiceInstanceNotFoundException(instanceId);
 

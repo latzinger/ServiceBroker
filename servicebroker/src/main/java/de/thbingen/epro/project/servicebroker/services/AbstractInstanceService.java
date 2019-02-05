@@ -10,7 +10,9 @@
 package de.thbingen.epro.project.servicebroker.services;
 
 
-import de.thbingen.epro.project.data.service.ServiceInstanceService;
+import de.thbingen.epro.project.data.model.ServiceInstance;
+import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
+import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstance.CreateServiceInstanceRequest;
 import de.thbingen.epro.project.web.request.serviceinstance.DeleteServiceInstanceRequest;
 import de.thbingen.epro.project.web.request.serviceinstance.LastOperationServiceInstanceRequest;
@@ -21,13 +23,20 @@ import de.thbingen.epro.project.web.response.serviceinstance.LastOperationServic
 import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstanceResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 public abstract class AbstractInstanceService implements InstanceService {
 
     @Autowired
-    private ServiceInstanceService serviceInstanceService;
+    protected ServiceInstanceRepository serviceInstanceRepository;
+
+    @Override
+    public ServiceInstance getServiceInstance(String instanceId) throws ServiceInstanceNotFoundException {
+        ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
+        if (serviceInstance == null)
+            throw new ServiceInstanceNotFoundException(instanceId);
+        return serviceInstance;
+    }
 
     @Override
     public abstract CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request);
@@ -41,11 +50,4 @@ public abstract class AbstractInstanceService implements InstanceService {
     @Override
     public abstract LastOperationServiceInstanceResponse lastOperation(LastOperationServiceInstanceRequest request);
 
-    public ServiceInstanceService getServiceInstanceService() {
-        return serviceInstanceService;
-    }
-
-    public void setServiceInstanceService(ServiceInstanceService serviceInstanceService) {
-        this.serviceInstanceService = serviceInstanceService;
-    }
 }

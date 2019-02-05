@@ -10,7 +10,6 @@ package de.thbingen.epro.project.web.controller;
 
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceBindingService;
-import de.thbingen.epro.project.servicebroker.services.BindingService;
 import de.thbingen.epro.project.web.exception.*;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
@@ -20,8 +19,6 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServic
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -70,7 +67,7 @@ public class ServiceInstanceBindingController extends BaseController {
         request.setParameters(parameters);
 
         DeleteServiceInstanceBindingResponse response =
-                bindingService.deleteServiceInstanceBinding(request);
+                bindingService.deleteServiceInstanceBinding(bindingId, instanceId, request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -89,7 +86,7 @@ public class ServiceInstanceBindingController extends BaseController {
         request.setParameters(parameters);
 
         CreateServiceInstanceBindingResponse response =
-                bindingService.createServiceInstanceBinding(request);
+                bindingService.createServiceInstanceBinding(bindingId, instanceId, request);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -109,27 +106,33 @@ public class ServiceInstanceBindingController extends BaseController {
         request.setParameters(parameters);
 
         LastOperationServiceInstanceBindingResponse response =
-                bindingService.lastOperation(request);
+                bindingService.lastOperation(bindingId, instanceId, request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler(ServiceInstanceBindingNotFoundException.class)
-    private ResponseEntity<ErrorMessage> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingNotFoundException e) {
+    private ResponseEntity<?> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingNotFoundException e) {
         log.debug(e.getMessage());
-        return ResponseEntity.notFound().build();
-    }
-
-    @ExceptionHandler(ServiceInstanceBindingDoesNotExistException.class)
-    private ResponseEntity<ErrorMessage> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingDoesNotExistException e) {
-        log.debug(e.getMessage());
-        return getErrorMessageResponseEntity("ServiceInstanceBindingNotFoundException", e.getMessage(), HttpStatus.GONE);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ServiceInstanceBindingBadRequestException.class)
-    private ResponseEntity<ErrorMessage> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingBadRequestException e) {
+    private ResponseEntity<ErrorMessage> handleServiceInstanceBindingBadRequestException(ServiceInstanceBindingBadRequestException e) {
         log.debug(e.getMessage());
-        return getErrorMessageResponseEntity("ServiceInstanceBindingNotFoundException", e.getMessage(), HttpStatus.BAD_REQUEST);
+        return getErrorMessageResponseEntity("ServiceInstanceBindingBadRequestException", e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ServiceInstanceBindingAlreadyExistsException.class)
+    private ResponseEntity<?> handleServiceInstanceBindingExistsException(ServiceInstanceBindingAlreadyExistsException e) {
+
+        log.debug(e.getMessage());
+
+        if (e.isMatchingParameters()) {
+            ServiceInstanceBinding serviceInstanceBinding = e.getServiceInstanceBinding();
+            return new ResponseEntity<>(serviceInstanceBinding, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
 }
