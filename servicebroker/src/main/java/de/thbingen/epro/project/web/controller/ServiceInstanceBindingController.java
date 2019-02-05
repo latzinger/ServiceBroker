@@ -19,6 +19,7 @@ import de.thbingen.epro.project.web.response.ErrorMessage;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,9 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/v2/service_instances")
+@Slf4j
 public class ServiceInstanceBindingController extends BaseController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ServiceInstanceBindingController.class);
 
     @Autowired
     private AbstractInstanceBindingService bindingService;
@@ -115,19 +116,19 @@ public class ServiceInstanceBindingController extends BaseController {
 
     @ExceptionHandler(ServiceInstanceBindingNotFoundException.class)
     private ResponseEntity<ErrorMessage> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingNotFoundException e) {
-        LOG.debug(e.getMessage());
+        log.debug(e.getMessage());
         return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler(ServiceInstanceBindingDoesNotExistException.class)
     private ResponseEntity<ErrorMessage> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingDoesNotExistException e) {
-        LOG.debug(e.getMessage());
+        log.debug(e.getMessage());
         return getErrorMessageResponseEntity("ServiceInstanceBindingNotFoundException", e.getMessage(), HttpStatus.GONE);
     }
 
     @ExceptionHandler(ServiceInstanceBindingBadRequestException.class)
     private ResponseEntity<ErrorMessage> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingBadRequestException e) {
-        LOG.debug(e.getMessage());
+        log.debug(e.getMessage());
         return getErrorMessageResponseEntity("ServiceInstanceBindingNotFoundException", e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

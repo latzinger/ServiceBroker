@@ -12,6 +12,7 @@ import de.thbingen.epro.project.web.schema.Catalog;
 import de.thbingen.epro.project.web.schema.ServiceDefinition;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @Getter
 @Setter
+@Slf4j
 public class CatalogServiceImpl implements CatalogService {
 
     @Autowired

@@ -15,6 +15,7 @@ import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundExce
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 @Getter
 @Setter
 @AllArgsConstructor
+@Slf4j
 public class ServiceInstanceBindingService {
 
     @Autowired
@@ -40,6 +42,10 @@ public class ServiceInstanceBindingService {
             throw new ServiceInstanceBindingNotFoundException(bindingId);
 
         return serviceInstanceBinding;
+    }
+
+    public boolean serviceInstanceBindingExists(String bindingId, String instanceId) {
+        return serviceInstanceBindingRepository.existsByIdAndServiceInstance_Id(bindingId, instanceId);
     }
 
     public ServiceInstanceBinding createServiceInstanceBinding(String serviceId, String bindingId)

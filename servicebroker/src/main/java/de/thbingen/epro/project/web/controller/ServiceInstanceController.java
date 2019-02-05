@@ -19,6 +19,7 @@ import de.thbingen.epro.project.servicebroker.services.InstanceService;
 import de.thbingen.epro.project.web.response.serviceinstance.DeleteServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.LastOperationServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstanceResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/v2/service_instance")
+@Slf4j
 public class ServiceInstanceController extends BaseController {
     private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 

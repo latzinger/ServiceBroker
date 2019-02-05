@@ -55,6 +55,11 @@ public class ServiceInstanceBindingRepositoryTest {
         assertTrue(serviceInstanceBinding.getServiceInstance().getId().equals(instanceId));
     }
 
+    @Test
+    public void testExistsById() {
+        assertTrue(serviceInstanceBindingRepository.existsByIdAndServiceInstance_Id(bindingId, instanceId));
+    }
+
     @After
     public void tearDown() throws Exception {
         serviceInstanceBindingRepository.deleteById(bindingId);
