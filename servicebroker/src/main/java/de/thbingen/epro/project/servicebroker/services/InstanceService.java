@@ -8,10 +8,14 @@
 
 package de.thbingen.epro.project.servicebroker.services;
 
+import de.thbingen.epro.project.data.model.ServiceInstance;
+import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.*;
 
 public interface InstanceService {
+
+    ServiceInstance getServiceInstance(String instanceId);
 
     CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request);
 

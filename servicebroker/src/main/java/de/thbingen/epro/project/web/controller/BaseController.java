@@ -15,8 +15,7 @@ import de.thbingen.epro.project.web.exception.InvalidRequestException;
 import de.thbingen.epro.project.web.exception.ServiceNotFoundException;
 import de.thbingen.epro.project.web.request.OsbRequest;
 import de.thbingen.epro.project.web.response.ErrorMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,10 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 public abstract class BaseController {
     private static final String API_VERSION = "2.14";
-
-    private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 
     @Autowired
     protected ServiceManager serviceManager;
@@ -41,14 +39,14 @@ public abstract class BaseController {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<ErrorMessage> handleException(Exception e) {
-        LOG.error("[Exception]", e.getMessage());
+        log.error("[Exception]", e.getMessage());
         return getErrorMessageResponseEntity("Exception", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
     @ExceptionHandler(InvalidRequestException.class)
     public ResponseEntity<ErrorMessage> handleInvalidRequestException(InvalidRequestException e) {
-        LOG.debug("Invalid request catched", e);
+        log.debug("Invalid request catched", e);
         ResponseEntity<ErrorMessage> invalidRequest = getErrorMessageResponseEntity("InvalidRequest", e.getMessage(), HttpStatus.BAD_REQUEST);
         return invalidRequest;
     }
@@ -68,7 +66,7 @@ public abstract class BaseController {
 
     @ExceptionHandler(ServiceNotFoundException.class)
     public ResponseEntity<ErrorMessage> handleServiceNotFoundException(ServiceNotFoundException e) {
-        LOG.debug("Service " + e.getServiceId() + " not found");
+        log.debug("Service " + e.getServiceId() + " not found");
 
         ResponseEntity<ErrorMessage> serviceNotFound = getErrorMessageResponseEntity("ServiceNotFound", "Service wit id" + e.getServiceId() + " not found", HttpStatus.BAD_REQUEST);
         return serviceNotFound;
@@ -88,11 +86,11 @@ public abstract class BaseController {
                         + "X-Broker-API-Version: " + apiVersion
                         + "] but needed API-Version " + API_VERSION);
 
-                LOG.debug("Invalid API-Version", apiVersionException);
+                log.debug("Invalid API-Version", apiVersionException);
                 throw apiVersionException;
             }
         } else {
-            LOG.debug("API version missing");
+            log.debug("API version missing");
             throw new InvalidApiVersionException("API version missing");
         }
     }
@@ -107,7 +105,7 @@ public abstract class BaseController {
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
         request.setParameters(parameters);
 
-        LOG.debug("checkAndComplete successfully");
+        log.debug("checkAndComplete successfully");
     }
 
 }

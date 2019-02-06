@@ -9,10 +9,6 @@
 package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
-import de.thbingen.epro.project.web.exception.ServiceInstanceBindingBadRequestException;
-import de.thbingen.epro.project.web.exception.ServiceInstanceBindingDoesNotExistException;
-import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
-import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
@@ -22,13 +18,12 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperatio
 
 public interface BindingService {
 
-    CreateServiceInstanceBindingResponse createServiceInstanceBinding(CreateServiceInstanceBindingRequest request)
-            throws ServiceInstanceBindingBadRequestException;
+    ServiceInstanceBinding getServiceInstanceBinding(String bindingId, String instanceId);
 
-    DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request)
-            throws ServiceInstanceBindingBadRequestException, ServiceInstanceBindingDoesNotExistException;
+    CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request);
 
-    LastOperationServiceInstanceBindingResponse lastOperation(LastOperationServiceInstanceBindingRequest request)
-            throws ServiceInstanceBindingBadRequestException, ServiceInstanceBindingDoesNotExistException;
+    DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(String bindingId, String instanceId, DeleteServiceInstanceBindingRequest request);
+
+    LastOperationServiceInstanceBindingResponse lastOperation(String bindingId, String instanceId, LastOperationServiceInstanceBindingRequest request);
 
 }
