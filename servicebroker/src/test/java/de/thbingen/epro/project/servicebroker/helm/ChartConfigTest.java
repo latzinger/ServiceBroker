@@ -1,7 +1,5 @@
 package de.thbingen.epro.project.servicebroker.helm;
 
-import static org.hamcrest.CoreMatchers.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,5 +73,46 @@ public class ChartConfigTest {
         assertNull(config.get("a.a.a.a"));
         assertNull(config.get("a.a.a.d"));
         assertNull(config.get("a.b.c.d"));
+    }
+
+    @Test
+    public void mergeFrom() {
+        Map<String, Object> confMap = new HashMap<>();
+
+        Map<String, Object> aMap = new HashMap<>();
+        confMap.put("a", aMap);
+        aMap.put("c", "C");
+
+        Map<String, Object> aaMap = new HashMap<>();
+        aMap.put("a", aaMap);
+
+        aaMap.put("a", "A3");
+        aaMap.put("b", "B3");
+        aaMap.put("c", "C3");
+
+        Map<String, Object> abMap = new HashMap<>();
+        aMap.put("b", abMap);
+
+        abMap.put("a", "A31");
+        abMap.put("b", "B31");
+        abMap.put("c", "C31");
+
+        Map<String, Object> aabMap = new HashMap<>();
+        aaMap.put("b", aabMap);
+
+        aabMap.put("a", "A4");
+        aabMap.put("b", "B4");
+        aabMap.put("c", "C4");
+
+        ChartConfig from = new ChartConfig(confMap);
+        System.out.println("FROM");
+        System.out.println(from.getConfigMap());
+
+        config.mergeFrom(from);
+
+
+        assertEquals("B4", config.get("a.a.b.b"));
+        assertEquals("C", config.get("a.c"));
+        assertNotEquals("B3", config.get("a.a.b"));
     }
 }

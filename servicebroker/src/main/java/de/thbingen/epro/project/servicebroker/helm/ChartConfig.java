@@ -44,6 +44,35 @@ public class ChartConfig {
         return containingMap.get(valueKey);
     }
 
+    public void mergeFrom(ChartConfig from){
+        mergeFrom(from.configMap, configMap);
+    }
+
+    private void mergeFrom(Map<String, Object> valueMap, Map<String, Object> currentPos){
+        for(Map.Entry<String, Object> entry : valueMap.entrySet()){
+            String key = entry.getKey();
+            Object valueOrMap = entry.getValue();
+
+            if(valueOrMap instanceof Map) {
+                Map<String, Object> map = (Map<String, Object>) valueOrMap;
+
+                if (currentPos.containsKey(key)){
+                    Object valueOrMap2 = currentPos.get(key);
+
+                    if(valueOrMap2 instanceof Map){
+                        mergeFrom(map, (Map<String, Object>) valueOrMap2);
+                    } else {
+                        currentPos.put(key, map);
+                    }
+                } else {
+                    currentPos.put(key, map);
+                }
+            } else {
+                currentPos.put(key, valueOrMap);
+            }
+        }
+    }
+
 
     private boolean contains(String key){
         List<String> keys = splitKey(key);
