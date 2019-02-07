@@ -57,7 +57,10 @@ public class HelmClient {
     }
 
     public Release installChart(ChartBuilder chart, String instanceId, long timeout) throws IOException, InstallFailedException {
+        return installChart(chart, instanceId, timeout, new ChartConfig());
+    }
 
+    public Release installChart(ChartBuilder chart, String instanceId, long timeout, ChartConfig chartConfig) throws IOException, InstallFailedException {
         try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient();
              Tiller tiller = new Tiller(kubernetesClient);
              ReleaseManager releaseManager = new ReleaseManager(tiller)) {
@@ -67,9 +70,16 @@ public class HelmClient {
             requestBuilder.setName(instanceId);
             requestBuilder.setWait(true);
 
+            if(!chartConfig.isEmpty()){
+                log.debug("ChartConfig provided");
+                chart.getChartConfig().mergeFrom(chartConfig);
+            }
+
+            log.debug("Run install for: " + instanceId + " (timeout: " + timeout + ")");
             Future<InstallReleaseResponse> installResponseFuture = releaseManager.install(requestBuilder, chart.getChartBuilder());
 
             InstallReleaseResponse installResponse = installResponseFuture.get();   //Throws InterruptedException and ExecutionException
+            log.debug("Installation completed");
             Release release = new Release(installResponse.getRelease());
             return release;
         } catch (InterruptedException e) {

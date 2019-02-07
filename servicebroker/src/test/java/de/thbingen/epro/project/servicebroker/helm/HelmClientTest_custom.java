@@ -12,11 +12,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,10 +28,12 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@EnableAutoConfiguration(exclude= FlywayAutoConfiguration.class)
 @Ignore
 public class HelmClientTest_custom {
     private static final String chartURL = "https://kubernetes-charts.storage.googleapis.com/redis-5.2.0.tgz";
@@ -88,5 +93,20 @@ public class HelmClientTest_custom {
 
         assertThat(release, notNullValue());
         assertThat("Uninstallation failed, has not deleted", release.hasDeleted(), is(true));
+    }
+
+    @Test
+    public void B1_installChart() throws IOException, InstallFailedException {
+        ChartBuilder chartBuilder = helmClient.loadChart(new URL(chartURL));
+        ChartConfig chartConfig = chartBuilder.getChartConfig();
+
+        chartConfig.set("cluster.enabled", true);
+        chartConfig.set("cluster.slaveCount", 3);
+
+        chartBuilder.setChartConfig(chartConfig);
+
+        Release release = helmClient.installChart(chartBuilder, instanceId);
+
+        assertTrue(release.isInitialized());
     }
 }

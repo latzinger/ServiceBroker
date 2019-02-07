@@ -155,4 +155,8 @@ public class ChartConfig {
         return strings.get(strings.size()-1);
     }
 
+
+    public boolean isEmpty(){
+        return configMap.entrySet().isEmpty();
+    }
 }
