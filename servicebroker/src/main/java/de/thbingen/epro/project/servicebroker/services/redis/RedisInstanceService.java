@@ -1,13 +1,8 @@
-/**
- * TODO add description
- *
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.servicebroker.services.redis;
 
+import de.thbingen.epro.project.data.model.ServiceInstance;
+import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
+import de.thbingen.epro.project.servicebroker.helm.HelmClient;
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceService;
 import de.thbingen.epro.project.web.request.serviceinstance.CreateServiceInstanceRequest;
 import de.thbingen.epro.project.web.request.serviceinstance.DeleteServiceInstanceRequest;
@@ -17,19 +12,35 @@ import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstan
 import de.thbingen.epro.project.web.response.serviceinstance.DeleteServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.LastOperationServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstanceResponse;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+/**
+ * TODO add description
+ *
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class RedisInstanceService extends AbstractInstanceService {
 
-    @Autowired
-    private RedisService redisService;
+    @NonNull
+    private final HelmClient helmClient;
+
+
 
     @Override
     public CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) {
+        String instanceId = request.getInstanceId();
+        ServiceInstance serviceInstance = getServiceInstance(instanceId);
+
+
         return null;
     }
 

@@ -9,6 +9,7 @@
 
 package de.thbingen.epro.project.web.controller;
 
+import de.thbingen.epro.project.servicebroker.services.OsbService;
 import de.thbingen.epro.project.servicebroker.services.ServiceManager;
 import de.thbingen.epro.project.web.exception.InvalidApiVersionException;
 import de.thbingen.epro.project.web.exception.InvalidRequestException;
@@ -77,7 +78,7 @@ public abstract class BaseController {
         return new ResponseEntity<ErrorMessage>(new ErrorMessage(error, message), status);
     }
 
-    public void checkApiVersion(HttpHeaders headers) throws InvalidApiVersionException {
+    protected void checkApiVersion(HttpHeaders headers) throws InvalidApiVersionException {
         String apiVersion = headers.toSingleValueMap().get("X-Broker-API-Version");
 
         if (apiVersion != null) {
@@ -95,11 +96,11 @@ public abstract class BaseController {
         }
     }
 
-    public void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request) {
+    protected void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request) {
         checkAndComplete(httpHeaders, request, new HashMap<>());
     }
 
-    public void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request, Map<String, String> parameters) throws InvalidApiVersionException {
+    protected void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request, Map<String, String> parameters) throws InvalidApiVersionException {
         checkApiVersion(httpHeaders);
 
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
@@ -108,4 +109,10 @@ public abstract class BaseController {
         log.debug("checkAndComplete successfully");
     }
 
+    public OsbService getOsbService(String serviceId){
+        OsbService service = serviceManager.getService(serviceId);
+
+        log.debug("Found service " + serviceId);
+        return service;
+    }
 }

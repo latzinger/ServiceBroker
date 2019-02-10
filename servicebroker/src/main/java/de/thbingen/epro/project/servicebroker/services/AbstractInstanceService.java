@@ -30,7 +30,6 @@ public abstract class AbstractInstanceService implements InstanceService {
     @Autowired
     protected ServiceInstanceRepository serviceInstanceRepository;
 
-    @Override
     public ServiceInstance getServiceInstance(String instanceId) throws ServiceInstanceNotFoundException {
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
         if (serviceInstance == null)

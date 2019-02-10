@@ -29,9 +29,6 @@ import java.util.Map;
 @Slf4j
 public class RedisInstanceBindingService extends AbstractInstanceBindingService {
 
-    @Autowired
-    private RedisService redisService;
-
     @Override
     public CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request)
             throws ServiceInstanceBindingBadRequestException {
@@ -51,8 +48,8 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
 
         }
 
-        if (request.getServiceId() != redisService.getServiceId())
-            throw new ServiceInstanceBindingBadRequestException(bindingId, request.toString());
+//        if (request.getServiceId() != redisService.getServiceId())
+//            throw new ServiceInstanceBindingBadRequestException(bindingId, request.toString());
 
         CreateServiceInstanceBindingResponse response =
                 CreateServiceInstanceBindingResponse.builder()

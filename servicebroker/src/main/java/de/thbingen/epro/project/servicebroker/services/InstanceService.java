@@ -15,8 +15,6 @@ import de.thbingen.epro.project.web.response.serviceinstance.*;
 
 public interface InstanceService {
 
-    ServiceInstance getServiceInstance(String instanceId);
-
     CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request);
 
     UpdateServiceInstanceResponse updateServiceInstance(UpdateServiceInstanceRequest request);

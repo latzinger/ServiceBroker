@@ -14,15 +14,24 @@ import de.thbingen.epro.project.web.schema.Plan;
 import de.thbingen.epro.project.web.schema.ServiceDefinition;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
 import de.thbingen.epro.project.servicebroker.services.InstanceService;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
+@RequiredArgsConstructor
 public class RedisService implements OsbService {
 
     public static final String SERVICE_ID = "4a30cd4f-914b-4082-8818-e9e9691fa1ce";
+
+    @NonNull
+    private RedisInstanceService redisInstanceService;
+
+    @NonNull
+    private RedisInstanceBindingService redisInstanceBindingService;
 
     @Override
     public ServiceDefinition getServiceDefiniton() {
@@ -61,5 +70,15 @@ public class RedisService implements OsbService {
     @Override
     public String getServiceId() {
         return SERVICE_ID;
+    }
+
+    @Override
+    public InstanceService getInstanceService() {
+        return redisInstanceService;
+    }
+
+    @Override
+    public BindingService getBindingService() {
+        return redisInstanceBindingService;
     }
 }
