@@ -15,7 +15,15 @@ import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstan
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 
 /**
  * TODO add description
@@ -29,16 +37,20 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class RedisInstanceService extends AbstractInstanceService {
+    private static final String chartUrlString = "https://kubernetes-charts.storage.googleapis.com/redis-5.3.0.tgz";
+    private static URL chartUrl;
+
+    @Lazy
+    private RedisService redisService;
 
     @NonNull
     private final HelmClient helmClient;
-
-
 
     @Override
     public CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) {
         String instanceId = request.getInstanceId();
         ServiceInstance serviceInstance = getServiceInstance(instanceId);
+
 
 
         return null;
@@ -60,4 +72,8 @@ public class RedisInstanceService extends AbstractInstanceService {
     }
 
 
+    @PostConstruct
+    private void postConstruct() throws MalformedURLException {
+        chartUrl = URI.create(chartUrlString).toURL();
+    }
 }
