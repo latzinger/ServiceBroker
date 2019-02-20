@@ -9,13 +9,14 @@
 package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.data.model.ServiceInstance;
+import de.thbingen.epro.project.web.exception.ServiceInstanceAlreadyExistsException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.*;
 
 public interface InstanceService {
 
-    CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request);
+    CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException;
 
     UpdateServiceInstanceResponse updateServiceInstance(UpdateServiceInstanceRequest request);
 

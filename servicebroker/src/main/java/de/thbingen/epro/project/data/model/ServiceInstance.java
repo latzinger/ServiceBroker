@@ -42,7 +42,7 @@ public class ServiceInstance extends AbstractEntity {
     @Column(name = "VALUE")
     private Map<String, String> parameters;
 
-    public String getParamater(Object key) {
+    public String getParamater(String key) {
         return parameters.get(key);
     }
 
@@ -50,7 +50,7 @@ public class ServiceInstance extends AbstractEntity {
         return parameters.put(key, value);
     }
 
-    public String removeParameter(Object key) {
+    public String removeParameter(String key) {
         return parameters.remove(key);
     }
 }

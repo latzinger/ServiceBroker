@@ -12,6 +12,7 @@ import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.servicebroker.services.InstanceService;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
+import de.thbingen.epro.project.web.exception.ServiceInstanceAlreadyExistsException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
@@ -59,7 +60,7 @@ public class ServiceInstanceController extends BaseController {
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId,
             @RequestParam Map<String, String> parameters,
-            @Valid @RequestBody CreateServiceInstanceRequest request) {
+            @Valid @RequestBody CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);

@@ -15,6 +15,8 @@ import lombok.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @RequiredArgsConstructor
@@ -85,4 +87,11 @@ public class ServiceDefinition implements Serializable {
     @JsonProperty("plans")
     private ArrayList<Plan> plans = new ArrayList<>();
 
+    public Plan getPlan(String planId){
+        List<Plan> collect = plans.stream()
+                .filter(plan -> plan.getId().equals(planId))
+                .collect(Collectors.toList());
+
+        return collect.size() > 0 ? collect.get(0) : null;
+    }
 }

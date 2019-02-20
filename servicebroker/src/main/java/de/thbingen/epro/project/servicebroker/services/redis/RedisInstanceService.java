@@ -2,8 +2,15 @@ package de.thbingen.epro.project.servicebroker.services.redis;
 
 import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
+import de.thbingen.epro.project.servicebroker.helm.ChartBuilder;
+import de.thbingen.epro.project.servicebroker.helm.ChartConfig;
 import de.thbingen.epro.project.servicebroker.helm.HelmClient;
+import de.thbingen.epro.project.servicebroker.helm.Release;
+import de.thbingen.epro.project.servicebroker.helm.exceptions.InstallFailedException;
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceService;
+import de.thbingen.epro.project.web.exception.InvalidRequestException;
+import de.thbingen.epro.project.web.exception.ServiceInstanceAlreadyExistsException;
+import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstance.CreateServiceInstanceRequest;
 import de.thbingen.epro.project.web.request.serviceinstance.DeleteServiceInstanceRequest;
 import de.thbingen.epro.project.web.request.serviceinstance.LastOperationServiceInstanceRequest;
@@ -12,6 +19,8 @@ import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstan
 import de.thbingen.epro.project.web.response.serviceinstance.DeleteServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.LastOperationServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstanceResponse;
+import de.thbingen.epro.project.web.schema.Plan;
+import de.thbingen.epro.project.web.schema.ServiceDefinition;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +30,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -38,7 +50,9 @@ import java.net.URL;
 @RequiredArgsConstructor
 public class RedisInstanceService extends AbstractInstanceService {
     private static final String chartUrlString = "https://kubernetes-charts.storage.googleapis.com/redis-5.3.0.tgz";
-    private static URL chartUrl;
+    private URL chartUrl;
+    private ChartBuilder chartBuilder;
+    private ChartConfig defaultConfig;
 
     @Lazy
     private RedisService redisService;
@@ -47,13 +61,46 @@ public class RedisInstanceService extends AbstractInstanceService {
     private final HelmClient helmClient;
 
     @Override
-    public CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) {
-        String instanceId = request.getInstanceId();
-        ServiceInstance serviceInstance = getServiceInstance(instanceId);
+    public CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException {
+        String planId = request.getPlanId();
 
+        ServiceDefinition serviceDefiniton = redisService.getServiceDefiniton();
+        Plan plan = serviceDefiniton.getPlan(planId);
 
+        if (plan == null) {
+            throw new InvalidRequestException("Plan " + planId + " for serviceId " + request.getServiceId() + " not found");
+        }
+
+        createServiceInstanceEntry(request);
+        try {
+
+            switch (planId) {
+                case RedisService.PLAN_SMALL_ID:
+                    createSmallPlanServiceInstance(request);
+                    break;
+                case RedisService.PLAN_STANDARD_ID:
+                    break;
+                case RedisService.PLAN_CLUSTER_ID:
+                    break;
+            }
+        } catch (IOException | InstallFailedException e) {
+            e.printStackTrace();
+        }
 
         return null;
+    }
+
+    private void createSmallPlanServiceInstance(CreateServiceInstanceRequest request) throws IOException, InstallFailedException {
+        ChartConfig chartConfig = new ChartConfig();
+        chartConfig.mergeFrom(defaultConfig);
+
+        chartConfig.set("cluster.enabled", "false");
+        chartConfig.set("master.resources.memory", "256Mi");
+        chartConfig.set("master.resources.cpu", "100m");
+
+        chartBuilder.setChartConfig(chartConfig);
+
+        Release release = helmClient.installChart(chartBuilder, request.getInstanceId(), 300);
     }
 
     @Override
@@ -73,7 +120,9 @@ public class RedisInstanceService extends AbstractInstanceService {
 
 
     @PostConstruct
-    private void postConstruct() throws MalformedURLException {
+    private void postConstruct() throws IOException {
         chartUrl = URI.create(chartUrlString).toURL();
+        chartBuilder = helmClient.loadChart(chartUrl);
+        defaultConfig = chartBuilder.getChartConfig();
     }
 }
