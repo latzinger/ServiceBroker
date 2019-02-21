@@ -144,19 +144,24 @@ public class HelmClient {
     public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, ChartConfig chartConfig, AsyncTask.AfterTaskRunnable afterTask)  {
         AsyncTask asyncTask = new AsyncTask(() -> installChart(chart, instanceId, timeout, chartConfig).isInitialized(), afterTask);
         Future<?> submit = executorService.submit(asyncTask);
+        log.debug("Started async installation");
     }
 
     public void uninstallChartAsync(String instanceId, long timeout, Operation operation){
+        operation.setMessage("Installation in progress");
+        operationRepository.save(operation);
         uninstallChartAsync(instanceId, timeout, defaultSuccessHandler(operation));
     }
 
     public void uninstallChartAsync(String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask){
         AsyncTask asyncTask = new AsyncTask(() -> uninstallChart(instanceId, timeout).hasDeleted(), afterTask);
         Future<?> submit = executorService.submit(asyncTask);
+        log.debug("Started async uninstallation");
     }
 
     private AsyncTask.AfterTaskRunnable defaultSuccessHandler(Operation operation){
         return (success, exception) -> {
+            log.info("Operation " + operation.getId() + " successfully: " + success);
             if(success){
                 operation.setState(Operation.OperationState.SUCCEEDED);
             } else {

@@ -19,6 +19,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.SequenceGenerator;
 import java.io.Serializable;
 
+@Data
 @MappedSuperclass
 @EqualsAndHashCode
 public abstract class AbstractLongId implements Serializable {
