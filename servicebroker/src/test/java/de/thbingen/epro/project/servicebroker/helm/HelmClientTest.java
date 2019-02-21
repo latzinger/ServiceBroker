@@ -29,6 +29,7 @@ import static org.junit.Assert.*;
 public class HelmClientTest {
     private static final String chartURL = "https://kubernetes-charts.storage.googleapis.com/redis-5.3.0.tgz";
     private final String instanceId = "unit-test-0";
+    private ServiceInstance serviceInstance;
 
     @Autowired
     private HelmClient helmClient;
@@ -39,6 +40,9 @@ public class HelmClientTest {
     @Before
     public void setUp() throws Exception {
         helmClient.installTiller();
+
+        serviceInstance = new ServiceInstance("xxx-service-xxx", "xxx-plan-xxx");
+        serviceInstanceRepository.save(serviceInstance);
     }
 
     @Test
@@ -59,11 +63,7 @@ public class HelmClientTest {
 
     @Test
     public void B1_installChartAsync() throws IOException, InterruptedException {
-        ServiceInstance serviceInstance = new ServiceInstance("xxx-service-xxx", "xxx-plan-xxx");
-        serviceInstanceRepository.save(serviceInstance);
-
         Operation operation = new Operation(serviceInstance, Operation.OperationState.IN_PROGRESS, "TEST In Progress");
-
         ChartBuilder chartBuilder = helmClient.loadChart(new URL(chartURL));
 
 
@@ -71,6 +71,35 @@ public class HelmClientTest {
         long start = System.currentTimeMillis();
 
         helmClient.installChartAsync(chartBuilder, instanceId, timeout, operation);
+
+        boolean finish = false;
+
+        while (!finish && start - System.currentTimeMillis() < timeout * 1000) {
+            synchronized (operation) {
+                switch (operation.getState()){
+                    case SUCCEEDED:
+                        finish = true;
+                        break;
+                    case FAILED:
+                        fail();
+                        break;
+                    case IN_PROGRESS:
+                        operation.wait(10000);
+                }
+            }
+        }
+
+        assertTrue(finish);
+    }
+
+    @Test
+    public void B2_uninstallChartAsync() throws InterruptedException {
+        Operation operation = new Operation(serviceInstance, Operation.OperationState.IN_PROGRESS, "TEST In Progress");
+
+        int timeout = 300;
+        long start = System.currentTimeMillis();
+
+        helmClient.uninstallChartAsync(instanceId, timeout, operation);
 
         boolean finish = false;
 

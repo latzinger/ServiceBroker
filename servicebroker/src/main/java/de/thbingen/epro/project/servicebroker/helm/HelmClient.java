@@ -146,12 +146,22 @@ public class HelmClient {
         Future<?> submit = executorService.submit(asyncTask);
     }
 
+    public void uninstallChartAsync(String instanceId, long timeout, Operation operation){
+        uninstallChartAsync(instanceId, timeout, defaultSuccessHandler(operation));
+    }
+
+    public void uninstallChartAsync(String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask){
+        AsyncTask asyncTask = new AsyncTask(() -> uninstallChart(instanceId, timeout).hasDeleted(), afterTask);
+        Future<?> submit = executorService.submit(asyncTask);
+    }
+
     private AsyncTask.AfterTaskRunnable defaultSuccessHandler(Operation operation){
         return (success, exception) -> {
             if(success){
                 operation.setState(Operation.OperationState.SUCCEEDED);
             } else {
                 operation.setState(Operation.OperationState.FAILED);
+                operation.setMessage("(Un)Installation failed");
             }
             operationRepository.save(operation);
         };
