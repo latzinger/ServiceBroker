@@ -52,6 +52,7 @@ public class RedisInstanceService extends AbstractInstanceService {
     private ChartBuilder chartBuilder;
     private ChartConfig defaultConfig;
 
+    @Autowired
     @Lazy
     private RedisService redisService;
 
@@ -61,7 +62,10 @@ public class RedisInstanceService extends AbstractInstanceService {
 
     @Override
     public CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException {
+        checkAcceptIncomplete(request);
         String planId = request.getPlanId();
+
+
 
         ServiceDefinition serviceDefiniton = redisService.getServiceDefiniton();
         Plan plan = serviceDefiniton.getPlan(planId);
@@ -73,17 +77,17 @@ public class RedisInstanceService extends AbstractInstanceService {
         ServiceInstance serviceInstance = createServiceInstanceEntry(request);
         Operation operation = createOperation(serviceInstance);
 
-            switch (planId) {
-                case RedisService.PLAN_SMALL_ID:
-                    createSmallPlanServiceInstance(request, operation);
-                    break;
-                case RedisService.PLAN_STANDARD_ID:
-                    break;
-                case RedisService.PLAN_CLUSTER_ID:
-                    break;
-            }
-
-        return null;
+        switch (planId) {
+            case RedisService.PLAN_SMALL_ID:
+                createSmallPlanServiceInstance(request, operation);
+                break;
+            case RedisService.PLAN_STANDARD_ID:
+                break;
+            case RedisService.PLAN_CLUSTER_ID:
+                break;
+        }
+        CreateServiceInstanceResponse createServiceInstanceResponse = new CreateServiceInstanceResponse(null, ""+operation.getId());
+        return createServiceInstanceResponse;
     }
 
     private void createSmallPlanServiceInstance(CreateServiceInstanceRequest request, @NotNull Operation operation) {

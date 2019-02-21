@@ -16,6 +16,7 @@ import de.thbingen.epro.project.web.exception.InvalidRequestException;
 import de.thbingen.epro.project.web.exception.ServiceNotFoundException;
 import de.thbingen.epro.project.web.request.OsbRequest;
 import de.thbingen.epro.project.web.response.ErrorMessage;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,10 +28,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
+@Log4j2
 public abstract class BaseController {
     private static final String API_VERSION = "2.14";
 
@@ -41,6 +43,7 @@ public abstract class BaseController {
     @ResponseBody
     public ResponseEntity<ErrorMessage> handleException(Exception e) {
         log.error("[Exception]", e.getMessage());
+        e.printStackTrace();
         return getErrorMessageResponseEntity("Exception", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -81,8 +84,11 @@ public abstract class BaseController {
     protected void checkApiVersion(HttpHeaders headers) throws InvalidApiVersionException {
         String apiVersion = headers.toSingleValueMap().get("X-Broker-API-Version");
 
+        List<String> apiVersions = headers.get("X-Broker-API-Version");
+        apiVersion = apiVersions.size() != 1 ? null : apiVersions.get(0);
+
         if (apiVersion != null) {
-            if (apiVersion.compareTo(API_VERSION) != 0) {
+            if (!apiVersion.equals(API_VERSION)) {
                 InvalidApiVersionException apiVersionException = new InvalidApiVersionException("API version mismatch: Platform is using ["
                         + "X-Broker-API-Version: " + apiVersion
                         + "] but needed API-Version " + API_VERSION);

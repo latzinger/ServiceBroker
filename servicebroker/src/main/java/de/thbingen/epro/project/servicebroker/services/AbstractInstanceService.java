@@ -14,22 +14,21 @@ import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
+import de.thbingen.epro.project.web.exception.RequiresAccpetsIncompleteException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceAlreadyExistsException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
-import de.thbingen.epro.project.web.request.serviceinstance.CreateServiceInstanceRequest;
-import de.thbingen.epro.project.web.request.serviceinstance.DeleteServiceInstanceRequest;
-import de.thbingen.epro.project.web.request.serviceinstance.LastOperationServiceInstanceRequest;
-import de.thbingen.epro.project.web.request.serviceinstance.UpdateServiceInstanceRequest;
+import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.DeleteServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.LastOperationServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstanceResponse;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
-@Slf4j
+@Log4j2
 public abstract class AbstractInstanceService implements InstanceService {
 
     @Autowired
@@ -45,6 +44,20 @@ public abstract class AbstractInstanceService implements InstanceService {
         return serviceInstance;
     }
 
+
+
+
+    @Override
+    public abstract CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException;
+
+    @Override
+    public abstract UpdateServiceInstanceResponse updateServiceInstance(UpdateServiceInstanceRequest request);
+
+    @Override
+    public abstract DeleteServiceInstanceResponse deleteServiceInstance(DeleteServiceInstanceRequest request);
+
+    @Override
+    public abstract LastOperationServiceInstanceResponse lastOperation(LastOperationServiceInstanceRequest request);
 
     protected boolean serviceInstanceExists(String instanceId){
         try {
@@ -75,16 +88,14 @@ public abstract class AbstractInstanceService implements InstanceService {
         return operation;
     }
 
-    @Override
-    public abstract CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException;
+    public void checkAcceptIncomplete(ServiceInstanceRequest request){
+        Map<String, String> parameters = request.getParameters();
+        String accepts_incomplete = parameters.get("accepts_incomplete");
 
-    @Override
-    public abstract UpdateServiceInstanceResponse updateServiceInstance(UpdateServiceInstanceRequest request);
+        log.debug("accepts_incomplete: " + accepts_incomplete);
 
-    @Override
-    public abstract DeleteServiceInstanceResponse deleteServiceInstance(DeleteServiceInstanceRequest request);
-
-    @Override
-    public abstract LastOperationServiceInstanceResponse lastOperation(LastOperationServiceInstanceRequest request);
+        if(accepts_incomplete == null || !Boolean.parseBoolean(accepts_incomplete))
+            throw new RequiresAccpetsIncompleteException();
+    }
 
 }

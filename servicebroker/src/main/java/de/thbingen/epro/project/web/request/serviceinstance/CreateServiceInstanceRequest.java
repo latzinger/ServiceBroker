@@ -19,6 +19,7 @@ import java.util.Map;
 
 @AllArgsConstructor
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
 public class CreateServiceInstanceRequest extends ServiceInstanceRequest {

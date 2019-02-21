@@ -2,6 +2,12 @@
 spring:
   profiles:
     active: "default"
+
+#debug: true
+logging:
+  level:
+    de:
+      thbingen: debug
 ---
 # Spring Boot configuration
 spring:
