@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -41,6 +42,13 @@ public class ServiceInstance extends AbstractEntity {
     @MapKeyJoinColumn(name = "PARAMETER_KEY")
     @Column(name = "VALUE")
     private Map<String, String> parameters;
+
+    @OneToMany(mappedBy = "serviceInstance")
+    private List<Operation> operations;
+
+    public void addOperation(Operation operation){
+        operations.add(operation);
+    }
 
     public String getParamater(String key) {
         return parameters.get(key);

@@ -49,7 +49,7 @@ public class HelmClientTest_custom {
 
     @Test
     public void A1_installChart() throws IOException, InstallFailedException {
-//        ReleaseOuterClass.Release release = helmClient.installChart(new URL(chartURL), instanceId);
+//        ReleaseOuterClass.Release release = helmClient.installChartAsync(new URL(chartURL), instanceId);
 
         ChartBuilder chart = helmClient.loadChart(new URL(chartURL));
 

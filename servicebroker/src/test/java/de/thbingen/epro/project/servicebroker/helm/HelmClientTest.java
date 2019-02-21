@@ -1,5 +1,8 @@
 package de.thbingen.epro.project.servicebroker.helm;
 
+import de.thbingen.epro.project.data.model.Operation;
+import de.thbingen.epro.project.data.model.ServiceInstance;
+import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.InstallFailedException;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.UninstallFailedException;
 import hapi.release.ReleaseOuterClass;
@@ -30,6 +33,9 @@ public class HelmClientTest {
     @Autowired
     private HelmClient helmClient;
 
+    @Autowired
+    private ServiceInstanceRepository serviceInstanceRepository;
+
     @Before
     public void setUp() throws Exception {
         helmClient.installTiller();
@@ -49,5 +55,40 @@ public class HelmClientTest {
 
         assertThat(release, notNullValue());
         assertThat("Uninstallation failed unexpected", release.hasDeleted(), is(true));
+    }
+
+    @Test
+    public void B1_installChartAsync() throws IOException, InterruptedException {
+        ServiceInstance serviceInstance = new ServiceInstance("xxx-service-xxx", "xxx-plan-xxx");
+        serviceInstanceRepository.save(serviceInstance);
+
+        Operation operation = new Operation(serviceInstance, Operation.OperationState.IN_PROGRESS, "TEST In Progress");
+
+        ChartBuilder chartBuilder = helmClient.loadChart(new URL(chartURL));
+
+
+        int timeout = 300;
+        long start = System.currentTimeMillis();
+
+        helmClient.installChartAsync(chartBuilder, instanceId, timeout, operation);
+
+        boolean finish = false;
+
+        while (!finish && start - System.currentTimeMillis() < timeout * 1000) {
+            synchronized (operation) {
+                switch (operation.getState()){
+                    case SUCCEEDED:
+                        finish = true;
+                        break;
+                    case FAILED:
+                        fail();
+                        break;
+                    case IN_PROGRESS:
+                        operation.wait(10000);
+                }
+            }
+        }
+
+        assertTrue(finish);
     }
 }

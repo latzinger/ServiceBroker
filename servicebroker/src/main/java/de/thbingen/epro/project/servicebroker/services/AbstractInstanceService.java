@@ -10,7 +10,9 @@
 package de.thbingen.epro.project.servicebroker.services;
 
 
+import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.model.ServiceInstance;
+import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.web.exception.ServiceInstanceAlreadyExistsException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
@@ -33,6 +35,9 @@ public abstract class AbstractInstanceService implements InstanceService {
     @Autowired
     protected ServiceInstanceRepository serviceInstanceRepository;
 
+    @Autowired
+    protected OperationRepository operationRepository;
+
     protected ServiceInstance getServiceInstance(String instanceId) throws ServiceInstanceNotFoundException {
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
         if (serviceInstance == null)
@@ -51,7 +56,7 @@ public abstract class AbstractInstanceService implements InstanceService {
         return true;
     }
 
-    public void createServiceInstanceEntry(CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException {
+    public ServiceInstance createServiceInstanceEntry(CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException {
         if(serviceInstanceExists(request.getInstanceId()))
             throw new ServiceInstanceAlreadyExistsException();
 
@@ -61,6 +66,13 @@ public abstract class AbstractInstanceService implements InstanceService {
         serviceInstance.setParameters(parameters);
 
         serviceInstanceRepository.save(serviceInstance);
+        return serviceInstance;
+    }
+
+    public Operation createOperation(ServiceInstance serviceInstance){
+        Operation operation = new Operation(serviceInstance, Operation.OperationState.IN_PROGRESS, "Operation initialized");
+        operationRepository.save(operation);
+        return operation;
     }
 
     @Override

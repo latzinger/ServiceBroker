@@ -1,11 +1,9 @@
 package de.thbingen.epro.project.servicebroker.services.redis;
 
+import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
-import de.thbingen.epro.project.servicebroker.helm.ChartBuilder;
-import de.thbingen.epro.project.servicebroker.helm.ChartConfig;
-import de.thbingen.epro.project.servicebroker.helm.HelmClient;
-import de.thbingen.epro.project.servicebroker.helm.Release;
+import de.thbingen.epro.project.servicebroker.helm.*;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.InstallFailedException;
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceService;
 import de.thbingen.epro.project.web.exception.InvalidRequestException;
@@ -47,7 +45,7 @@ import java.net.URL;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor()
 public class RedisInstanceService extends AbstractInstanceService {
     private static final String chartUrlString = "https://kubernetes-charts.storage.googleapis.com/redis-5.3.0.tgz";
     private URL chartUrl;
@@ -60,6 +58,7 @@ public class RedisInstanceService extends AbstractInstanceService {
     @NonNull
     private final HelmClient helmClient;
 
+
     @Override
     public CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException {
         String planId = request.getPlanId();
@@ -71,26 +70,23 @@ public class RedisInstanceService extends AbstractInstanceService {
             throw new InvalidRequestException("Plan " + planId + " for serviceId " + request.getServiceId() + " not found");
         }
 
-        createServiceInstanceEntry(request);
-        try {
+        ServiceInstance serviceInstance = createServiceInstanceEntry(request);
+        Operation operation = createOperation(serviceInstance);
 
             switch (planId) {
                 case RedisService.PLAN_SMALL_ID:
-                    createSmallPlanServiceInstance(request);
+                    createSmallPlanServiceInstance(request, operation);
                     break;
                 case RedisService.PLAN_STANDARD_ID:
                     break;
                 case RedisService.PLAN_CLUSTER_ID:
                     break;
             }
-        } catch (IOException | InstallFailedException e) {
-            e.printStackTrace();
-        }
 
         return null;
     }
 
-    private void createSmallPlanServiceInstance(CreateServiceInstanceRequest request) throws IOException, InstallFailedException {
+    private void createSmallPlanServiceInstance(CreateServiceInstanceRequest request, @NotNull Operation operation) {
         ChartConfig chartConfig = new ChartConfig();
         chartConfig.mergeFrom(defaultConfig);
 
@@ -100,7 +96,7 @@ public class RedisInstanceService extends AbstractInstanceService {
 
         chartBuilder.setChartConfig(chartConfig);
 
-        Release release = helmClient.installChart(chartBuilder, request.getInstanceId(), 300);
+        helmClient.installChartAsync(chartBuilder, request.getInstanceId(), 300, operation);
     }
 
     @Override

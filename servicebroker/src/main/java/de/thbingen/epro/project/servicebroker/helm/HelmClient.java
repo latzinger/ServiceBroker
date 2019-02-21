@@ -1,5 +1,7 @@
 package de.thbingen.epro.project.servicebroker.helm;
 
+import de.thbingen.epro.project.data.model.Operation;
+import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.InstallFailedException;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.UninstallFailedException;
 import hapi.chart.ChartOuterClass;
@@ -9,6 +11,8 @@ import hapi.services.tiller.Tiller.InstallReleaseResponse;
 import hapi.services.tiller.Tiller.UninstallReleaseRequest;
 import hapi.services.tiller.Tiller.UninstallReleaseResponse;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.microbean.helm.ReleaseManager;
 import org.microbean.helm.Tiller;
@@ -18,12 +22,17 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class HelmClient {
+    @NonNull
+    private OperationRepository operationRepository;
+
+    private ExecutorService executorService = Executors.newCachedThreadPool();
+
 
     public void installTiller() {
         TillerInstaller tillerInstaller = new TillerInstaller();
@@ -117,5 +126,61 @@ public class HelmClient {
         }
 
         throw new UninstallFailedException("Unknown reason");
+    }
+
+    //ASYNC
+
+    public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, Operation operation) {
+        operation.setMessage("Installation in progress");
+        operationRepository.save(operation);
+
+        installChartAsync(chart, instanceId, timeout, defaultSuccessHandler(operation));
+    }
+
+    public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask) {
+        installChartAsync(chart, instanceId, timeout, new ChartConfig(), afterTask);
+    }
+
+    public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, ChartConfig chartConfig, AsyncTask.AfterTaskRunnable afterTask)  {
+        AsyncTask asyncTask = new AsyncTask(() -> installChart(chart, instanceId, timeout, chartConfig).isInitialized(), afterTask);
+        Future<?> submit = executorService.submit(asyncTask);
+    }
+
+    private AsyncTask.AfterTaskRunnable defaultSuccessHandler(Operation operation){
+        return (success, exception) -> {
+            if(success){
+                operation.setState(Operation.OperationState.SUCCEEDED);
+            } else {
+                operation.setState(Operation.OperationState.FAILED);
+            }
+            operationRepository.save(operation);
+        };
+    }
+
+//    public Release uninstallChart(String instanceId, long timeout) throws IOException, UninstallFailedException {
+//        return uninstallChart(instanceId, timeout);
+//    }
+
+    @RequiredArgsConstructor
+    public static class AsyncTask implements Runnable{
+        @NonNull
+        private Callable<Boolean> task;
+        @NonNull
+        private AsyncTask.AfterTaskRunnable afterTask;
+
+        @Override
+        public void run() {
+            try {
+                Boolean call = task.call();
+                afterTask.afterTask(call, null);
+            } catch (Exception e) {
+                afterTask.afterTask(false, e);
+            }
+        }
+
+        @FunctionalInterface
+        public static interface AfterTaskRunnable{
+            void afterTask(boolean success, Exception exception);
+        }
     }
 }
