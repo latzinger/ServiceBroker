@@ -27,7 +27,7 @@ public abstract class OsbRequest {
     private Map<String, String> httpHeaders = new HashMap<>();
 
     @JsonIgnore
-    private Map<String, String> parameters = new HashMap<>();
+    private Map<String, String> requestParameters = new HashMap<>();
 
     public OsbRequest(@NonNull Map<String, String> httpHeaders) {
         this.httpHeaders = httpHeaders;

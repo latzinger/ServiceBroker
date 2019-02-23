@@ -17,7 +17,6 @@ import de.thbingen.epro.project.web.exception.ServiceNotFoundException;
 import de.thbingen.epro.project.web.request.OsbRequest;
 import de.thbingen.epro.project.web.response.ErrorMessage;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -76,16 +75,20 @@ public abstract class BaseController {
         return serviceNotFound;
     }
 
+    @ExceptionHandler(InvalidApiVersionException.class)
+    public ResponseEntity handleInvalidApiVersionException(InvalidApiVersionException ex){
+        ResponseEntity<ErrorMessage> invalidApiVersion = getErrorMessageResponseEntity("InvalidApiVersion", ex.getMessage(), HttpStatus.PRECONDITION_FAILED);
+        return invalidApiVersion;
+    }
+
 
     protected ResponseEntity<ErrorMessage> getErrorMessageResponseEntity(String error, String message, HttpStatus status) {
         return new ResponseEntity<ErrorMessage>(new ErrorMessage(error, message), status);
     }
 
     protected void checkApiVersion(HttpHeaders headers) throws InvalidApiVersionException {
-        String apiVersion = headers.toSingleValueMap().get("X-Broker-API-Version");
-
         List<String> apiVersions = headers.get("X-Broker-API-Version");
-        apiVersion = apiVersions.size() != 1 ? null : apiVersions.get(0);
+        String apiVersion = apiVersions != null && apiVersions.size() == 1 ? apiVersions.get(0) : null;
 
         if (apiVersion != null) {
             if (!apiVersion.equals(API_VERSION)) {
@@ -110,7 +113,7 @@ public abstract class BaseController {
         checkApiVersion(httpHeaders);
 
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
-        request.setParameters(parameters);
+        request.setRequestParameters(parameters);
 
         log.debug("checkAndComplete successfully");
     }

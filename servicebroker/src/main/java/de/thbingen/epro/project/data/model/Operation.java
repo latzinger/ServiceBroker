@@ -6,10 +6,7 @@
 
 package de.thbingen.epro.project.data.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,6 +21,7 @@ public class Operation extends AbstractLongId{
     @ManyToOne
     @JoinColumn(name="SERVICE_INSTANCE_ID")
     @NonNull
+    @ToString.Exclude
     @NotNull
     private ServiceInstance serviceInstance;
 

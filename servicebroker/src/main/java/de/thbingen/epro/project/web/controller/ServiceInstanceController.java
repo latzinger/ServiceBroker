@@ -12,6 +12,7 @@ import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.servicebroker.services.InstanceService;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
+import de.thbingen.epro.project.web.exception.InvalidRequestException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceAlreadyExistsException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
@@ -24,10 +25,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,11 +64,12 @@ public class ServiceInstanceController extends BaseController {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
-        if (serviceInstance != null)
+        log.debug("Found serviceInstance with id " + instanceId, " : " + (serviceInstance != null));
+        if (serviceInstance != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
 
         InstanceService instanceService = getInstanceService(request.getServiceId());
-
         CreateServiceInstanceResponse createResponse = instanceService.createServiceInstance(request);
 
         log.debug("createService returns");
@@ -115,9 +115,14 @@ public class ServiceInstanceController extends BaseController {
         LastOperationServiceInstanceRequest request = new LastOperationServiceInstanceRequest();
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
+        String operation = parameters.get("operation");
+
+        if(operation == null)
+            throw new InvalidRequestException();
+
+        request.setOperationId(operation);
 
         InstanceService instanceService = getInstanceService(request);
-
         LastOperationServiceInstanceResponse response = instanceService.lastOperation(request);
 
         return ResponseEntity.ok(response);

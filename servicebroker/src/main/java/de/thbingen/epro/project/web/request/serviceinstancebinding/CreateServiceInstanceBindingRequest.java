@@ -41,7 +41,7 @@ public class CreateServiceInstanceBindingRequest extends ServiceInstanceBindingR
     @JsonProperty("bind_resource")
     private BindResource bindResource;
 
-    @JsonProperty("parameters")
+    @JsonProperty("requestParameters")
     private Map<String, String> parameters = new HashMap<>();
 
     public CreateServiceInstanceBindingRequest(@NonNull Map<String, String> httpHeaders, @NonNull String instanceId, @NonNull String bindingId, @NonNull @NotEmpty String serviceId, @NonNull @NotEmpty String planId) {

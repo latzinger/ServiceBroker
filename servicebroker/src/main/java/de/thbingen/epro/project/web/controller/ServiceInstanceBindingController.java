@@ -64,7 +64,7 @@ public class ServiceInstanceBindingController extends BaseController {
 
         DeleteServiceInstanceBindingRequest request =
                 new DeleteServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
-        request.setParameters(parameters);
+        request.setRequestParameters(parameters);
 
         DeleteServiceInstanceBindingResponse response =
                 bindingService.deleteServiceInstanceBinding(bindingId, instanceId, request);
@@ -83,7 +83,7 @@ public class ServiceInstanceBindingController extends BaseController {
 
         checkApiVersion(httpHeaders);
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
-        request.setParameters(parameters);
+        request.setRequestParameters(parameters);
 
         CreateServiceInstanceBindingResponse response =
                 bindingService.createServiceInstanceBinding(bindingId, instanceId, request);
@@ -103,7 +103,7 @@ public class ServiceInstanceBindingController extends BaseController {
 
         LastOperationServiceInstanceBindingRequest request =
                 new LastOperationServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
-        request.setParameters(parameters);
+        request.setRequestParameters(parameters);
 
         LastOperationServiceInstanceBindingResponse response =
                 bindingService.lastOperation(bindingId, instanceId, request);

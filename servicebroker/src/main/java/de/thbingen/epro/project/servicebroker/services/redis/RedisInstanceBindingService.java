@@ -17,10 +17,7 @@ import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperation
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
-import de.thbingen.epro.project.web.schema.Plan;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -39,7 +36,7 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
         if (serviceInstanceBinding != null) {
 
             Map<String, String> parameters = serviceInstanceBinding.getParameters();
-            Map<String, String> requestedParam = request.getParameters();
+            Map<String, String> requestedParam = request.getRequestParameters();
 
             if (parameters.equals(requestedParam))
                 throw new ServiceInstanceBindingAlreadyExistsException(serviceInstanceBinding, true);

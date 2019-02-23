@@ -24,7 +24,7 @@ import java.util.Map;
 @Builder
 public class InputParametersSchema implements Serializable {
 
-    @JsonProperty("parameters")
+    @JsonProperty("requestParameters")
     private Map<String, Object> parameters = new HashMap<>();
 
 }

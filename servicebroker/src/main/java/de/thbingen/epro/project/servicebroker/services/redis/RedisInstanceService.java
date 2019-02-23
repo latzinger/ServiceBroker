@@ -62,9 +62,9 @@ public class RedisInstanceService extends AbstractInstanceService {
 
     @Override
     public CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException {
+        log.debug("Create ServiceInstance");
         checkAcceptIncomplete(request);
         String planId = request.getPlanId();
-
 
 
         ServiceDefinition serviceDefiniton = redisService.getServiceDefiniton();
@@ -77,20 +77,25 @@ public class RedisInstanceService extends AbstractInstanceService {
         ServiceInstance serviceInstance = createServiceInstanceEntry(request);
         Operation operation = createOperation(serviceInstance);
 
+        log.debug("Created serviceInstance and operation, go on with plan " + planId);
+
         switch (planId) {
             case RedisService.PLAN_SMALL_ID:
                 createSmallPlanServiceInstance(request, operation);
                 break;
             case RedisService.PLAN_STANDARD_ID:
+                createStandardPlanServiceInstance(request, operation);
                 break;
             case RedisService.PLAN_CLUSTER_ID:
+                createClusterPlanServiceInstance(request, operation);
                 break;
         }
-        CreateServiceInstanceResponse createServiceInstanceResponse = new CreateServiceInstanceResponse(null, ""+operation.getId());
+        CreateServiceInstanceResponse createServiceInstanceResponse = new CreateServiceInstanceResponse(null, "" + operation.getId());
         return createServiceInstanceResponse;
     }
 
     private void createSmallPlanServiceInstance(CreateServiceInstanceRequest request, @NotNull Operation operation) {
+        log.debug("Create Redis plan: small");
         ChartConfig chartConfig = new ChartConfig();
         chartConfig.mergeFrom(defaultConfig);
 
@@ -99,8 +104,34 @@ public class RedisInstanceService extends AbstractInstanceService {
         chartConfig.set("master.resources.cpu", "100m");
 
         chartBuilder.setChartConfig(chartConfig);
-
         helmClient.installChartAsync(chartBuilder, request.getInstanceId(), 300, operation);
+    }
+
+    private void createStandardPlanServiceInstance(CreateServiceInstanceRequest request, @NotNull Operation operation) {
+        log.debug("Create Redis plan: standard");
+        ChartConfig chartConfig = new ChartConfig();
+        chartConfig.mergeFrom(defaultConfig);
+
+        chartConfig.set("cluster.enabled", "false");
+        chartConfig.set("master.resources.memory", "1024Mi");
+        chartConfig.set("master.resources.cpu", "400m");
+
+        chartBuilder.setChartConfig(chartConfig);
+        helmClient.installChartAsync(chartBuilder, request.getInstanceId(), 300, operation);
+    }
+
+    private void createClusterPlanServiceInstance(CreateServiceInstanceRequest request, @NotNull Operation operation) {
+        log.debug("Create Redis plan: cluster");
+        ChartConfig chartConfig = new ChartConfig();
+        chartConfig.mergeFrom(defaultConfig);
+
+        chartConfig.set("cluster.enabled", "true");
+        chartConfig.set("cluster.slaveCount", 3);
+        chartConfig.set("master.resources.memory", "1024Mi");
+        chartConfig.set("master.resources.cpu", "400m");
+
+        chartBuilder.setChartConfig(chartConfig);
+        helmClient.installChartAsync(chartBuilder, request.getInstanceId(), 500, operation);
     }
 
     @Override
@@ -115,9 +146,29 @@ public class RedisInstanceService extends AbstractInstanceService {
 
     @Override
     public LastOperationServiceInstanceResponse lastOperation(LastOperationServiceInstanceRequest request) {
-        return null;
+        log.debug("Get lastOpartion for " + request.getInstanceId() + " with operationId " + request.getOperationId());
+        Long operationId = getOperationId(request);
+
+        Operation operation = operationRepository.getOperation(request.getInstanceId(), operationId);
+
+        LastOperationServiceInstanceResponse response = new LastOperationServiceInstanceResponse("", "");
+        if (operation != null)
+            response = LastOperationServiceInstanceResponse.builder()
+                    .state(operation.getState().toString())
+                    .description(operation.getMessage())
+                    .build();
+
+        return response;
     }
 
+    private Long getOperationId(LastOperationServiceInstanceRequest request) {
+        String operationIdString = request.getOperationId();
+        try {
+            return Long.parseLong(operationIdString);
+        } catch (NumberFormatException e) {
+            return -1L;
+        }
+    }
 
     @PostConstruct
     private void postConstruct() throws IOException {

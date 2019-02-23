@@ -16,7 +16,7 @@ public class ServiceInstanceBindingAlreadyExistsException extends RuntimeExcepti
     @Override
     public String getMessage() {
         return "ServiceInstanceBinding already exist: binding_id = " + serviceInstanceBinding.getId() +
-                " matching parameters = " + matchingParameters;
+                " matching requestParameters = " + matchingParameters;
     }
 
 }

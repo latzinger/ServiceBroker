@@ -8,6 +8,7 @@
 
 package de.thbingen.epro.project.web.response.serviceinstance;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class CreateServiceInstanceResponse {
 
     @NotEmpty
     @JsonProperty("dashboard_url")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String dashboardUrl;
 
     @NotEmpty

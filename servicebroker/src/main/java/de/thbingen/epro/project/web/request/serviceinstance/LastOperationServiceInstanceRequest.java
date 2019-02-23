@@ -8,5 +8,9 @@
 
 package de.thbingen.epro.project.web.request.serviceinstance;
 
+import lombok.Data;
+
+@Data
 public class LastOperationServiceInstanceRequest extends ServiceInstanceRequest {
+    private String operationId;
 }

@@ -32,7 +32,7 @@ public class UpdateServiceInstanceRequest extends ServiceInstanceRequest {
     @JsonProperty("plan_id")
     private String planId;
 
-    @JsonProperty("parameters")
+    @JsonProperty("requestParameters")
     private Map<String, String> parameters = new HashMap<>();
 
     @JsonProperty("previous_values")

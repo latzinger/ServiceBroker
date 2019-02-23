@@ -8,6 +8,7 @@
 
 package de.thbingen.epro.project.data.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -35,7 +36,14 @@ public class ServiceInstance extends AbstractEntity {
     private String planId;
 
     @Column
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String dashboardURL;
+
+    public ServiceInstance(String instanceId, String serviceId, String planId) {
+        super(instanceId);
+        this.serviceId = serviceId;
+        this.planId = planId;
+    }
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "SERVICE_INSTANCE_PARAMETERS")
