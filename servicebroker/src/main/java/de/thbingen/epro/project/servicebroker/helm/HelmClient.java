@@ -43,7 +43,6 @@ public class HelmClient {
 
     private ExecutorService executorService = Executors.newCachedThreadPool();
 
-
     public void installTiller() {
         TillerInstaller tillerInstaller = new TillerInstaller();
         tillerInstaller.init();
@@ -58,7 +57,6 @@ public class HelmClient {
 
         return new ChartBuilder(chart);
     }
-
 
     public Release installChart(URL chartURL, String instanceId) throws IOException, InstallFailedException {
         return installChart(chartURL, instanceId, 300L);

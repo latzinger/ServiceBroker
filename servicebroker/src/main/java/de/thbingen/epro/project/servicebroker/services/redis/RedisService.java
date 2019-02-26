@@ -31,9 +31,11 @@ public class RedisService implements OsbService {
     public static final String PLAN_CLUSTER_ID = "0b1fbc27-8495-45a6-8858-0e28789026e9";
 
     @NonNull
+    @Autowired
     private RedisInstanceService redisInstanceService;
 
     @NonNull
+    @Autowired
     private RedisInstanceBindingService redisInstanceBindingService;
 
     @Override
