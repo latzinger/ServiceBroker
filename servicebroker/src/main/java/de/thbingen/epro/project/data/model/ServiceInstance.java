@@ -8,6 +8,7 @@
 
 package de.thbingen.epro.project.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -52,6 +53,7 @@ public class ServiceInstance extends AbstractEntity {
     private Map<String, String> parameters;
 
     @OneToMany(mappedBy = "serviceInstance", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Operation> operations;
 
     public void addOperation(Operation operation){
@@ -68,5 +70,11 @@ public class ServiceInstance extends AbstractEntity {
 
     public String removeParameter(String key) {
         return parameters.remove(key);
+    }
+
+    @Override
+    @JsonIgnore
+    public @NonNull String getId() {
+        return super.getId();
     }
 }

@@ -99,9 +99,7 @@ public class RedisInstanceService extends AbstractInstanceService {
         ChartConfig chartConfig = new ChartConfig();
         chartConfig.mergeFrom(defaultConfig);
 
-        chartConfig.set("cluster.enabled", "false");
-        chartConfig.set("master.resources.memory", "256Mi");
-        chartConfig.set("master.resources.cpu", "100m");
+        //using default settings
 
         chartBuilder.setChartConfig(chartConfig);
         helmClient.installChartAsync(chartBuilder, request.getInstanceId(), 300, operation);
@@ -112,7 +110,6 @@ public class RedisInstanceService extends AbstractInstanceService {
         ChartConfig chartConfig = new ChartConfig();
         chartConfig.mergeFrom(defaultConfig);
 
-        chartConfig.set("cluster.enabled", "false");
         chartConfig.set("master.resources.memory", "1024Mi");
         chartConfig.set("master.resources.cpu", "400m");
 
@@ -141,22 +138,13 @@ public class RedisInstanceService extends AbstractInstanceService {
 
     @Override
     public DeleteServiceInstanceResponse deleteServiceInstance(DeleteServiceInstanceRequest request) {
+        checkSerivceIdAndPlanId(request);
         ServiceInstance serviceInstance = getServiceInstance(request.getInstanceId());
-
-        String serviceId = request.getRequestParameters().get("service_id");
-        String planId = request.getRequestParameters().get("plan_id");
-
-        if(serviceId == null || planId == null || !serviceId.equals(serviceInstance.getServiceId()) || !planId.equals(serviceInstance.getPlanId())){
-            throw new InvalidRequestException("service_id or plan_id not provided or does not match instanceId");
-        }
-
         Operation operation = createOperation(serviceInstance);
 
 
         helmClient.uninstallChartAsync(request.getInstanceId(), 500, operation);
-
         DeleteServiceInstanceResponse deleteServiceInstanceResponse = new DeleteServiceInstanceResponse("" + operation.getId());
-
         return deleteServiceInstanceResponse;
     }
 
@@ -191,5 +179,12 @@ public class RedisInstanceService extends AbstractInstanceService {
         chartUrl = URI.create(chartUrlString).toURL();
         chartBuilder = helmClient.loadChart(chartUrl);
         defaultConfig = chartBuilder.getChartConfig();
+
+        defaultConfig.set("master.service.type", "NodePort");
+        defaultConfig.set("slave.service.type", "NodePort");
+
+        defaultConfig.set("cluster.enabled", "false");
+        defaultConfig.set("master.resources.memory", "256Mi");
+        defaultConfig.set("master.resources.cpu", "100m");
     }
 }

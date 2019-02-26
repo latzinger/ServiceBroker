@@ -86,7 +86,7 @@ public class ServiceInstanceController extends BaseController {
             @PathVariable("instanceId") String instanceId,
             @RequestParam Map<String, String> parameters) {
         DeleteServiceInstanceRequest request = new DeleteServiceInstanceRequest();
-        checkAndComplete(httpHeaders, request, parameters);
+        checkAndComplete(httpHeaders, request, instanceId, parameters);
 
         InstanceService instanceService = getInstanceService(request);
 

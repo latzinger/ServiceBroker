@@ -48,6 +48,6 @@ public class CreateServiceInstanceRequest extends ServiceInstanceRequest {
     @JsonProperty("space_guid")
     private String spaceGuid;
 
-    @JsonProperty("requestParameters")
-    private Map<String, String> parameters;
+    @JsonProperty("parameters")
+    private Map<String, Object> parameters;
 }

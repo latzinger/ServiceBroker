@@ -1,7 +1,9 @@
 package de.thbingen.epro.project.servicebroker.helm;
 
 import de.thbingen.epro.project.data.model.Operation;
+import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.repository.OperationRepository;
+import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.InstallFailedException;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.UninstallFailedException;
 import hapi.chart.ChartOuterClass;
@@ -18,8 +20,11 @@ import org.microbean.helm.ReleaseManager;
 import org.microbean.helm.Tiller;
 import org.microbean.helm.TillerInstaller;
 import org.microbean.helm.chart.URLChartLoader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.*;
@@ -28,8 +33,13 @@ import java.util.concurrent.*;
 @Service
 @RequiredArgsConstructor
 public class HelmClient {
-    @NonNull
+    @Autowired
+    @Lazy
     private OperationRepository operationRepository;
+
+    @Autowired
+    @Lazy
+    private ServiceInstanceRepository serviceInstanceRepository;
 
     private ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -177,13 +187,14 @@ public class HelmClient {
         return (success, exception) -> {
             log.info("Uninstall Operation " + operation.getId() + " successfully: " + success);
             if(success){
-                operation.setState(Operation.OperationState.FAILED);
-                operation.setMessage("Uninstalling succeeded, gone in a few moments");
+                ServiceInstance serviceInstance = operation.getServiceInstance();
+                serviceInstanceRepository.delete(serviceInstance);
             } else {
                 operation.setState(Operation.OperationState.FAILED);
                 operation.setMessage("Uninstalling failed");
+                operationRepository.save(operation);
             }
-            operationRepository.save(operation);
+
         };
     }
 
