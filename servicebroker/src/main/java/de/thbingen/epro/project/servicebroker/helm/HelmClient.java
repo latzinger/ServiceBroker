@@ -58,7 +58,7 @@ public class HelmClient {
         io.fabric8.kubernetes.api.model.Service service = null;
 
         try(DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient()){
-             service = kubernetesClient.services().withName(instanceId).get();
+            service = kubernetesClient.services().inNamespace("default").withName(instanceId).get();
 
              if(service == null)
                  throw new ServiceInstanceNotFoundException(instanceId);

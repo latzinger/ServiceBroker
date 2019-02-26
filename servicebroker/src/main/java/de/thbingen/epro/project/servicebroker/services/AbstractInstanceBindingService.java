@@ -39,7 +39,14 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     protected OperationRepository operationRepository;
 
     @Override
-    public abstract ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId);
+    public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId) throws ServiceInstanceBindingNotFoundException {
+        ServiceInstanceBinding serviceInstanceBinding = serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId);
+
+        if(serviceInstanceBinding == null)
+            throw new ServiceInstanceBindingNotFoundException(bindingId);
+
+        return serviceInstanceBinding;
+    }
 
     @Override
     public abstract CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request);

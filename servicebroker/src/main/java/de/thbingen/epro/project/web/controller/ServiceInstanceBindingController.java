@@ -58,10 +58,9 @@ public class ServiceInstanceBindingController extends BaseController {
         OsbService service = serviceManager.getService(serviceId);
 
         BindingService bindingService = service.getBindingService();
-        InstanceService instanceService = service.getInstanceService();
 
         ServiceInstanceBinding serviceInstanceBinding =
-                bindingService.getServiceInstanceBinding(bindingId, instanceId);
+                bindingService.getServiceInstanceBinding(instanceId, bindingId);
 
         /*
          * check if binding in progress (lastOperation) and throw 404 Not Found
@@ -84,7 +83,6 @@ public class ServiceInstanceBindingController extends BaseController {
                 new DeleteServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
         request.setRequestParameters(parameters);
 
-
         return null;
     }
 
@@ -100,6 +98,7 @@ public class ServiceInstanceBindingController extends BaseController {
         checkApiVersion(httpHeaders);
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
         request.setRequestParameters(parameters);
+
 
         return null;
     }

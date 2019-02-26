@@ -26,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 
 @Service
 @Slf4j
@@ -37,9 +39,10 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
     private final HelmClient helmClient;
 
     @Override
-    public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId) {
+    public CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request) {
 
         ServiceDetails serviceDetails = null;
+        HashMap<String, String> credentials = new HashMap<>();
 
         try {
             serviceDetails = helmClient.getServiceDetails(instanceId);
@@ -47,12 +50,15 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
             throw new ServiceInstanceBindingNotFoundException(bindingId);
         }
 
-        return null;
-    }
 
-    @Override
-    public CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request) {
-        return null;
+
+        CreateServiceInstanceBindingResponse response =
+                CreateServiceInstanceBindingResponse
+                        .builder()
+                        .credentials(credentials)
+                        .build();
+
+        return response;
     }
 
     @Override
