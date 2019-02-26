@@ -141,7 +141,23 @@ public class RedisInstanceService extends AbstractInstanceService {
 
     @Override
     public DeleteServiceInstanceResponse deleteServiceInstance(DeleteServiceInstanceRequest request) {
-        return null;
+        ServiceInstance serviceInstance = getServiceInstance(request.getInstanceId());
+
+        String serviceId = request.getRequestParameters().get("service_id");
+        String planId = request.getRequestParameters().get("plan_id");
+
+        if(serviceId == null || planId == null || !serviceId.equals(serviceInstance.getServiceId()) || !planId.equals(serviceInstance.getPlanId())){
+            throw new InvalidRequestException("service_id or plan_id not provided or does not match instanceId");
+        }
+
+        Operation operation = createOperation(serviceInstance);
+
+
+        helmClient.uninstallChartAsync(request.getInstanceId(), 500, operation);
+
+        DeleteServiceInstanceResponse deleteServiceInstanceResponse = new DeleteServiceInstanceResponse("" + operation.getId());
+
+        return deleteServiceInstanceResponse;
     }
 
     @Override
@@ -151,7 +167,7 @@ public class RedisInstanceService extends AbstractInstanceService {
 
         Operation operation = operationRepository.getOperation(request.getInstanceId(), operationId);
 
-        LastOperationServiceInstanceResponse response = new LastOperationServiceInstanceResponse("", "");
+        LastOperationServiceInstanceResponse response = new LastOperationServiceInstanceResponse("unknown", "Something went wrong");
         if (operation != null)
             response = LastOperationServiceInstanceResponse.builder()
                     .state(operation.getState().toString())

@@ -8,11 +8,14 @@
 
 package de.thbingen.epro.project.web.controller;
 
+import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.model.ServiceInstance;
+import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.servicebroker.services.InstanceService;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
 import de.thbingen.epro.project.web.exception.InvalidRequestException;
+import de.thbingen.epro.project.web.exception.OperationNotFoundException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceAlreadyExistsException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
@@ -42,6 +45,7 @@ public class ServiceInstanceController extends BaseController {
 
     @NonNull
     private ServiceInstanceRepository serviceInstanceRepository;
+
 
     @GetMapping(value = "/{instanceId}")
     public ResponseEntity<?> fetchServiceInstance(
@@ -86,9 +90,12 @@ public class ServiceInstanceController extends BaseController {
 
         InstanceService instanceService = getInstanceService(request);
 
-        DeleteServiceInstanceResponse response = instanceService.deleteServiceInstance(request);
-
-        return ResponseEntity.ok(response);
+        try {
+            DeleteServiceInstanceResponse response = instanceService.deleteServiceInstance(request);
+            return ResponseEntity.ok(response);
+        } catch (ServiceInstanceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.GONE).build();
+        }
     }
 
     @PatchMapping(value = "/{instanceId}")
@@ -111,20 +118,27 @@ public class ServiceInstanceController extends BaseController {
     public ResponseEntity<?> lastOperation(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId,
-            @RequestParam Map<String, String> parameters) {
+            @RequestParam Map<String, String> parameters) throws OperationNotFoundException {
         LastOperationServiceInstanceRequest request = new LastOperationServiceInstanceRequest();
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
-        String operation = parameters.get("operation");
-
-        if(operation == null)
+        String operationId = parameters.get("operation");
+        if (operationId == null)
             throw new InvalidRequestException();
+        request.setOperationId(operationId);
 
-        request.setOperationId(operation);
 
+        try {
+            ServiceInstance serviceInstance = getServiceInstance(instanceId);
+        } catch (ServiceInstanceNotFoundException e){
+            return ResponseEntity.status(HttpStatus.GONE).build();
+        }
+
+        Operation operation = getOperation(instanceId, operationId);
         InstanceService instanceService = getInstanceService(request);
-        LastOperationServiceInstanceResponse response = instanceService.lastOperation(request);
 
+
+        LastOperationServiceInstanceResponse response = instanceService.lastOperation(request);
         return ResponseEntity.ok(response);
     }
 
@@ -142,14 +156,14 @@ public class ServiceInstanceController extends BaseController {
         return serviceInstance;
     }
 
-    private InstanceService getInstanceService(ServiceInstanceRequest request){
+    private InstanceService getInstanceService(ServiceInstanceRequest request) {
         ServiceInstance serviceInstance = getServiceInstance(request.getInstanceId());
         String serviceId = serviceInstance.getServiceId();
 
         return getInstanceService(serviceId);
     }
 
-    private InstanceService getInstanceService(String serviceId){
+    private InstanceService getInstanceService(String serviceId) {
         OsbService osbService = getOsbService(serviceId);
 
         return osbService.getInstanceService();

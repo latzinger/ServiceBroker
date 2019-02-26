@@ -134,7 +134,7 @@ public class HelmClient {
         operation.setMessage("Installation in progress");
         operationRepository.save(operation);
 
-        installChartAsync(chart, instanceId, timeout, defaultSuccessHandler(operation));
+        installChartAsync(chart, instanceId, timeout, defaultInstallationSuccessHandler(operation));
     }
 
     public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask) {
@@ -150,7 +150,7 @@ public class HelmClient {
     public void uninstallChartAsync(String instanceId, long timeout, Operation operation){
         operation.setMessage("Installation in progress");
         operationRepository.save(operation);
-        uninstallChartAsync(instanceId, timeout, defaultSuccessHandler(operation));
+        uninstallChartAsync(instanceId, timeout, defaultUninstallationSuccessHandler(operation));
     }
 
     public void uninstallChartAsync(String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask){
@@ -159,14 +159,29 @@ public class HelmClient {
         log.debug("Started async uninstallation");
     }
 
-    private AsyncTask.AfterTaskRunnable defaultSuccessHandler(Operation operation){
+    private AsyncTask.AfterTaskRunnable defaultInstallationSuccessHandler(Operation operation){
         return (success, exception) -> {
-            log.info("Operation " + operation.getId() + " successfully: " + success);
+            log.info("Install Operation " + operation.getId() + " successfully: " + success);
             if(success){
                 operation.setState(Operation.OperationState.SUCCEEDED);
+                operation.setMessage("Installation  succeeded");
             } else {
                 operation.setState(Operation.OperationState.FAILED);
-                operation.setMessage("(Un)Installation failed");
+                operation.setMessage("Installation failed");
+            }
+            operationRepository.save(operation);
+        };
+    }
+
+    private AsyncTask.AfterTaskRunnable defaultUninstallationSuccessHandler(Operation operation){
+        return (success, exception) -> {
+            log.info("Uninstall Operation " + operation.getId() + " successfully: " + success);
+            if(success){
+                operation.setState(Operation.OperationState.FAILED);
+                operation.setMessage("Uninstalling succeeded, gone in a few moments");
+            } else {
+                operation.setState(Operation.OperationState.FAILED);
+                operation.setMessage("Uninstalling failed");
             }
             operationRepository.save(operation);
         };

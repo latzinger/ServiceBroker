@@ -51,7 +51,7 @@ public class ServiceInstance extends AbstractEntity {
     @Column(name = "VALUE")
     private Map<String, String> parameters;
 
-    @OneToMany(mappedBy = "serviceInstance")
+    @OneToMany(mappedBy = "serviceInstance", cascade = CascadeType.ALL)
     private List<Operation> operations;
 
     public void addOperation(Operation operation){
