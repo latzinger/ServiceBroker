@@ -6,6 +6,7 @@
 
 package de.thbingen.epro.project.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class Operation extends AbstractLongId{
     @NonNull
     @ToString.Exclude
     @NotNull
+    @JsonIgnore
     private ServiceInstance serviceInstance;
 
     @Column

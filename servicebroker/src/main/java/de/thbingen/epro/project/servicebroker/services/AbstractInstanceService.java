@@ -14,9 +14,11 @@ import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
+import de.thbingen.epro.project.web.exception.InvalidRequestException;
 import de.thbingen.epro.project.web.exception.RequiresAccpetsIncompleteException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceAlreadyExistsException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
+import de.thbingen.epro.project.web.request.OsbRequest;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.DeleteServiceInstanceResponse;
@@ -25,6 +27,7 @@ import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstan
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
@@ -73,8 +76,12 @@ public abstract class AbstractInstanceService implements InstanceService {
         }
 
         ServiceInstance serviceInstance = new ServiceInstance(request.getInstanceId(), request.getServiceId(), request.getPlanId());
-        Map<String, String> parameters = request.getParameters();
-        serviceInstance.setParameters(parameters);
+        Map<String, Object> parameters = request.getParameters();
+        Map<String, String> parameterStrings = new HashMap<>();
+
+        parameters.forEach((s, o) -> parameterStrings.put(s, o.toString()));
+
+        serviceInstance.setParameters(parameterStrings);
 
         serviceInstanceRepository.save(serviceInstance);
         return serviceInstance;
@@ -94,6 +101,21 @@ public abstract class AbstractInstanceService implements InstanceService {
 
         if(accepts_incomplete == null || !Boolean.parseBoolean(accepts_incomplete))
             throw new RequiresAccpetsIncompleteException();
+    }
+
+    public void checkSerivceIdAndPlanId(ServiceInstanceRequest request){
+        ServiceInstance serviceInstance = getServiceInstance(request.getInstanceId());
+
+        String serviceId = request.getRequestParameters().get("service_id");
+        String planId = request.getRequestParameters().get("plan_id");
+
+        if(serviceId == null || planId == null || !serviceId.equals(serviceInstance.getServiceId()) || !planId.equals(serviceInstance.getPlanId())){
+            throw new InvalidRequestException("service_id or plan_id not provided or does not match instanceId");
+        }
+    }
+
+    public void checkPlanExists(OsbRequest request){
+
     }
 
 }

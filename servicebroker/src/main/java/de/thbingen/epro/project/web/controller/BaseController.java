@@ -9,13 +9,17 @@
 
 package de.thbingen.epro.project.web.controller;
 
+import de.thbingen.epro.project.data.model.Operation;
+import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
 import de.thbingen.epro.project.servicebroker.services.ServiceManager;
 import de.thbingen.epro.project.web.exception.InvalidApiVersionException;
 import de.thbingen.epro.project.web.exception.InvalidRequestException;
+import de.thbingen.epro.project.web.exception.OperationNotFoundException;
 import de.thbingen.epro.project.web.exception.ServiceNotFoundException;
 import de.thbingen.epro.project.web.request.OsbRequest;
 import de.thbingen.epro.project.web.response.ErrorMessage;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +41,9 @@ public abstract class BaseController {
 
     @Autowired
     protected ServiceManager serviceManager;
+
+    @Autowired
+    protected OperationRepository operationRepository;
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
@@ -81,6 +88,12 @@ public abstract class BaseController {
         return invalidApiVersion;
     }
 
+    @ExceptionHandler(OperationNotFoundException.class)
+    public ResponseEntity handleOperationNotFoundException(OperationNotFoundException ex){
+        ResponseEntity<ErrorMessage> operationNotFound = getErrorMessageResponseEntity("OperationNotFound", ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return operationNotFound;
+    }
+
 
     protected ResponseEntity<ErrorMessage> getErrorMessageResponseEntity(String error, String message, HttpStatus status) {
         return new ResponseEntity<ErrorMessage>(new ErrorMessage(error, message), status);
@@ -121,7 +134,25 @@ public abstract class BaseController {
     public OsbService getOsbService(String serviceId){
         OsbService service = serviceManager.getService(serviceId);
 
-        log.debug("Found service " + serviceId);
+        log.debug("Found service " + serviceId.getClass());
         return service;
+    }
+
+    public Operation getOperation(String instanceId, String operationId) throws OperationNotFoundException {
+        Long id = -1L;
+
+        try {
+            id = Long.parseLong(operationId);
+        } catch (NumberFormatException e){
+            id = -1L;
+            log.debug("Provided id " + operationId + " is not a valid operation id (a Long)");
+        }
+
+        Operation operation = operationRepository.getOperation(instanceId, id);
+
+        if(operation == null)
+            throw new OperationNotFoundException();
+
+        return operation;
     }
 }

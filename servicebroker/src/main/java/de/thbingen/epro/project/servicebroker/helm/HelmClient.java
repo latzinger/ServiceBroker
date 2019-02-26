@@ -1,7 +1,9 @@
 package de.thbingen.epro.project.servicebroker.helm;
 
 import de.thbingen.epro.project.data.model.Operation;
+import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.repository.OperationRepository;
+import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.InstallFailedException;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.UninstallFailedException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
@@ -23,8 +25,11 @@ import org.microbean.helm.ReleaseManager;
 import org.microbean.helm.Tiller;
 import org.microbean.helm.TillerInstaller;
 import org.microbean.helm.chart.URLChartLoader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.*;
@@ -33,8 +38,13 @@ import java.util.concurrent.*;
 @Service
 @RequiredArgsConstructor
 public class HelmClient {
-    @NonNull
+    @Autowired
+    @Lazy
     private OperationRepository operationRepository;
+
+    @Autowired
+    @Lazy
+    private ServiceInstanceRepository serviceInstanceRepository;
 
     private ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -152,7 +162,7 @@ public class HelmClient {
         operation.setMessage("Installation in progress");
         operationRepository.save(operation);
 
-        installChartAsync(chart, instanceId, timeout, defaultSuccessHandler(operation));
+        installChartAsync(chart, instanceId, timeout, defaultInstallationSuccessHandler(operation));
     }
 
     public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask) {
@@ -168,7 +178,7 @@ public class HelmClient {
     public void uninstallChartAsync(String instanceId, long timeout, Operation operation){
         operation.setMessage("Installation in progress");
         operationRepository.save(operation);
-        uninstallChartAsync(instanceId, timeout, defaultSuccessHandler(operation));
+        uninstallChartAsync(instanceId, timeout, defaultUninstallationSuccessHandler(operation));
     }
 
     public void uninstallChartAsync(String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask){
@@ -177,16 +187,32 @@ public class HelmClient {
         log.debug("Started async uninstallation");
     }
 
-    private AsyncTask.AfterTaskRunnable defaultSuccessHandler(Operation operation){
+    private AsyncTask.AfterTaskRunnable defaultInstallationSuccessHandler(Operation operation){
         return (success, exception) -> {
-            log.info("Operation " + operation.getId() + " successfully: " + success);
+            log.info("Install Operation " + operation.getId() + " successfully: " + success);
             if(success){
                 operation.setState(Operation.OperationState.SUCCEEDED);
+                operation.setMessage("Installation  succeeded");
             } else {
                 operation.setState(Operation.OperationState.FAILED);
-                operation.setMessage("(Un)Installation failed");
+                operation.setMessage("Installation failed");
             }
             operationRepository.save(operation);
+        };
+    }
+
+    private AsyncTask.AfterTaskRunnable defaultUninstallationSuccessHandler(Operation operation){
+        return (success, exception) -> {
+            log.info("Uninstall Operation " + operation.getId() + " successfully: " + success);
+            if(success){
+                ServiceInstance serviceInstance = operation.getServiceInstance();
+                serviceInstanceRepository.delete(serviceInstance);
+            } else {
+                operation.setState(Operation.OperationState.FAILED);
+                operation.setMessage("Uninstalling failed");
+                operationRepository.save(operation);
+            }
+
         };
     }
 
