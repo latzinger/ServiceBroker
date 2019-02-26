@@ -11,6 +11,7 @@ package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
+import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceBindingRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
@@ -34,17 +35,11 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     @Autowired
     protected ServiceInstanceRepository serviceInstanceRepository;
 
+    @Autowired
+    protected OperationRepository operationRepository;
+
     @Override
-    public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId) {
-        ServiceInstanceBinding serviceInstanceBinding =
-                serviceInstanceBindingRepository
-                        .getServiceInstanceBinding(instanceId, bindingId);
-
-        if (serviceInstanceBinding == null)
-            throw new ServiceInstanceBindingNotFoundException(bindingId);
-
-        return serviceInstanceBinding;
-    }
+    public abstract ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId);
 
     @Override
     public abstract CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request);
