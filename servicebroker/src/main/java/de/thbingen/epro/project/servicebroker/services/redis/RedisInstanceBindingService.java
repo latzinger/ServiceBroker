@@ -10,7 +10,10 @@ package de.thbingen.epro.project.servicebroker.services.redis;
 
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.servicebroker.helm.HelmClient;
+import de.thbingen.epro.project.servicebroker.helm.ServiceDetails;
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceBindingService;
+import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
+import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
@@ -36,10 +39,13 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
     @Override
     public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId) {
 
-        //uri redis://password@endpoint:port
-        //password
-        //host
-        //port
+        ServiceDetails serviceDetails = null;
+
+        try {
+            serviceDetails = helmClient.getServiceDetails(instanceId);
+        } catch (ServiceInstanceNotFoundException e){
+            throw new ServiceInstanceBindingNotFoundException(bindingId);
+        }
 
         return null;
     }

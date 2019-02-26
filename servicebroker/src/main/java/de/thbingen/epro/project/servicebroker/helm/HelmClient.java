@@ -4,12 +4,17 @@ import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.InstallFailedException;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.UninstallFailedException;
+import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
+import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import hapi.chart.ChartOuterClass;
 import hapi.release.ReleaseOuterClass;
 import hapi.services.tiller.Tiller.InstallReleaseRequest;
 import hapi.services.tiller.Tiller.InstallReleaseResponse;
 import hapi.services.tiller.Tiller.UninstallReleaseRequest;
 import hapi.services.tiller.Tiller.UninstallReleaseResponse;
+import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.fabric8.kubernetes.api.model.ServiceSpec;
+import io.fabric8.kubernetes.client.AutoAdaptableKubernetesClient;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +51,21 @@ public class HelmClient {
         }
 
         return new ChartBuilder(chart);
+    }
+
+    public ServiceDetails getServiceDetails(String instanceId) throws ServiceInstanceNotFoundException{
+
+        io.fabric8.kubernetes.api.model.Service service = null;
+
+        try(DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient()){
+             service = kubernetesClient.services().withName(instanceId).get();
+
+             if(service == null)
+                 throw new ServiceInstanceNotFoundException(instanceId);
+
+        }
+
+        return new ServiceDetails(service);
     }
 
     public Release installChart(URL chartURL, String instanceId) throws IOException, InstallFailedException {
