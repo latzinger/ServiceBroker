@@ -1,5 +1,6 @@
 package de.thbingen.epro.project.servicebroker.helm;
 
+import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServicePort;
 import lombok.Data;
 import lombok.NonNull;
@@ -11,7 +12,7 @@ import java.util.Map;
 public class ServiceDetails {
 
     @NonNull
-    private io.fabric8.kubernetes.api.model.Service service;
+    private Service service;
 
     public String getUUID(){
         return service.getMetadata().getUid();

@@ -54,7 +54,30 @@ public class HelmClientTest {
     }
 
     @Test
-    public void A2_uninstallChart() throws IOException, UninstallFailedException {
+    public void A2_getServiceDetails() {
+        ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
+        ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-redis-slave");
+        ServiceDetails nonExistingDetails = helmClient.getServiceDetails(instanceId + "nonExistingId");
+
+
+        assertNotNull(masterDetails);
+        assertNotNull(slaveDetails);
+        assertNull(nonExistingDetails);
+    }
+
+    @Test
+    public void A3_getCredentials() {
+        Credentials credentials = helmClient.getCredentials(instanceId + "-redis");
+        Credentials nonExistingCredenitals = helmClient.getCredentials(instanceId + "nonExistingId");
+
+
+        assertNotNull(credentials);
+        assertNotNull(credentials.getPassword("redis-password"));
+        assertNull(nonExistingCredenitals);
+    }
+
+    @Test
+    public void A4_uninstallChart() throws IOException, UninstallFailedException {
         Release release = helmClient.uninstallChart(instanceId);
 
         assertThat(release, notNullValue());

@@ -24,13 +24,14 @@ import org.microbean.helm.TillerInstaller;
 import org.microbean.helm.chart.URLChartLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.*;
 
 @Slf4j
-@org.springframework.stereotype.Service
+@Service
 @RequiredArgsConstructor
 public class HelmClient {
     @Autowired
@@ -60,24 +61,29 @@ public class HelmClient {
 
     public ServiceDetails getServiceDetails(String serviceName) throws ServiceInstanceNotFoundException {
 
-        io.fabric8.kubernetes.api.model.Service service = null;
 
         try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
-            service = kubernetesClient.services().inNamespace("default").withName(serviceName).get();
+            io.fabric8.kubernetes.api.model.Service service = kubernetesClient.services().inNamespace("default").withName(serviceName).get();
+
+            if(service != null)
+                return new ServiceDetails(service);
         }
 
-        return new ServiceDetails(service);
+        return null;
     }
 
     public Credentials getCredentials(String secretName) {
 
-        Secret secret = null;
 
         try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
-            secret = kubernetesClient.secrets().inNamespace("default").withName(secretName).get();
+            Secret secret = kubernetesClient.secrets().inNamespace("default").withName(secretName).get();
+
+            if (secret != null) {
+                return new Credentials(secret);
+            }
         }
 
-        return new Credentials(secret);
+        return null;
     }
 
     public Release installChart(URL chartURL, String instanceId) throws IOException, InstallFailedException {
