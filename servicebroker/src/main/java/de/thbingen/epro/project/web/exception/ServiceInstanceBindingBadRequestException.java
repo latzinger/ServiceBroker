@@ -8,6 +8,7 @@
 
 package de.thbingen.epro.project.web.exception;
 
+import de.thbingen.epro.project.web.request.OsbRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class ServiceInstanceBindingBadRequestException extends RuntimeException {
 
     private String bindingId;
-    private String requestBody;
+    private OsbRequest requestBody;
 
     @Override
     public String getMessage() {

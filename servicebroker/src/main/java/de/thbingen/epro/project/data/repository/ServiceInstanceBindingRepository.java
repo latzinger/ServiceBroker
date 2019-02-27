@@ -19,4 +19,5 @@ public interface ServiceInstanceBindingRepository extends JpaRepository<ServiceI
     @Query("FROM ServiceInstanceBinding s WHERE s.id = :bindingId and s.serviceInstance.id = :instanceId")
     ServiceInstanceBinding getServiceInstanceBinding(@Param("instanceId") String instanceId,
                                                      @Param("bindingId") String bindingId);
+
 }

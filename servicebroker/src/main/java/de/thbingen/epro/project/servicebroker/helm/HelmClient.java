@@ -6,12 +6,14 @@ import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.InstallFailedException;
 import de.thbingen.epro.project.servicebroker.helm.exceptions.UninstallFailedException;
+import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import hapi.chart.ChartOuterClass;
 import hapi.release.ReleaseOuterClass;
 import hapi.services.tiller.Tiller.InstallReleaseRequest;
 import hapi.services.tiller.Tiller.InstallReleaseResponse;
 import hapi.services.tiller.Tiller.UninstallReleaseRequest;
 import hapi.services.tiller.Tiller.UninstallReleaseResponse;
+import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +24,13 @@ import org.microbean.helm.TillerInstaller;
 import org.microbean.helm.chart.URLChartLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.*;
 
 @Slf4j
-@Service
+@org.springframework.stereotype.Service
 @RequiredArgsConstructor
 public class HelmClient {
     @Autowired
@@ -56,6 +56,28 @@ public class HelmClient {
         }
 
         return new ChartBuilder(chart);
+    }
+
+    public ServiceDetails getServiceDetails(String serviceName) throws ServiceInstanceNotFoundException {
+
+        io.fabric8.kubernetes.api.model.Service service = null;
+
+        try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
+            service = kubernetesClient.services().inNamespace("default").withName(serviceName).get();
+        }
+
+        return new ServiceDetails(service);
+    }
+
+    public Credentials getCredentials(String secretName) {
+
+        Secret secret = null;
+
+        try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
+            secret = kubernetesClient.secrets().inNamespace("default").withName(secretName).get();
+        }
+
+        return new Credentials(secret);
     }
 
     public Release installChart(URL chartURL, String instanceId) throws IOException, InstallFailedException {
@@ -87,7 +109,7 @@ public class HelmClient {
             requestBuilder.setName(instanceId);
             requestBuilder.setWait(true);
 
-            if(!chartConfig.isEmpty()){
+            if (!chartConfig.isEmpty()) {
                 log.debug("ChartConfig provided");
                 chart.getChartConfig().mergeFrom(chartConfig);
             }
@@ -149,28 +171,28 @@ public class HelmClient {
         installChartAsync(chart, instanceId, timeout, new ChartConfig(), afterTask);
     }
 
-    public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, ChartConfig chartConfig, AsyncTask.AfterTaskRunnable afterTask)  {
+    public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, ChartConfig chartConfig, AsyncTask.AfterTaskRunnable afterTask) {
         AsyncTask asyncTask = new AsyncTask(() -> installChart(chart, instanceId, timeout, chartConfig).isInitialized(), afterTask);
         Future<?> submit = executorService.submit(asyncTask);
         log.debug("Started async installation");
     }
 
-    public void uninstallChartAsync(String instanceId, long timeout, Operation operation){
+    public void uninstallChartAsync(String instanceId, long timeout, Operation operation) {
         operation.setMessage("Installation in progress");
         operationRepository.save(operation);
         uninstallChartAsync(instanceId, timeout, defaultUninstallationSuccessHandler(operation));
     }
 
-    public void uninstallChartAsync(String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask){
+    public void uninstallChartAsync(String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask) {
         AsyncTask asyncTask = new AsyncTask(() -> uninstallChart(instanceId, timeout).hasDeleted(), afterTask);
         Future<?> submit = executorService.submit(asyncTask);
         log.debug("Started async uninstallation");
     }
 
-    private AsyncTask.AfterTaskRunnable defaultInstallationSuccessHandler(Operation operation){
+    private AsyncTask.AfterTaskRunnable defaultInstallationSuccessHandler(Operation operation) {
         return (success, exception) -> {
             log.info("Install Operation " + operation.getId() + " successfully: " + success);
-            if(success){
+            if (success) {
                 operation.setState(Operation.OperationState.SUCCEEDED);
                 operation.setMessage("Installation  succeeded");
             } else {
@@ -181,10 +203,10 @@ public class HelmClient {
         };
     }
 
-    private AsyncTask.AfterTaskRunnable defaultUninstallationSuccessHandler(Operation operation){
+    private AsyncTask.AfterTaskRunnable defaultUninstallationSuccessHandler(Operation operation) {
         return (success, exception) -> {
             log.info("Uninstall Operation " + operation.getId() + " successfully: " + success);
-            if(success){
+            if (success) {
                 ServiceInstance serviceInstance = operation.getServiceInstance();
                 serviceInstanceRepository.delete(serviceInstance);
             } else {
@@ -201,7 +223,7 @@ public class HelmClient {
 //    }
 
     @RequiredArgsConstructor
-    public static class AsyncTask implements Runnable{
+    public static class AsyncTask implements Runnable {
         @NonNull
         private Callable<Boolean> task;
         @NonNull
@@ -218,7 +240,7 @@ public class HelmClient {
         }
 
         @FunctionalInterface
-        public static interface AfterTaskRunnable{
+        public static interface AfterTaskRunnable {
             void afterTask(boolean success, Exception exception);
         }
     }
