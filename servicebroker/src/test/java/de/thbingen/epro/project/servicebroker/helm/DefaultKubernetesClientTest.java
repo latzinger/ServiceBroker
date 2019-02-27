@@ -6,9 +6,6 @@ import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import java.util.Base64;
-import java.util.Map;
-
 @Slf4j
 public class DefaultKubernetesClientTest {
 
@@ -20,6 +17,7 @@ public class DefaultKubernetesClientTest {
 
             Service service = kubernetesClient.services().inNamespace("default").withName("redis-master").get();
 
+            /*
             Secret secret = kubernetesClient.secrets().inNamespace("default").withName("redis").get();
             String passwordEncoded = secret.getData().get("redis-password");
             String passwordDecoded = new String(Base64.getDecoder().decode((String) passwordEncoded));
@@ -34,6 +32,7 @@ public class DefaultKubernetesClientTest {
             passwordEncoded = secret.getData().get("redis-password");
             passwordDecoded = new String(Base64.getDecoder().decode((String) passwordEncoded));
             System.out.println(passwordDecoded);
+            */
 
 
         }
