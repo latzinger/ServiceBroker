@@ -21,7 +21,7 @@ import java.util.List;
 @Builder
 public class Catalog implements Serializable {
 
-    @JsonProperty("serviceDefinitions")
+    @JsonProperty("services")
     private List<ServiceDefinition> serviceDefinitions = new ArrayList<>();
 
 }

@@ -37,12 +37,10 @@ import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/v2/service_instance")
+@RequestMapping("/v2/service_instances")
 @Slf4j
 @RequiredArgsConstructor
 public class ServiceInstanceController extends BaseController {
-    private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
-
     @NonNull
     private ServiceInstanceRepository serviceInstanceRepository;
 
@@ -69,6 +67,7 @@ public class ServiceInstanceController extends BaseController {
 
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
         log.debug("Found serviceInstance with id " + instanceId, " : " + (serviceInstance != null));
+
         if (serviceInstance != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
@@ -87,9 +86,9 @@ public class ServiceInstanceController extends BaseController {
             @RequestParam Map<String, String> parameters) {
         DeleteServiceInstanceRequest request = new DeleteServiceInstanceRequest();
         checkAndComplete(httpHeaders, request, instanceId, parameters);
+        checkSerivceIdAndPlanId(request);
 
         InstanceService instanceService = getInstanceService(request);
-
         try {
             DeleteServiceInstanceResponse response = instanceService.deleteServiceInstance(request);
             return ResponseEntity.ok(response);
@@ -128,11 +127,7 @@ public class ServiceInstanceController extends BaseController {
         request.setOperationId(operationId);
 
 
-        try {
-            ServiceInstance serviceInstance = getServiceInstance(instanceId);
-        } catch (ServiceInstanceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.GONE).build();
-        }
+        ServiceInstance serviceInstance = getServiceInstance(instanceId);
 
         Operation operation = getOperation(instanceId, operationId);
         InstanceService instanceService = getInstanceService(request);
@@ -171,8 +166,19 @@ public class ServiceInstanceController extends BaseController {
 
     @ExceptionHandler(ServiceInstanceNotFoundException.class)
     private ResponseEntity<?> handleServiceInstanceNotFoundException(ServiceInstanceNotFoundException e) {
-        LOG.debug("ServiceInstance not found: " + e.getInstanceId());
-        return ResponseEntity.notFound().build();
+        log.debug("ServiceInstance not found: " + e.getInstanceId());
+        return ResponseEntity.status(HttpStatus.GONE).build();
     }
 
+
+    public void checkSerivceIdAndPlanId(ServiceInstanceRequest request){
+        ServiceInstance serviceInstance = getServiceInstance(request.getInstanceId());
+
+        String serviceId = request.getRequestParameters().get("service_id");
+        String planId = request.getRequestParameters().get("plan_id");
+
+        if(serviceId == null || planId == null || !serviceId.equals(serviceInstance.getServiceId()) || !planId.equals(serviceInstance.getPlanId())){
+            throw new InvalidRequestException("service_id or plan_id not provided or does not match instanceId");
+        }
+    }
 }

@@ -138,6 +138,7 @@ public class RedisInstanceService extends AbstractInstanceService {
 
     @Override
     public DeleteServiceInstanceResponse deleteServiceInstance(DeleteServiceInstanceRequest request) {
+        checkAcceptIncomplete(request);
         checkSerivceIdAndPlanId(request);
         ServiceInstance serviceInstance = getServiceInstance(request.getInstanceId());
         Operation operation = createOperation(serviceInstance);

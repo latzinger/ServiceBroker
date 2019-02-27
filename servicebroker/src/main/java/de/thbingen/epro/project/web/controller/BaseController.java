@@ -9,14 +9,12 @@
 
 package de.thbingen.epro.project.web.controller;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
 import de.thbingen.epro.project.servicebroker.services.ServiceManager;
-import de.thbingen.epro.project.web.exception.InvalidApiVersionException;
-import de.thbingen.epro.project.web.exception.InvalidRequestException;
-import de.thbingen.epro.project.web.exception.OperationNotFoundException;
-import de.thbingen.epro.project.web.exception.ServiceNotFoundException;
+import de.thbingen.epro.project.web.exception.*;
 import de.thbingen.epro.project.web.request.OsbRequest;
 import de.thbingen.epro.project.web.response.ErrorMessage;
 import lombok.NonNull;
@@ -25,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,17 +47,16 @@ public abstract class BaseController {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<ErrorMessage> handleException(Exception e) {
-        log.error("[Exception]", e.getMessage());
-        e.printStackTrace();
+        log.error("[Unhandled Exception]", e.getMessage(), e);
+//        e.printStackTrace();
         return getErrorMessageResponseEntity("Exception", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
     @ExceptionHandler(InvalidRequestException.class)
     public ResponseEntity<ErrorMessage> handleInvalidRequestException(InvalidRequestException e) {
-        log.debug("Invalid request catched", e);
-        ResponseEntity<ErrorMessage> invalidRequest = getErrorMessageResponseEntity("InvalidRequest", e.getMessage(), HttpStatus.BAD_REQUEST);
-        return invalidRequest;
+        log.debug("Invalid request catched", e.getMessage());
+        return getErrorMessageResponseEntity("InvalidRequest", e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -78,22 +76,29 @@ public abstract class BaseController {
     public ResponseEntity<ErrorMessage> handleServiceNotFoundException(ServiceNotFoundException e) {
         log.debug("Service " + e.getServiceId() + " not found");
 
-        ResponseEntity<ErrorMessage> serviceNotFound = getErrorMessageResponseEntity("ServiceNotFound", "Service wit id" + e.getServiceId() + " not found", HttpStatus.BAD_REQUEST);
-        return serviceNotFound;
+        return getErrorMessageResponseEntity("ServiceNotFound", "Service wit id" + e.getServiceId() + " not found", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidApiVersionException.class)
     public ResponseEntity handleInvalidApiVersionException(InvalidApiVersionException ex){
-        ResponseEntity<ErrorMessage> invalidApiVersion = getErrorMessageResponseEntity("InvalidApiVersion", ex.getMessage(), HttpStatus.PRECONDITION_FAILED);
-        return invalidApiVersion;
+        return getErrorMessageResponseEntity("InvalidApiVersion", ex.getMessage(), HttpStatus.PRECONDITION_FAILED);
     }
 
     @ExceptionHandler(OperationNotFoundException.class)
     public ResponseEntity handleOperationNotFoundException(OperationNotFoundException ex){
-        ResponseEntity<ErrorMessage> operationNotFound = getErrorMessageResponseEntity("OperationNotFound", ex.getMessage(), HttpStatus.BAD_REQUEST);
-        return operationNotFound;
+        return getErrorMessageResponseEntity("OperationNotFound", ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RequiresAccpetsIncompleteException.class)
+    public ResponseEntity handleRequiresAccpetsIncompleteException(RequiresAccpetsIncompleteException ex){
+        return getErrorMessageResponseEntity("RequiresAsync", ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorMessage> handleJsonMappingException(HttpMessageNotReadableException ex){
+        log.debug("Catched HttpMessageNotReadableException: " + ex.getMessage());
+        return getErrorMessageResponseEntity("Missing or invalid fields: " + ex.getMessage(), ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
     protected ResponseEntity<ErrorMessage> getErrorMessageResponseEntity(String error, String message, HttpStatus status) {
         return new ResponseEntity<ErrorMessage>(new ErrorMessage(error, message), status);

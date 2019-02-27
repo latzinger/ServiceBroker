@@ -44,8 +44,8 @@ public class Plan implements Serializable {
     @JsonProperty("bindable")
     private boolean bindable;
 
-    @JsonProperty("plan_updateable")
-    private boolean planUpdateable;
+    @JsonProperty("plan_updatable")
+    private boolean planUpdatable;
 
     @JsonProperty("schemas")
     private Schemas schemas;
