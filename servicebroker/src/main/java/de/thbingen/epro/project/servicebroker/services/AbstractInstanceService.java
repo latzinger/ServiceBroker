@@ -99,7 +99,7 @@ public abstract class AbstractInstanceService implements InstanceService {
 
         log.debug("accepts_incomplete: " + accepts_incomplete);
 
-        if(accepts_incomplete == null || !Boolean.parseBoolean(accepts_incomplete))
+        if(!Boolean.parseBoolean(accepts_incomplete))
             throw new RequiresAccpetsIncompleteException();
     }
 

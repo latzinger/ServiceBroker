@@ -14,10 +14,7 @@ import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.servicebroker.services.InstanceService;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
-import de.thbingen.epro.project.web.exception.InvalidRequestException;
-import de.thbingen.epro.project.web.exception.OperationNotFoundException;
-import de.thbingen.epro.project.web.exception.ServiceInstanceAlreadyExistsException;
-import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
+import de.thbingen.epro.project.web.exception.*;
 import de.thbingen.epro.project.web.request.serviceinstance.*;
 import de.thbingen.epro.project.web.response.serviceinstance.CreateServiceInstanceResponse;
 import de.thbingen.epro.project.web.response.serviceinstance.DeleteServiceInstanceResponse;
@@ -66,7 +63,7 @@ public class ServiceInstanceController extends BaseController {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
-        log.debug("Found serviceInstance with id " + instanceId, " : " + (serviceInstance != null));
+        log.debug("Found serviceInstance with id " + instanceId + " : " + (serviceInstance != null));
 
         if (serviceInstance != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -88,12 +85,14 @@ public class ServiceInstanceController extends BaseController {
         checkAndComplete(httpHeaders, request, instanceId, parameters);
         checkSerivceIdAndPlanId(request);
 
-        InstanceService instanceService = getInstanceService(request);
+
         try {
+            InstanceService instanceService = getInstanceService(request);
             DeleteServiceInstanceResponse response = instanceService.deleteServiceInstance(request);
             return ResponseEntity.ok(response);
         } catch (ServiceInstanceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.GONE).build();
+            checkAcceptIncomplete(request);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
@@ -153,6 +152,7 @@ public class ServiceInstanceController extends BaseController {
 
     private InstanceService getInstanceService(ServiceInstanceRequest request) {
         ServiceInstance serviceInstance = getServiceInstance(request.getInstanceId());
+
         String serviceId = serviceInstance.getServiceId();
 
         return getInstanceService(serviceId);
@@ -164,6 +164,17 @@ public class ServiceInstanceController extends BaseController {
         return osbService.getInstanceService();
     }
 
+    @SuppressWarnings("Duplicates")
+    public void checkAcceptIncomplete(ServiceInstanceRequest request) {
+        Map<String, String> parameters = request.getRequestParameters();
+        String accepts_incomplete = parameters.get("accepts_incomplete");
+
+        log.debug("accepts_incomplete: " + accepts_incomplete);
+
+        if (!Boolean.parseBoolean(accepts_incomplete))
+            throw new RequiresAccpetsIncompleteException();
+    }
+
     @ExceptionHandler(ServiceInstanceNotFoundException.class)
     private ResponseEntity<?> handleServiceInstanceNotFoundException(ServiceInstanceNotFoundException e) {
         log.debug("ServiceInstance not found: " + e.getInstanceId());
@@ -171,14 +182,12 @@ public class ServiceInstanceController extends BaseController {
     }
 
 
-    public void checkSerivceIdAndPlanId(ServiceInstanceRequest request){
-        ServiceInstance serviceInstance = getServiceInstance(request.getInstanceId());
-
+    public void checkSerivceIdAndPlanId(ServiceInstanceRequest request) {
         String serviceId = request.getRequestParameters().get("service_id");
         String planId = request.getRequestParameters().get("plan_id");
 
-        if(serviceId == null || planId == null || !serviceId.equals(serviceInstance.getServiceId()) || !planId.equals(serviceInstance.getPlanId())){
-            throw new InvalidRequestException("service_id or plan_id not provided or does not match instanceId");
+        if (serviceId == null || planId == null) {
+            throw new InvalidRequestException("service_id or plan_id not provided");
         }
     }
 }
