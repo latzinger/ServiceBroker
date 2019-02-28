@@ -41,23 +41,24 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
     @Override
     public CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request) {
 
-        ServiceDetails serviceDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
-        Credentials creds = helmClient.getCredentials(instanceId + "-redis");
+        ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
+        ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-redis-salve");
+        Credentials credentials = helmClient.getCredentials(instanceId + "-redis");
 
-        HashMap<String, String> credentials = new HashMap<>();
+        String password = credentials.getPassword("redis-password");
+        String host = helmClient.getHost();
+        String port = masterDetails.getServicePorts().get(0).getNodePort().toString();
 
-        /*
-        credentials.put("uri", String.format("redis://%s@%s", creds.getPassword("redis-password"), ));
-        credentials.put("password", creds.getPassword("redis-password"));
-        credentials.put("host", );
-        credentials.put("port", );
-
-        */
+        HashMap<String, String> creds = new HashMap<>();
+        creds.put("uri", String.format("redis://%s@%s", password, host));
+        creds.put("password", password);
+        creds.put("host", host);
+        creds.put("port", port);
 
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
 
         ServiceInstanceBinding serviceInstanceBinding = new ServiceInstanceBinding(serviceInstance);
-        serviceInstanceBinding.setCredentials(credentials);
+        serviceInstanceBinding.setCredentials(creds);
         serviceInstanceBinding.setParameters(request.getParameters());
 
         serviceInstanceBindingRepository.save(serviceInstanceBinding);
@@ -65,7 +66,7 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
         CreateServiceInstanceBindingResponse response =
                 CreateServiceInstanceBindingResponse
                         .builder()
-                        .credentials(credentials)
+                        .credentials(creds)
                         .build();
 
         return response;
