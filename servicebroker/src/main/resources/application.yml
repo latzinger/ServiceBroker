@@ -31,3 +31,10 @@ spring:
 # Server configuration
 server:
   port: 8080
+
+#OSB
+osb-security:
+  permit-all: true
+  use-db: false
+  username: epro
+  password: epro

@@ -48,6 +48,7 @@ public class Plan implements Serializable {
 
 
     @JsonProperty("schemas")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Schemas schemas;
 
 }

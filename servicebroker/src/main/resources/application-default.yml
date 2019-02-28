@@ -7,3 +7,9 @@ database:
 
     user: postgres
     password:
+
+osb-security:
+  permit-all: false
+  use-db: false
+  username: epro
+  password: epro

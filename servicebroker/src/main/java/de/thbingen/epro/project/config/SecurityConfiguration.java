@@ -1,7 +1,9 @@
 package de.thbingen.epro.project.config;
 
 import de.thbingen.epro.project.web.security.userdetails.UserInfoDetailsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -23,26 +25,57 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserInfoDetailsService userInfoDetailsService;
 
+    @Value("#{new Boolean('${osb-security.permit-all}')}")
+    private boolean permit_all;
+
+
+    @Value("#{new Boolean('${osb-security.use-db}')}")
+    private boolean useDb;
+
+    @Value("${osb-security.username}")
+    private String username;
+
+    @Value("${osb-security.password}")
+    private String password;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
-        //auth.inMemoryAuthentication().withUser("user").password("user").roles("USER");
+        log.debug("AUTH uses DB: " + useDb);
+        if (useDb) {
+            auth.authenticationProvider(authenticationProvider());
+        } else {
+            log.debug("Using username=" + username + "  password=" + password);
+            auth.inMemoryAuthentication().withUser(username).password("{noop}" + password).roles("USER");
+        }
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .antMatcher("/**")
-                .authorizeRequests()
-                .anyRequest()
-                .permitAll()
-                .and()
-                .csrf().disable();
+        log.debug("AUTH permit-all: " + permit_all);
+        if (permit_all) {
+            http
+                    .antMatcher("/**")
+                    .authorizeRequests()
+                    .anyRequest()
+                    .permitAll()
+                    .and()
+                    .csrf().disable();
+        } else {
+            http
+                    .authorizeRequests()
+                    .antMatchers("/**")
+                    .fullyAuthenticated()
+                    .and()
+                    .httpBasic()
+                    .and()
+                    .csrf().disable();
+        }
     }
 
     @Bean
