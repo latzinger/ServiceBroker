@@ -56,32 +56,26 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
 
         ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
         Credentials secrets = helmClient.getCredentials(instanceId + "-redis");
-        HashMap<String, String> masterCredentials = new HashMap<>();
 
         String password = secrets.getPassword("redis-password");
         String host = helmClient.getHost();
         String masterPort = masterDetails.getServicePorts().get(0).getNodePort().toString();
 
-        masterCredentials.put("uri", String.format("redis://%s@%s", password, host + ":" + masterPort));
-        masterCredentials.put("host", host);
-        masterCredentials.put("port", masterPort);
+        HashMap<String, String> masterCredentials = getCredentialsMap(password, host, masterPort);
 
-        credentials.put("password", password);
         credentials.put("master", masterCredentials);
 
         if (serviceInstance.getPlanId().equals(RedisService.PLAN_CLUSTER_ID)) {
 
             ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-redis-slave");
-            HashMap<String, String> slaveCredentials = new HashMap<>();
             String slavePort = slaveDetails.getServicePorts().get(0).getNodePort().toString();
 
-            slaveCredentials.put("uri", String.format("redis://%s@%s", password, host + ":" + slavePort));
-            slaveCredentials.put("host", host);
-            slaveCredentials.put("port", slavePort);
-
+            HashMap<String, String> slaveCredentials = getCredentialsMap(password, host, slavePort);
             credentials.put("slave", slaveCredentials);
 
         }
+
+        credentials.put("password", password);
 
         ServiceInstanceBinding serviceInstanceBinding = new ServiceInstanceBinding(serviceInstance);
         serviceInstanceBinding.setCredentials(credentials);
@@ -118,6 +112,16 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
     @Override
     public LastOperationServiceInstanceBindingResponse lastOperation(String bindingId, String instanceId, LastOperationServiceInstanceBindingRequest request) {
         return null;
+    }
+
+    private HashMap<String, String> getCredentialsMap(String password, String host, String port) {
+
+        HashMap<String, String> credentials = new HashMap<>();
+        credentials.put("uri", String.format("redis://%s@%s", password, host + ":" + port));
+        credentials.put("host", host);
+        credentials.put("port", port);
+
+        return credentials;
     }
 
 }
