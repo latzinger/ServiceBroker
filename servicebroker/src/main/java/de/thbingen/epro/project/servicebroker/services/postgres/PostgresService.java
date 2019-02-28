@@ -68,9 +68,9 @@ public class PostgresService implements OsbService {
                 .build());
 
         ServiceDefinition serviceDefinition = ServiceDefinition.builder()
-                .name("redis")
+                .name("postgres")
                 .id(SERVICE_ID)
-                .description("A simple Redis Server.")
+                .description("A simple Postgres Server.")
                 .bindable(true)
                 .plans(plans)
                 .build();

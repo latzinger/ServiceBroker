@@ -44,12 +44,11 @@ import java.net.URL;
  * @version 1.0
  * @since 1.0
  */
-
 @Service
 @Slf4j
 @RequiredArgsConstructor()
 public class PostgresInstanceService extends AbstractInstanceService {
-    private static final String chartUrlString = "https://kubernetes-charts.storage.googleapis.com/redis-5.3.0.tgz";
+    private static final String chartUrlString = "https://kubernetes-charts.storage.googleapis.com/postgresql-3.10.1.tgz";
     private URL chartUrl;
     private ChartBuilder chartBuilder;
     private ChartConfig defaultConfig;
@@ -64,7 +63,7 @@ public class PostgresInstanceService extends AbstractInstanceService {
 
     @Override
     public CreateServiceInstanceResponse createServiceInstance(CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException {
-        log.debug("Create ServiceInstance");
+        log.debug("Create Postgres ServiceInstance");
         checkAcceptIncomplete(request);
         String planId = request.getPlanId();
 
@@ -97,7 +96,7 @@ public class PostgresInstanceService extends AbstractInstanceService {
     }
 
     private void createSmallPlanServiceInstance(CreateServiceInstanceRequest request, @NotNull Operation operation) {
-        log.debug("Create Redis plan: small");
+        log.debug("Create Postgres plan: small");
         ChartConfig chartConfig = new ChartConfig();
         chartConfig.mergeFrom(defaultConfig);
 
@@ -108,26 +107,27 @@ public class PostgresInstanceService extends AbstractInstanceService {
     }
 
     private void createStandardPlanServiceInstance(CreateServiceInstanceRequest request, @NotNull Operation operation) {
-        log.debug("Create Redis plan: standard");
+        log.debug("Create Postgres plan: standard");
         ChartConfig chartConfig = new ChartConfig();
         chartConfig.mergeFrom(defaultConfig);
 
-        chartConfig.set("master.resources.memory", "1024Mi");
-        chartConfig.set("master.resources.cpu", "400m");
+        chartConfig.set("resources.memory", "1024Mi");
+        chartConfig.set("resources.cpu", "400m");
 
         chartBuilder.setChartConfig(chartConfig);
         helmClient.installChartAsync(chartBuilder, request.getInstanceId(), 300, operation);
     }
 
     private void createClusterPlanServiceInstance(CreateServiceInstanceRequest request, @NotNull Operation operation) {
-        log.debug("Create Redis plan: cluster");
+        log.debug("Create Postgres plan: cluster");
         ChartConfig chartConfig = new ChartConfig();
         chartConfig.mergeFrom(defaultConfig);
 
-        chartConfig.set("cluster.enabled", "true");
-        chartConfig.set("cluster.slaveCount", 3);
-        chartConfig.set("master.resources.memory", "1024Mi");
-        chartConfig.set("master.resources.cpu", "400m");
+        defaultConfig.set("replication.slaveReplicas", 0);
+        defaultConfig.set("resources.memory", "1024Mi");
+        defaultConfig.set("resources.cpu", "400m");
+
+
 
         chartBuilder.setChartConfig(chartConfig);
         helmClient.installChartAsync(chartBuilder, request.getInstanceId(), 500, operation);
@@ -183,11 +183,12 @@ public class PostgresInstanceService extends AbstractInstanceService {
         chartBuilder = helmClient.loadChart(chartUrl);
         defaultConfig = chartBuilder.getChartConfig();
 
-        defaultConfig.set("master.service.type", "NodePort");
-        defaultConfig.set("slave.service.type", "NodePort");
+        defaultConfig.set("usePasswordFile", true);
+        defaultConfig.set("service.type", "NodePort");
 
-        defaultConfig.set("cluster.enabled", "false");
-        defaultConfig.set("master.resources.memory", "256Mi");
-        defaultConfig.set("master.resources.cpu", "100m");
+        defaultConfig.set("resources.memory", "256Mi");
+        defaultConfig.set("resources.cpu", "100m");
+
+        defaultConfig.set("replication.slaveReplicas", 0);
     }
 }
