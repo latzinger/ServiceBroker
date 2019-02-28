@@ -62,7 +62,7 @@ public class RedisService implements OsbService {
                 .build());
 
         ServiceDefinition serviceDefinition = ServiceDefinition.builder()
-                .name("Redis")
+                .name("redis")
                 .id(SERVICE_ID)
                 .description("A simple Redis Server.")
                 .bindable(true)

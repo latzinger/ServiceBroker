@@ -8,6 +8,7 @@
 
 package de.thbingen.epro.project.web.schema;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.*;
@@ -57,9 +58,11 @@ public class ServiceDefinition implements Serializable {
     private String description;
 
     @JsonProperty("tags")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private ArrayList<String> tags = new ArrayList<>();
 
     @JsonProperty("requires")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private ArrayList<Permissions> requires = new ArrayList<>();
 
     @NotEmpty
@@ -68,15 +71,17 @@ public class ServiceDefinition implements Serializable {
     private boolean bindable;
 
     @JsonProperty("instances_retrievable")
-    private boolean instancesRetrievable;
+    private boolean instancesRetrievable = true;
 
     @JsonProperty("bindings_retrievable")
-    private boolean bindingsRetrievable;
+    private boolean bindingsRetrievable = true;
 
     @JsonProperty("metadata")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private ServiceMetadata metadata;
 
     @JsonProperty("dashboard_client")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private DashboardClient dashboardClient;
 
     @JsonProperty("plan_updateable")
