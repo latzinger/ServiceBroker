@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Storing Kubernetes Service for specified Service.
+ * Storing Kubernetes Service for specified {@link de.thbingen.epro.project.servicebroker.services.OsbService}.
  *
  * @author larsatzinger
  * @version 1.0

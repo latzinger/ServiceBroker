@@ -1,5 +1,5 @@
 /**
- * TODO add description
+ * Spring WebSecurity Configuration
  *
  * @author larsatzinger
  * @author jonashueg

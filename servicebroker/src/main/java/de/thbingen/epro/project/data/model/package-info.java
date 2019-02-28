@@ -1,5 +1,5 @@
 /**
- * TODO add description
+ * Datamodel containing Entities used by Database.
  *
  * @author larsatzinger
  * @author jonashueg

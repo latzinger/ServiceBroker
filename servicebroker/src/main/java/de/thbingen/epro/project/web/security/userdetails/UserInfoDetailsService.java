@@ -38,6 +38,13 @@ public class UserInfoDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(s);
         }
 
+        log.debug("loadUserByUsername(): ["
+                + userInfo.getUsername()
+                + "] "
+                + userInfo.getLastName()
+                + ", "
+                + userInfo.getFirstName());
+
         return new UserInfoPrincipal(userInfo);
 
     }

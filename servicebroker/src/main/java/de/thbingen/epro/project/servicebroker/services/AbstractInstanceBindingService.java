@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Abstract InstanceBindingService providing default behavior for a BindingService.
+ * Abstract InstanceBindingService providing default behavior for a {@link BindingService}.
  *
  * @author larsatzinger
  * @version 1.0
@@ -46,9 +46,9 @@ public abstract class AbstractInstanceBindingService implements BindingService {
 
 
     /**
-     * @param instanceId instance_id of an existing ServiceInstance
-     * @param bindingId  binding_id of an existing ServiceInstanceBinding
-     * @return ServiceInstanceBinding or throwing Exception.
+     * @param instanceId instance_id of an existing {@link ServiceInstance}
+     * @param bindingId  binding_id of an existing {@link ServiceInstanceBinding}
+     * @return {@link ServiceInstanceBinding} or throwing Exception.
      */
     @Override
     public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId) {
@@ -63,10 +63,10 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     }
 
     /**
-     * @param bindingId  binding_id of an existing ServiceInstanceBinding
-     * @param instanceId instance_id of an existing ServiceInstance
-     * @param request
-     * @return
+     * @param bindingId  binding_id of an existing {@link ServiceInstanceBinding}
+     * @param instanceId instance_id of an existing {@link ServiceInstance}
+     * @param request {@link LastOperationServiceInstanceBindingRequest} containing all necessary information
+     * @return {@link LastOperationServiceInstanceBindingResponse} containing all necessary information
      * @throws OperationNotFoundException
      */
     @Override
@@ -80,17 +80,17 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     }
 
     /**
-     * @param instanceId instance_id of an existing ServiceInstance
-     * @param bindingId  binding_id of an existing ServiceInstanceBinding
-     * @return true if ServiceInstanceBinding already exists otherwise false.
+     * @param instanceId instance_id of an existing {@link ServiceInstance}
+     * @param bindingId  binding_id of an existing {@link ServiceInstanceBinding}
+     * @return true if {@link ServiceInstanceBinding} already exists otherwise false.
      */
     protected boolean serviceInstanceBindingExist(String instanceId, String bindingId) {
         return (getServiceInstanceBinding(instanceId, bindingId) != null);
     }
 
     /**
-     * @param serviceInstance        an existing ServiceInstance
-     * @param serviceInstanceBinding an existing ServiceInstanceBinding
+     * @param serviceInstance        an existing {@link ServiceInstance}
+     * @param serviceInstanceBinding an existing {@link ServiceInstanceBinding}
      * @return an new Operation.
      */
     public Operation createOperation(ServiceInstance serviceInstance, ServiceInstanceBinding serviceInstanceBinding) {
