@@ -9,6 +9,7 @@
 
 package de.thbingen.epro.project.servicebroker.services;
 
+import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.data.repository.OperationRepository;
@@ -43,6 +44,8 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId) {
         ServiceInstanceBinding serviceInstanceBinding = serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId);
 
+        log.debug("Found binding " + bindingId + " for instance " + instanceId + " : " + (serviceInstanceBinding != null));
+
         if (serviceInstanceBinding == null)
             throw new ServiceInstanceBindingNotFoundException(bindingId);
 
@@ -62,4 +65,9 @@ public abstract class AbstractInstanceBindingService implements BindingService {
         return (getServiceInstanceBinding(instanceId, bindingId) != null);
     }
 
+    public Operation createOperation(ServiceInstance serviceInstance){
+        Operation operation = new Operation(serviceInstance, Operation.OperationState.IN_PROGRESS, "Operation initialized");
+        operationRepository.save(operation);
+        return operation;
+    }
 }

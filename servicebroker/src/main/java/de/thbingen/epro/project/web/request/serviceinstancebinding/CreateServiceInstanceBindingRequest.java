@@ -20,6 +20,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class CreateServiceInstanceBindingRequest extends ServiceInstanceBindingRequest {
 
     @JsonProperty("context")

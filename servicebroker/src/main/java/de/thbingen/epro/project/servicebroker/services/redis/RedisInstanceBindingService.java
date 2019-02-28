@@ -8,6 +8,7 @@
 
 package de.thbingen.epro.project.servicebroker.services.redis;
 
+import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.servicebroker.helm.HelmClient;
@@ -21,6 +22,7 @@ import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperation
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
+import io.fabric8.kubernetes.api.model.Secret;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,47 +54,45 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
             throw new ServiceInstanceBindingBadRequestException(bindingId, request);
 
 
-        HashMap<String, Object> credentials = new HashMap<>();
+        Operation operation = createOperation(serviceInstance);
 
-        ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
-        Credentials secrets = helmClient.getCredentials(instanceId + "-redis");
-        HashMap<String, String> masterCredentials = new HashMap<>();
 
-        String password = secrets.getPassword("redis-password");
-        String host = helmClient.getHost();
-        String masterPort = masterDetails.getServicePorts().get(0).getNodePort().toString();
+        helmClient.getCredentialsAsync(instanceId + "-redis", secrets -> {
+            ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
+            HashMap<String, String> credentials = new HashMap<>();
 
-        masterCredentials.put("uri", String.format("redis://%s@%s", password, host + ":" + masterPort));
-        masterCredentials.put("host", host);
-        masterCredentials.put("port", masterPort);
+            String password = secrets.getPassword("redis-password");
+            String host = helmClient.getHost();
+            String masterPort = masterDetails.getServicePorts().get(0).getNodePort().toString();
 
-        credentials.put("password", password);
-        credentials.put("master", masterCredentials);
+            credentials.put("password", password);
 
-        if (serviceInstance.getPlanId().equals(RedisService.PLAN_CLUSTER_ID)) {
+            credentials.put("master-uri", String.format("redis://%s@%s", password, host + ":" + masterPort));
+            credentials.put("master-host", host);
+            credentials.put("master-port", masterPort);
 
-            ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-redis-slave");
-            HashMap<String, String> slaveCredentials = new HashMap<>();
-            String slavePort = slaveDetails.getServicePorts().get(0).getNodePort().toString();
+            if (serviceInstance.getPlanId().equals(RedisService.PLAN_CLUSTER_ID)) {
 
-            slaveCredentials.put("uri", String.format("redis://%s@%s", password, host + ":" + slavePort));
-            slaveCredentials.put("host", host);
-            slaveCredentials.put("port", slavePort);
+                ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-redis-slave");
+                String slavePort = slaveDetails.getServicePorts().get(0).getNodePort().toString();
 
-            credentials.put("slave", slaveCredentials);
+                credentials.put("slave-uri", String.format("redis://%s@%s", password, host + ":" + slavePort));
+                credentials.put("slave-host", host);
+                credentials.put("slave-port", slavePort);
+            }
 
-        }
+            ServiceInstanceBinding serviceInstanceBinding = new ServiceInstanceBinding(bindingId, serviceInstance);
+            serviceInstanceBinding.setCredentials(credentials);
+            serviceInstanceBinding.setParameters(request.getParameters());
 
-        ServiceInstanceBinding serviceInstanceBinding = new ServiceInstanceBinding(serviceInstance);
-        serviceInstanceBinding.setCredentials(credentials);
-        serviceInstanceBinding.setParameters(request.getParameters());
+            serviceInstanceBindingRepository.save(serviceInstanceBinding);
 
-        serviceInstanceBindingRepository.save(serviceInstanceBinding);
+        }, operation);
 
         CreateServiceInstanceBindingResponse response =
                 CreateServiceInstanceBindingResponse
                         .builder()
-                        .credentials(credentials)
+                        .operation("" + operation.getId())
                         .build();
 
         return response;
