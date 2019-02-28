@@ -98,16 +98,13 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
 
     @Override
     public DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(String bindingId, String instanceId, DeleteServiceInstanceBindingRequest request) {
-
-        ServiceInstanceBinding serviceInstanceBinding =
-                serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId);
-
+        
         serviceInstanceBindingRepository.deleteById(bindingId);
 
         DeleteServiceInstanceBindingResponse response =
                 DeleteServiceInstanceBindingResponse
                         .builder()
-                        .operation("{}")
+                        .operation(null)
                         .build();
 
         return response;

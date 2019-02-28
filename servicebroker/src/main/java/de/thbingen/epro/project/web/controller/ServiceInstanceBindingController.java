@@ -74,11 +74,11 @@ public class ServiceInstanceBindingController extends BaseController {
         if (serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId) == null)
             return new ResponseEntity<>(HttpStatus.GONE);
 
-        BindingService bindingService = getBindingService(instanceId, bindingId);
-
         DeleteServiceInstanceBindingRequest request =
                 new DeleteServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
         request.setRequestParameters(parameters);
+
+        BindingService bindingService = getBindingService(instanceId, bindingId);
 
         DeleteServiceInstanceBindingResponse response =
                 bindingService.deleteServiceInstanceBinding(bindingId, instanceId, request);
