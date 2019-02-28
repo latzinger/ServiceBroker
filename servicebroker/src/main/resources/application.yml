@@ -1,0 +1,40 @@
+# Spring Profile
+spring:
+  profiles:
+    active: "default"
+
+#debug: true
+logging:
+  level:
+    de:
+      thbingen: debug
+---
+# Spring Boot configuration
+spring:
+  # Database
+  datasource:
+    url: jdbc:postgresql://${database.postgres.host}:${database.postgres.port}/${database.postgres.base}
+    username: ${database.postgres.user}
+    password: ${database.postgres.password}
+
+  # JPA properties
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+# Server configuration
+server:
+  port: 8080
+
+#OSB
+osb-security:
+  permit-all: true
+  use-db: false
+  username: epro
+  password: epro

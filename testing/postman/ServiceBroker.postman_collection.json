@@ -1,0 +1,474 @@
+{
+	"info": {
+		"_postman_id": "03533123-8f4f-4ce8-ae02-30752c064904",
+		"name": "EPRO-Projek-ServiceBroker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "service_instance",
+			"item": [
+				{
+					"name": "Last Operation",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Broker-API-Version",
+								"value": "2.14",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/v2/service_instances/{{instanceId}}/last_operation?operation=33",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v2",
+								"service_instances",
+								"{{instanceId}}",
+								"last_operation"
+							],
+							"query": [
+								{
+									"key": "operation",
+									"value": "33"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ServiceInstance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e5cb0ae6-ba4c-47ea-8b64-86dfc9d08f2f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-Broker-API-Version",
+								"value": "2.14",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"service_id\": \"{{redis-serviceId}}\",\r\n  \"plan_id\": \"{{redis-small}}\",\r\n  \"organization_guid\": \"org-guid-here\",\r\n  \"space_guid\": \"space-guid-here\",\r\n  \"parameters\": {\r\n    \"parameter1\": 1,\r\n    \"parameter2\": \"foo\"\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/v2/service_instances/{{instanceId}}?accepts_incomplete=true",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v2",
+								"service_instances",
+								"{{instanceId}}"
+							],
+							"query": [
+								{
+									"key": "accepts_incomplete",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete ServiceInstance",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Broker-API-Version",
+								"value": "2.14",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/v2/service_instances/{{instanceId}}?service_id={{redis-serviceId}}&plan_id={{redis-small}}&accepts_incomplete=true",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v2",
+								"service_instances",
+								"{{instanceId}}"
+							],
+							"query": [
+								{
+									"key": "service_id",
+									"value": "{{redis-serviceId}}"
+								},
+								{
+									"key": "plan_id",
+									"value": "{{redis-small}}"
+								},
+								{
+									"key": "accepts_incomplete",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ServiceInstance",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Broker-API-Version",
+								"value": "2.14",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/v2/service_instances/{{instanceId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v2",
+								"service_instances",
+								"{{instanceId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "instance_binding",
+			"item": [
+				{
+					"name": "Create Binding",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Broker-API-Version",
+								"value": "2.14",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"service_id\": \"{{redis-serviceId}}\",\n    \"plan_id\": \"{{redis-small}}\"\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/v2/service_instances/{{instanceId}}/service_bindings/ {{bindingId}}?accepts_incomplete=true",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v2",
+								"service_instances",
+								"{{instanceId}}",
+								"service_bindings",
+								" {{bindingId}}"
+							],
+							"query": [
+								{
+									"key": "accepts_incomplete",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Binding",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Broker-API-Version",
+								"value": "2.14",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/v2/service_instances/{{instanceId}}/service_bindings/ {{bindingId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v2",
+								"service_instances",
+								"{{instanceId}}",
+								"service_bindings",
+								" {{bindingId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Last Binding Operation",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Broker-API-Version",
+								"value": "2.14",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/v2/service_instances/{{instanceId}}/service_bindings/ {{bindingId}}/last_operation?operation=44",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v2",
+								"service_instances",
+								"{{instanceId}}",
+								"service_bindings",
+								" {{bindingId}}",
+								"last_operation"
+							],
+							"query": [
+								{
+									"key": "operation",
+									"value": "44"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Binding",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Broker-API-Version",
+								"value": "2.14",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/v2/service_instances/{{instanceId}}/service_bindings/ {{bindingId}}?accepts_incomplete=true&service_id={{postgres-serviceId}}&plan_id={{postgres-small}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v2",
+								"service_instances",
+								"{{instanceId}}",
+								"service_bindings",
+								" {{bindingId}}"
+							],
+							"query": [
+								{
+									"key": "accepts_incomplete",
+									"value": "true"
+								},
+								{
+									"key": "service_id",
+									"value": "{{postgres-serviceId}}"
+								},
+								{
+									"key": "plan_id",
+									"value": "{{postgres-small}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get Catalog",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "epro",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "epro",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Broker-API-Version",
+						"value": "2.14",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/v2/catalog",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v2",
+						"catalog"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "aae4610d-b48c-4fa2-9150-8cd45c298a36",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "6ad83d39-509b-43b1-b307-336f239e43c5",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "33846901-1a9b-450d-8b68-9761b1588841",
+			"key": "redis-serviceId",
+			"value": "4a30cd4f-914b-4082-8818-e9e9691fa1ce",
+			"type": "string"
+		},
+		{
+			"id": "6834aeea-fb44-4d9b-8d15-58f94aa0fab6",
+			"key": "instanceId",
+			"value": "abc-123-def",
+			"type": "string"
+		},
+		{
+			"id": "9a2a6ffa-6a8b-4f0d-93bf-52fcd50dcce8",
+			"key": "redis-small",
+			"value": "d6a5721a-e022-4bba-8356-6d50692aef27",
+			"type": "string"
+		},
+		{
+			"id": "111b9979-8584-41f2-ba29-198478c1d083",
+			"key": "redis-standard",
+			"value": "1bf2507c-7523-4383-bb9d-f79dee50941a",
+			"type": "string"
+		},
+		{
+			"id": "57ae8e77-e216-4d5c-832c-c7d8a5e4f7cf",
+			"key": "redis-cluster",
+			"value": "0b1fbc27-8495-45a6-8858-0e28789026e9",
+			"type": "string"
+		},
+		{
+			"id": "7e7ec058-1e21-4096-94bd-14900b878b78",
+			"key": "last_operation",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "99d5dd13-6347-42f4-a1be-af4b76d6b4f6",
+			"key": "bindingId",
+			"value": "fc8286e9-c6f0-44c3-b375-755cc418821c",
+			"type": "string"
+		},
+		{
+			"id": "bcbcd317-9fbe-4901-8bd9-d7a1bd0f5681",
+			"key": "postgres-serviceId",
+			"value": "5989ec65-f04f-438d-9889-b5aec3c49bf4",
+			"type": "string"
+		},
+		{
+			"id": "f174792a-eb88-4af5-bfeb-c5204996ed15",
+			"key": "postgres-small",
+			"value": "c7bc888e-8732-4e08-be25-5eb91d4b1589",
+			"type": "string"
+		},
+		{
+			"id": "a534e7f9-46ac-4c22-8a91-2880926167dc",
+			"key": "postgres-cluster",
+			"value": "22f63649-983d-46d3-a921-f91ee16a14c1",
+			"type": "string"
+		}
+	]
+}

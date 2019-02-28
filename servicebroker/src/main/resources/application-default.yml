@@ -1,0 +1,15 @@
+# Application config
+database:
+  postgres:
+    host: localhost
+    port: 54321
+    base: postgres
+
+    user: postgres
+    password:
+
+osb-security:
+  permit-all: false
+  use-db: false
+  username: epro
+  password: epro
