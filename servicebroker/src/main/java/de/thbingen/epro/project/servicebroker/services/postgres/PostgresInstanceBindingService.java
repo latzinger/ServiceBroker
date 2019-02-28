@@ -63,7 +63,7 @@ public class PostgresInstanceBindingService extends AbstractInstanceBindingServi
         helmClient.getCredentialsAsync(instanceId + "-postgresql", secrets -> {
             helmClient.waitForInstanceReady(instanceId);
 
-            ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-postgresql-master");
+            ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-postgresql");
             HashMap<String, String> credentials = new HashMap<>();
 
             String password = secrets.getPassword("postgresql-password");
@@ -72,18 +72,19 @@ public class PostgresInstanceBindingService extends AbstractInstanceBindingServi
 
             credentials.put("password", password);
 
-            credentials.put("master-uri", String.format("postgresql://%s@%s", password, host + ":" + masterPort));
-            credentials.put("master-host", host);
-            credentials.put("master-port", masterPort);
+            credentials.put("uri", String.format("postgresql://%s@%s", "postgres:" + password, host + ":" + masterPort));
+            credentials.put("host", host);
+            credentials.put("port", masterPort);
+            credentials.put("user", "postgres");
 
             if (serviceInstance.getPlanId().equals(PostgresService.PLAN_CLUSTER_ID)) {
 
-                ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-postgresql-slave");
+                ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-postgresql-read");
                 String slavePort = slaveDetails.getServicePorts().get(0).getNodePort().toString();
 
-                credentials.put("slave-uri", String.format("postgresql://%s@%s", password, host + ":" + slavePort));
-                credentials.put("slave-host", host);
-                credentials.put("slave-port", slavePort);
+                credentials.put("read-uri", String.format("postgresql://%s@%s", password, host + ":" + slavePort));
+                credentials.put("read-host", host);
+                credentials.put("read-port", slavePort);
             }
 
 

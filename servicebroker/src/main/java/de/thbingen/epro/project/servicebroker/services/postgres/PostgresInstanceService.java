@@ -123,7 +123,8 @@ public class PostgresInstanceService extends AbstractInstanceService {
         ChartConfig chartConfig = new ChartConfig();
         chartConfig.mergeFrom(defaultConfig);
 
-        defaultConfig.set("replication.slaveReplicas", 0);
+        defaultConfig.set("replication.enabled", true);
+        defaultConfig.set("replication.slaveReplicas", 1);
         defaultConfig.set("resources.memory", "1024Mi");
         defaultConfig.set("resources.cpu", "400m");
 
@@ -189,6 +190,7 @@ public class PostgresInstanceService extends AbstractInstanceService {
         defaultConfig.set("resources.memory", "256Mi");
         defaultConfig.set("resources.cpu", "100m");
 
+        defaultConfig.set("replication.enabled", false);
         defaultConfig.set("replication.slaveReplicas", 0);
     }
 }
