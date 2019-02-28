@@ -168,10 +168,4 @@ public class ServiceInstanceBindingController extends BaseController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ServiceInstanceBindingBadRequestException.class)
-    private ResponseEntity<ErrorMessage> handleServiceInstanceBindingBadRequestException(ServiceInstanceBindingBadRequestException e) {
-        log.debug(e.getMessage());
-        return getErrorMessageResponseEntity("ServiceInstanceBindingBadRequestException", e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
 }
