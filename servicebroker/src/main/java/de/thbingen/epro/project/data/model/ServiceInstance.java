@@ -56,6 +56,10 @@ public class ServiceInstance extends AbstractEntity {
     @JsonIgnore
     private List<Operation> operations;
 
+    @OneToMany(mappedBy = "serviceInstance", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ServiceInstanceBinding> bindings;
+
     public void addOperation(Operation operation){
         operations.add(operation);
     }
