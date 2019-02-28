@@ -306,7 +306,7 @@ public class HelmClient {
         synchronized (waitLock){
             Long start = System.currentTimeMillis();
             while (!instance.isInitialized() && (System.currentTimeMillis() - start < 300000)){
-                log.debug("Instance initialized: " + instance.isInitialized());
+//                log.debug("Instance initialized: " + instance.isInitialized());
                 try {
                     waitLock.wait(10000);
                 } catch (InterruptedException e) {

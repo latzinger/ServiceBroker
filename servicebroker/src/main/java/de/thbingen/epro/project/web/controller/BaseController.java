@@ -160,4 +160,8 @@ public abstract class BaseController {
 
         return operation;
     }
+
+    public String formatInstanceId(String instanceId){
+        return "osb-" + instanceId;
+    }
 }

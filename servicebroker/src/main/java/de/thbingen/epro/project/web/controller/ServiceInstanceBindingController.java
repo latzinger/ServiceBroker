@@ -48,7 +48,7 @@ public class ServiceInstanceBindingController extends BaseController {
             @PathVariable String instanceId,
             @PathVariable String bindingId)
             throws InvalidApiVersionException, ServiceInstanceBindingNotFoundException, ServiceNotFoundException {
-
+        instanceId = formatInstanceId(instanceId);
         checkApiVersion(httpHeaders);
         BindingService bindingService = getBindingService(instanceId, bindingId);
 
@@ -69,16 +69,15 @@ public class ServiceInstanceBindingController extends BaseController {
             @PathVariable String bindingId,
             @RequestParam Map<String, String> parameters)
             throws InvalidApiVersionException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException {
-
+        instanceId = formatInstanceId(instanceId);
         checkApiVersion(httpHeaders);
+
+        String accepts_incomplete = parameters.get("accepts_incomplete");
+        if (!Boolean.parseBoolean(accepts_incomplete))
+            throw new RequiresAccpetsIncompleteException();
 
         if (parameters.get("service_id") == null || parameters.get("plan_id") == null)
             throw new InvalidRequestException("service_id or plan_id not provided");
-
-        String accepts_incomplete = parameters.get("accepts_incomplete");
-
-        if (!Boolean.parseBoolean(accepts_incomplete))
-            throw new RequiresAccpetsIncompleteException();
 
         if (serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId) == null)
             return new ResponseEntity<>(HttpStatus.GONE);
@@ -106,10 +105,10 @@ public class ServiceInstanceBindingController extends BaseController {
             @RequestParam Map<String, String> parameters,
             @Valid @RequestBody CreateServiceInstanceBindingRequest request)
             throws InvalidApiVersionException, InvalidRequestException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException {
-
+        instanceId = formatInstanceId(instanceId);
         checkApiVersion(httpHeaders);
 
-        if (parameters.get("service_id") == null || parameters.get("plan_id") == null)
+        if (request.getServiceId() == null || request.getPlanId() == null)
             throw new InvalidRequestException("service_id or plan_id not provided");
 
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
@@ -155,7 +154,7 @@ public class ServiceInstanceBindingController extends BaseController {
             @PathVariable String bindingId,
             @RequestParam Map<String, String> parameters)
             throws InvalidApiVersionException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException, OperationNotFoundException {
-
+        instanceId = formatInstanceId(instanceId);
         checkApiVersion(httpHeaders);
 
         LastOperationServiceInstanceBindingRequest request =

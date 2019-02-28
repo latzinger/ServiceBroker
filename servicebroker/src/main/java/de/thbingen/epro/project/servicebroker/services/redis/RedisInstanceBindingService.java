@@ -101,8 +101,8 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
 
         ServiceInstanceBinding serviceInstanceBinding = serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId);
 
-        if (!(serviceInstanceBinding.getParameters().get("service_id").equals(request.getRequestParameters().get("service_id")) ||
-                serviceInstanceBinding.getParameters().get("plan_id").equals(request.getRequestParameters().get("plan_id"))))
+        if (!(serviceInstanceBinding.getServiceInstance().getServiceId().equals(request.getRequestParameters().get("service_id")) ||
+                serviceInstanceBinding.getServiceInstance().getPlanId().equals(request.getRequestParameters().get("plan_id"))))
             throw new InvalidRequestException();
 
         serviceInstanceBindingRepository.deleteById(bindingId);

@@ -47,6 +47,7 @@ public class ServiceInstanceController extends BaseController {
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId,
             @RequestParam Map<String, String> parameters) {
+        instanceId = formatInstanceId(instanceId);
         checkApiVersion(httpHeaders);
 
         ServiceInstance serviceInstance = getServiceInstance(instanceId);
@@ -60,13 +61,20 @@ public class ServiceInstanceController extends BaseController {
             @PathVariable("instanceId") String instanceId,
             @RequestParam Map<String, String> parameters,
             @Valid @RequestBody CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException {
+        instanceId = formatInstanceId(instanceId);
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
         log.debug("Found serviceInstance with id " + instanceId + " : " + (serviceInstance != null));
 
         if (serviceInstance != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            if (serviceInstance.getParameters().equals(request.getParameters())) {
+                if (serviceInstance.isInitialized())
+                    return ResponseEntity.ok(null);
+                else
+                    return ResponseEntity.accepted().body(null);
+            } else
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
         InstanceService instanceService = getInstanceService(request.getServiceId());
@@ -81,6 +89,7 @@ public class ServiceInstanceController extends BaseController {
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId,
             @RequestParam Map<String, String> parameters) {
+        instanceId = formatInstanceId(instanceId);
         DeleteServiceInstanceRequest request = new DeleteServiceInstanceRequest();
         checkAndComplete(httpHeaders, request, instanceId, parameters);
         checkSerivceIdAndPlanId(request);
@@ -92,7 +101,7 @@ public class ServiceInstanceController extends BaseController {
             return ResponseEntity.ok(response);
         } catch (ServiceInstanceNotFoundException e) {
             checkAcceptIncomplete(request);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.GONE).build();
         }
     }
 
@@ -102,6 +111,7 @@ public class ServiceInstanceController extends BaseController {
             @PathVariable("instanceId") String instanceId,
             @RequestParam Map<String, String> parameters,
             @Valid @RequestBody UpdateServiceInstanceRequest request) {
+        instanceId = formatInstanceId(instanceId);
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
         InstanceService instanceService = getInstanceService(request);
@@ -117,6 +127,7 @@ public class ServiceInstanceController extends BaseController {
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable("instanceId") String instanceId,
             @RequestParam Map<String, String> parameters) throws OperationNotFoundException {
+        instanceId = formatInstanceId(instanceId);
         LastOperationServiceInstanceRequest request = new LastOperationServiceInstanceRequest();
         checkAndComplete(httpHeaders, request, instanceId, parameters);
 
