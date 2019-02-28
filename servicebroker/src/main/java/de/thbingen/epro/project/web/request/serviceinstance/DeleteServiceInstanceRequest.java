@@ -8,5 +8,8 @@
 
 package de.thbingen.epro.project.web.request.serviceinstance;
 
+import lombok.Data;
+
+@Data
 public class DeleteServiceInstanceRequest extends ServiceInstanceRequest {
 }

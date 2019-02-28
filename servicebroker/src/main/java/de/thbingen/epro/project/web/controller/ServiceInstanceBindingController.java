@@ -72,17 +72,23 @@ public class ServiceInstanceBindingController extends BaseController {
 
         checkApiVersion(httpHeaders);
 
+        if (parameters.get("service_id") == null || parameters.get("plan_id") == null)
+            throw new InvalidRequestException("service_id or plan_id not provided");
+
         if (serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId) == null)
             return new ResponseEntity<>(HttpStatus.GONE);
-
-        BindingService bindingService = getBindingService(instanceId, bindingId);
 
         DeleteServiceInstanceBindingRequest request =
                 new DeleteServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
         request.setRequestParameters(parameters);
 
+        BindingService bindingService = getBindingService(instanceId, bindingId);
+
         DeleteServiceInstanceBindingResponse response =
                 bindingService.deleteServiceInstanceBinding(bindingId, instanceId, request);
+
+        if (response.getOperation() == null)
+            return new ResponseEntity<>("{}", HttpStatus.OK);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -97,6 +103,10 @@ public class ServiceInstanceBindingController extends BaseController {
             throws InvalidApiVersionException, InvalidRequestException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException {
 
         checkApiVersion(httpHeaders);
+
+        if (parameters.get("service_id") == null || parameters.get("plan_id") == null)
+            throw new InvalidRequestException("service_id or plan_id not provided");
+
         request.setHttpHeaders(httpHeaders.toSingleValueMap());
         request.setRequestParameters(parameters);
 
