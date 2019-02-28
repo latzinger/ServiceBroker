@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.data.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,6 +12,13 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * {@link Entity} class for service instances
+ *
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 @Entity
 @Data
 @NoArgsConstructor

@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.request.serviceinstance;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,6 +8,15 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Map;
+
+
+/**
+ * Request data class for provisioning
+ *
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 
 @AllArgsConstructor
 @RequiredArgsConstructor

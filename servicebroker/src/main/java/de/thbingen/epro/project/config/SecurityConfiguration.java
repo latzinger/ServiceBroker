@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * Security Configuration for REST-API.
  *
  * @author larsatzinger
+ * @author jonashueg
  * @version 1.0
  * @since 1.0
  */
@@ -78,6 +79,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         }
     }
 
+    /**
+     * {@link DaoAuthenticationProvider} for using DB for {@link org.springframework.security.core.userdetails.UserDetails}
+     * @return
+     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider

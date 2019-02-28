@@ -1,12 +1,3 @@
-/**
- * 
- * TODO add description
- *
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.request.serviceinstance;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,6 +9,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
+
+/**
+ * Request data class for update
+ *
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Data
 @AllArgsConstructor

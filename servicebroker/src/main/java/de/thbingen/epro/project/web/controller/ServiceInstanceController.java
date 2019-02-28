@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.controller;
 
 import de.thbingen.epro.project.data.model.Operation;
@@ -30,6 +22,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Map;
 
+/**
+ * REST controller
+ *
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
+
 @RestController
 @RequestMapping("/v2/service_instances")
 @Slf4j
@@ -39,6 +39,13 @@ public class ServiceInstanceController extends BaseController {
     private ServiceInstanceRepository serviceInstanceRepository;
 
 
+    /**
+     * REST mapping for fetching an {@link ServiceInstance}
+     * @param httpHeaders
+     * @param instanceId
+     * @param parameters
+     * @return
+     */
     @GetMapping(value = "/{instanceId}")
     public ResponseEntity<?> fetchServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
@@ -52,6 +59,15 @@ public class ServiceInstanceController extends BaseController {
         return ResponseEntity.ok(serviceInstance);
     }
 
+    /**
+     * REST mapping for provisioning an ServiceInstance
+     * @param httpHeaders
+     * @param instanceId
+     * @param parameters
+     * @param request
+     * @return
+     * @throws ServiceInstanceAlreadyExistsException
+     */
     @PutMapping(value = "/{instanceId}")
     public ResponseEntity<CreateServiceInstanceResponse> createServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
@@ -81,6 +97,13 @@ public class ServiceInstanceController extends BaseController {
         return ResponseEntity.ok(createResponse);
     }
 
+    /**
+     * REST mapping for unprovisioning an ServiceInstance
+     * @param httpHeaders
+     * @param instanceId
+     * @param parameters
+     * @return
+     */
     @DeleteMapping(value = "/{instanceId}")
     public ResponseEntity<?> deleteServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
@@ -102,6 +125,14 @@ public class ServiceInstanceController extends BaseController {
         }
     }
 
+    /**
+     * REST mapping for updating an ServiceInstance
+     * @param httpHeaders
+     * @param instanceId
+     * @param parameters
+     * @param request
+     * @return
+     */
     @PatchMapping(value = "/{instanceId}")
     public ResponseEntity<?> updateServiceInstance(
             @RequestHeader HttpHeaders httpHeaders,
@@ -119,6 +150,14 @@ public class ServiceInstanceController extends BaseController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * REST mapping for get {@link Operation} status for ServiceInstance from provision, update and unprovision
+     * @param httpHeaders
+     * @param instanceId
+     * @param parameters
+     * @return
+     * @throws OperationNotFoundException
+     */
     @GetMapping(value = "/{instanceId}/last_operation")
     public ResponseEntity<?> lastOperation(
             @RequestHeader HttpHeaders httpHeaders,
@@ -173,7 +212,7 @@ public class ServiceInstanceController extends BaseController {
     }
 
     @SuppressWarnings("Duplicates")
-    public void checkAcceptIncomplete(ServiceInstanceRequest request) {
+    private void checkAcceptIncomplete(ServiceInstanceRequest request) {
         Map<String, String> parameters = request.getRequestParameters();
         String accepts_incomplete = parameters.get("accepts_incomplete");
 
@@ -190,7 +229,7 @@ public class ServiceInstanceController extends BaseController {
     }
 
 
-    public void checkSerivceIdAndPlanId(ServiceInstanceRequest request) {
+    private void checkSerivceIdAndPlanId(ServiceInstanceRequest request) {
         String serviceId = request.getRequestParameters().get("service_id");
         String planId = request.getRequestParameters().get("plan_id");
 

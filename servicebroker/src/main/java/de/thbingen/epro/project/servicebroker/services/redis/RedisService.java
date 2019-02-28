@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 /**
  * Representing a concrete Reds-Service.
+ * Implementation of {@link OsbService} for Redis
  *
  * @author larsatzinger
  * @author jonashueg

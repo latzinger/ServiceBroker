@@ -1,5 +1,12 @@
 package de.thbingen.epro.project.servicebroker.helm.exceptions;
 
+/**
+ * {@link Exception} thrown when installation via {@link de.thbingen.epro.project.servicebroker.helm.HelmClient} failed
+ *
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 public class InstallFailedException extends Exception {
     public InstallFailedException() {
         super();

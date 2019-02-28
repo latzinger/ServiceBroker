@@ -1,17 +1,3 @@
-/*
- * Developed by Jonas Hueg (jhueg) on 28.02.19 18:35.
- * Last modified 28.02.19 18:04.
- * Copyright (c) 2019. All rights reserved.
- */
-
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.servicebroker.services.postgres;
 
 import de.thbingen.epro.project.data.model.Operation;
@@ -33,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
-
+/**
+ * Implementation of {@link de.thbingen.epro.project.servicebroker.services.BindingService} for postgres
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor

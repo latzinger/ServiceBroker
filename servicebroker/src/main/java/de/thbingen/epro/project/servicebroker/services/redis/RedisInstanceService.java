@@ -36,7 +36,7 @@ import java.net.URI;
 import java.net.URL;
 
 /**
- * TODO add description
+ * Implementation of {@link de.thbingen.epro.project.servicebroker.services.InstanceService} for Redis
  *
  * @author jonashueg
  * @version 1.0

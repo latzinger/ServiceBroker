@@ -1,17 +1,3 @@
-/*
- * Developed by Jonas Hueg (jhueg) on 28.02.19 18:35.
- * Last modified 27.02.19 22:34.
- * Copyright (c) 2019. All rights reserved.
- */
-
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
 
 package de.thbingen.epro.project.servicebroker.services.postgres;
 
@@ -26,6 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+
+/**
+ * Implementation of {@link OsbService} for postgres
+ *
+ * @author larsatzinger
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Service
 @RequiredArgsConstructor

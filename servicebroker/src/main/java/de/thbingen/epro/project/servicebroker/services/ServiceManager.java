@@ -11,9 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Handling and managing all Service Broker Services found.
- *
- * @author larsatzinger
+ * Handling and managing all Service Broker Services ({@link OsbService}) found.
+ * Detecting services via Spring component scan.
  * @author jonashueg
  * @version 1.0
  * @since 1.0
@@ -47,6 +46,10 @@ public class ServiceManager {
         definedServices.forEach(service -> services.put(service.getServiceId(), service));
     }
 
+    /**
+     * Returns a list of defined {@link OsbService}'s scanned with Spring package scan
+     * @return
+     */
     public List<? extends OsbService> getDefinedServices() {
         return definedServices;
     }

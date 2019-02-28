@@ -1,7 +1,7 @@
 package de.thbingen.epro.project.web.exception;
 
 /**
- * InvalidRequestException
+ * InvalidRequestException thrown if missing request data or request data is malformed
  *
  * @author larsatzinger
  * @author jonashueg

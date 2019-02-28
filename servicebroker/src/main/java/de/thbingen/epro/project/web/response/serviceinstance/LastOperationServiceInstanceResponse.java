@@ -1,10 +1,3 @@
-/**
- * TODO add description
- *
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
 
 package de.thbingen.epro.project.web.response.serviceinstance;
 
@@ -15,6 +8,14 @@ import lombok.Data;
 import lombok.NonNull;
 
 import javax.validation.constraints.NotEmpty;
+
+/**
+ * Request data class for get last operation
+ *
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Data
 @AllArgsConstructor

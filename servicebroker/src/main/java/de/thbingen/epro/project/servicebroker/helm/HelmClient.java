@@ -56,10 +56,21 @@ public class HelmClient {
 
     private Object waitLock = new Object();
 
+
+    /**
+     * Installs tiller if not already installed
+     */
     public void installTiller() {
         TillerInstaller tillerInstaller = new TillerInstaller();
         tillerInstaller.init();
     }
+
+    /**
+     * Loads a Chart from URL and returns it as {@link ChartConfig}
+     * @param chartURL
+     * @return the helm chart
+     * @throws IOException
+     */
 
     public ChartBuilder loadChart(URL chartURL) throws IOException {
         ChartOuterClass.Chart.Builder chart = null;
@@ -71,6 +82,12 @@ public class HelmClient {
         return new ChartBuilder(chart);
     }
 
+    /**
+     * Gets the {@link ServiceDetails} from a service via serviceName
+     * @param serviceName
+     * @return
+     * @throws ServiceInstanceNotFoundException
+     */
     public ServiceDetails getServiceDetails(String serviceName) throws ServiceInstanceNotFoundException {
 
 
@@ -84,6 +101,11 @@ public class HelmClient {
         return null;
     }
 
+    /**
+     * Gets the host address the helm client connects to
+     * @return
+     */
+
     public String getHost() {
 
         try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
@@ -92,6 +114,11 @@ public class HelmClient {
 
     }
 
+    /**
+     * Gets a {@link Credentials} object for given secretName
+     * @param secretName
+     * @return
+     */
     public Credentials getCredentials(String secretName) {
 
 
@@ -106,10 +133,27 @@ public class HelmClient {
         return null;
     }
 
+    /**
+     * Installs chart synchronous
+     * @param chartURL
+     * @param instanceId
+     * @return
+     * @throws IOException
+     * @throws InstallFailedException
+     */
     public Release installChart(URL chartURL, String instanceId) throws IOException, InstallFailedException {
         return installChart(chartURL, instanceId, 300L);
     }
 
+    /**
+     * Installs chart synchronous
+     * @param chartURL
+     * @param instanceId
+     * @param timeout
+     * @return
+     * @throws IOException
+     * @throws InstallFailedException
+     */
     public Release installChart(URL chartURL, String instanceId, long timeout) throws IOException, InstallFailedException {
         ChartBuilder chart = loadChart(chartURL);
 
@@ -117,14 +161,41 @@ public class HelmClient {
     }
 
 
+    /**
+     * Installs chart synchronous
+     * @param chart
+     * @param instanceId
+     * @return
+     * @throws IOException
+     * @throws InstallFailedException
+     */
     public Release installChart(ChartBuilder chart, String instanceId) throws IOException, InstallFailedException {
         return installChart(chart, instanceId, 300L);
     }
 
+    /**
+     * Installs chart synchronous
+     * @param chart
+     * @param instanceId
+     * @param timeout
+     * @return
+     * @throws IOException
+     * @throws InstallFailedException
+     */
     public Release installChart(ChartBuilder chart, String instanceId, long timeout) throws IOException, InstallFailedException {
         return installChart(chart, instanceId, timeout, new ChartConfig());
     }
 
+    /**
+     * Installs chart synchronous.
+     * @param chart chart to install
+     * @param instanceId helm instanceId
+     * @param timeout installation timeout
+     * @param chartConfig override {@link ChartConfig} in {@link ChartBuilder}
+     * @return
+     * @throws IOException
+     * @throws InstallFailedException
+     */
     public Release installChart(ChartBuilder chart, String instanceId, long timeout, ChartConfig chartConfig) throws IOException, InstallFailedException {
         try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient();
              Tiller tiller = new Tiller(kubernetesClient);
@@ -163,10 +234,25 @@ public class HelmClient {
         throw new InstallFailedException("Unknown reason");
     }
 
+    /**
+     * Uninstalls chart synchronous
+     * @param instanceId
+     * @return
+     * @throws IOException
+     * @throws UninstallFailedException
+     */
     public Release uninstallChart(String instanceId) throws IOException, UninstallFailedException {
         return uninstallChart(instanceId, 300);
     }
 
+    /**
+     * Uninstalls chart synchronous
+     * @param instanceId helm instanceId
+     * @param timeout uninstall timeout
+     * @return
+     * @throws IOException
+     * @throws UninstallFailedException
+     */
     public Release uninstallChart(String instanceId, long timeout) throws IOException, UninstallFailedException {
 
         try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient();
@@ -193,7 +279,13 @@ public class HelmClient {
 
     //ASYNC
 
-
+    /**
+     * Fetches credentials asynchronous
+     * Calls the {@link Consumer} credentialsConsumer after fetching and afterTask afterwards
+     * @param secretName
+     * @param credentialsConsumer
+     * @param afterTask
+     */
     public void getCredentialsAsync(String secretName, Consumer<Credentials> credentialsConsumer, AsyncTask.AfterTaskRunnable afterTask){
         AsyncTask asyncTask = new AsyncTask(() -> {
             credentialsConsumer.accept(getCredentials(secretName));
@@ -202,10 +294,24 @@ public class HelmClient {
         executorService.submit(asyncTask);
     }
 
+    /**
+     * Fetches credentials asynchronous
+     * Calls the {@link Consumer} credentialsConsumer after fetching and saves the success to given {@link Operation}
+     * @param secretName
+     * @param credentialsConsumer
+     * @param operation
+     */
     public void getCredentialsAsync(String secretName, Consumer<Credentials> credentialsConsumer, Operation operation){
         getCredentialsAsync(secretName, credentialsConsumer, defaultBindingSuccessHandler(operation));
     }
 
+    /**
+     * Fetches {@link ServiceDetails} asynchronous
+     * Calls the {@link Consumer} detailsConsumer after fetching and afterTask afterwards
+     * @param serviceName
+     * @param detailsConsumer
+     * @param afterTask
+     */
     public void getServiceDetailsAsync(String serviceName, Consumer<ServiceDetails> detailsConsumer, AsyncTask.AfterTaskRunnable afterTask){
         AsyncTask asyncTask = new AsyncTask(() -> {
             detailsConsumer.accept(getServiceDetails(serviceName));
@@ -214,11 +320,24 @@ public class HelmClient {
         executorService.submit(asyncTask);
     }
 
+    /**
+     * Fetches {@link ServiceDetails} asynchronous
+     * @param serviceName
+     * @param detailsConsumer
+     * @param operation
+     */
     public void getServiceDetailsAsync(String serviceName, Consumer<ServiceDetails> detailsConsumer, Operation operation){
         getServiceDetailsAsync(serviceName, detailsConsumer, defaultBindingSuccessHandler(operation));
     }
 
 
+    /**
+     * Asynchronously installs a {@link ChartBuilder} saving success state to Operation
+     * @param chart
+     * @param instanceId
+     * @param timeout
+     * @param operation
+     */
     public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, Operation operation) {
         operation.setMessage("Installation in progress");
         operationRepository.save(operation);
@@ -226,10 +345,26 @@ public class HelmClient {
         installChartAsync(chart, instanceId, timeout, defaultInstallationSuccessHandler(operation));
     }
 
+    /**
+     * Asynchronously installs a {@link ChartBuilder} and calling the {@link AsyncTask.AfterTaskRunnable} afterwards
+     * @param chart
+     * @param instanceId
+     * @param timeout
+     * @param afterTask
+     */
+
     public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask) {
         installChartAsync(chart, instanceId, timeout, new ChartConfig(), afterTask);
     }
 
+    /**
+     * Asynchronously installs a {@link ChartBuilder} and calling the {@link AsyncTask.AfterTaskRunnable} afterwards
+     * @param chart
+     * @param instanceId
+     * @param timeout
+     * @param chartConfig
+     * @param afterTask
+     */
     public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, ChartConfig chartConfig, AsyncTask.AfterTaskRunnable afterTask) {
         AsyncTask asyncTask = new AsyncTask(() ->{
             return installChart(chart, instanceId, timeout, chartConfig).isInitialized();
@@ -238,12 +373,24 @@ public class HelmClient {
         log.debug("Started async installation");
     }
 
+    /**
+     * Asynchronously uninstalls a {@link ChartBuilder} and saving the success to given {@link Operation}
+     * @param instanceId
+     * @param timeout
+     * @param operation
+     */
     public void uninstallChartAsync(String instanceId, long timeout, Operation operation) {
         operation.setMessage("Uninstallation in progress");
         operationRepository.save(operation);
         uninstallChartAsync(instanceId, timeout, defaultUninstallationSuccessHandler(operation));
     }
 
+    /**
+     * Asynchronously uninstalls a {@link ChartBuilder} and calling the {@link AsyncTask.AfterTaskRunnable} afterwards
+     * @param instanceId
+     * @param timeout
+     * @param afterTask
+     */
     public void uninstallChartAsync(String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask) {
         AsyncTask asyncTask = new AsyncTask(() -> {
             try {
@@ -258,6 +405,11 @@ public class HelmClient {
         log.debug("Started async uninstallation");
     }
 
+    /**
+     * Default install {@link AsyncTask.AfterTaskRunnable} to save the success to an operation
+     * @param operation
+     * @return
+     */
     private AsyncTask.AfterTaskRunnable defaultInstallationSuccessHandler(Operation operation) {
         return (success, exception) -> {
             log.info("Install Operation " + operation.getId() + " successfully: " + success + " exception: " + exception);
@@ -281,6 +433,11 @@ public class HelmClient {
         };
     }
 
+    /**
+     * Default uninstall {@link AsyncTask.AfterTaskRunnable} to save the success to an operation
+     * @param operation
+     * @return
+     */
     private AsyncTask.AfterTaskRunnable defaultUninstallationSuccessHandler(Operation operation) {
         return (success, exception) -> {
             log.info("Uninstall Operation " + operation.getId() + " successfully: " + success);
@@ -296,6 +453,11 @@ public class HelmClient {
         };
     }
 
+    /**
+     * Default binding {@link AsyncTask.AfterTaskRunnable} to save the success to an operation
+     * @param operation
+     * @return
+     */
     private AsyncTask.AfterTaskRunnable defaultBindingSuccessHandler(Operation operation) {
         return (success, exception) -> {
             log.info("Binding Operation " + operation.getId() + " successfully: " + success);
@@ -310,11 +472,16 @@ public class HelmClient {
         };
     }
 
+    /**
+     * Waits until {@link ServiceInstance#isInitialized()} return true or timeout after 500 seconds
+     * @param instanceId
+     */
+
     public void waitForInstanceReady(String instanceId){
         ServiceInstance instance = serviceInstanceRepository.getServiceInstanceById(instanceId);
         synchronized (waitLock){
             Long start = System.currentTimeMillis();
-            while (!instance.isInitialized() && (System.currentTimeMillis() - start < 300000)){
+            while (!instance.isInitialized() && (System.currentTimeMillis() - start < 500000)){
 //                log.debug("Instance initialized: " + instance.isInitialized());
                 try {
                     waitLock.wait(10000);
@@ -333,6 +500,11 @@ public class HelmClient {
 //        return uninstallChart(instanceId, timeout);
 //    }
 
+    /**
+     * Util class used for asynchronous tasks
+     * First runs the {@link Callable} and afterwards run {@link AfterTaskRunnable} with its success or/and an exception thrown before if something goes wrong
+     * Call afterTask again with success = false and an {@link Exception} if executing afterTask fails
+     */
     @RequiredArgsConstructor
     public static class AsyncTask implements Runnable {
         @NonNull
@@ -350,6 +522,12 @@ public class HelmClient {
             }
         }
 
+
+        /**
+         * {@link FunctionalInterface} for handle operation success and failure
+         * if success = true an {@link Exception} IS NOT present
+         * if success = false an {@link Exception} MAY be present
+         */
         @FunctionalInterface
         public static interface AfterTaskRunnable {
             void afterTask(boolean success, Exception exception);

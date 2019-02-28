@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Defining default behavior of a REST-Controller.
+ * Defining default behavior of a OSB REST-Controller.
  *
  * @author larsatzinger
  * @author jonashueg
@@ -102,6 +102,11 @@ public abstract class BaseController {
         return new ResponseEntity<ErrorMessage>(new ErrorMessage(error, message), status);
     }
 
+    /**
+     * Checks if API version in header (X-Broker-API-Version) matches defined OSB version (at the moment 2.14) or throws {@link InvalidApiVersionException}
+     * @param headers
+     * @throws InvalidApiVersionException
+     */
     protected void checkApiVersion(HttpHeaders headers) throws InvalidApiVersionException {
         List<String> apiVersions = headers.get("X-Broker-API-Version");
         String apiVersion = apiVersions != null && apiVersions.size() == 1 ? apiVersions.get(0) : null;
@@ -125,6 +130,13 @@ public abstract class BaseController {
         checkAndComplete(httpHeaders, request, new HashMap<>());
     }
 
+    /**
+     * Checks api version and completes {@link OsbRequest} by inserting {@link HttpHeaders} and request parameters
+     * @param httpHeaders
+     * @param request
+     * @param parameters
+     * @throws InvalidApiVersionException
+     */
     protected void checkAndComplete(HttpHeaders httpHeaders, OsbRequest request, Map<String, String> parameters) throws InvalidApiVersionException {
         checkApiVersion(httpHeaders);
 
@@ -134,6 +146,11 @@ public abstract class BaseController {
         log.debug("checkAndComplete successfully");
     }
 
+    /**
+     * Gets the {@link OsbRequest} from
+     * @param serviceId
+     * @return
+     */
     public OsbService getOsbService(String serviceId) {
         OsbService service = serviceManager.getService(serviceId);
 
@@ -141,6 +158,13 @@ public abstract class BaseController {
         return service;
     }
 
+    /**
+     * Gets operation for given instanceId and operationId or throws a exception if no operation with operationId is found for the ServiceInstance
+     * @param instanceId
+     * @param operationId
+     * @return
+     * @throws OperationNotFoundException
+     */
     public Operation getOperation(String instanceId, String operationId) throws OperationNotFoundException {
         Long id = -1L;
 
@@ -159,6 +183,12 @@ public abstract class BaseController {
         return operation;
     }
 
+    /**
+     * Formats the instanceId to prevent naming errors
+     * Adds a "osb-" as prefix
+     * @param instanceId
+     * @return
+     */
     public String formatInstanceId(String instanceId){
         return "osb-" + instanceId;
     }

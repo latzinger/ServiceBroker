@@ -1,5 +1,11 @@
 package de.thbingen.epro.project.servicebroker.helm.exceptions;
 
+/**
+ * {@link Exception} thrown when uninstallation via {@link de.thbingen.epro.project.servicebroker.helm.HelmClient} failed
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 public class UninstallFailedException extends Exception {
     public UninstallFailedException() {
         super();

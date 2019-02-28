@@ -1,9 +1,3 @@
-/*
- * Developed by Jonas Hueg (jhueg) on 20.02.19 16:59.
- * Last modified 20.02.19 16:59.
- * Copyright (c) 2019. All rights reserved.
- */
-
 package de.thbingen.epro.project.data.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,6 +6,10 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+/**
+ * Class for asynchronous operations for create and delete {@link ServiceInstance} and {@link ServiceInstanceBinding}
+ */
 
 @Data
 @NoArgsConstructor
@@ -29,6 +27,10 @@ public class Operation extends AbstractLongId{
     @JsonIgnore
     private ServiceInstance serviceInstance;
 
+
+    /**
+     * Only non null if {@link Operation} is binding related
+     */
     @ManyToOne
     @JoinColumn(name = "SERVICE_INSTANCE_BINDING_ID")
     @ToString.Exclude
@@ -46,6 +48,9 @@ public class Operation extends AbstractLongId{
     @NotNull
     private String message;
 
+    /**
+     * Enum for {@link Operation} state
+     */
     public static enum OperationState{
         IN_PROGRESS("in progress"),
         SUCCEEDED("succeeded"),

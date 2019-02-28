@@ -1,9 +1,3 @@
-/*
- * Developed by Jonas Hueg (jhueg) on 28.02.19 18:35.
- * Last modified 27.02.19 15:09.
- * Copyright (c) 2019. All rights reserved.
- */
-
 package de.thbingen.epro.project.servicebroker.services.postgres;
 
 import de.thbingen.epro.project.data.model.Operation;
@@ -38,7 +32,7 @@ import java.net.URI;
 import java.net.URL;
 
 /**
- * TODO add description
+ * Implementation of {@link de.thbingen.epro.project.servicebroker.services.InstanceService} for Postgres
  *
  * @author jonashueg
  * @version 1.0

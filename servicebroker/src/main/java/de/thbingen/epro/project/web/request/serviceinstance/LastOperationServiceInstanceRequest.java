@@ -1,15 +1,14 @@
+package de.thbingen.epro.project.web.request.serviceinstance;
+
+import lombok.Data;
+
 /**
- * TODO add description
+ * Request data class for get last operation
  *
  * @author jonashueg
  * @version 1.0
  * @since 1.0
  */
-
-package de.thbingen.epro.project.web.request.serviceinstance;
-
-import lombok.Data;
-
 @Data
 public class LastOperationServiceInstanceRequest extends ServiceInstanceRequest {
     private String operationId;

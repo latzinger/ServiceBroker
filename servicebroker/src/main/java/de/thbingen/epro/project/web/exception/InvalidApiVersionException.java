@@ -1,7 +1,8 @@
 package de.thbingen.epro.project.web.exception;
 
 /**
- * InvalidApiVersionException
+ * InvalidApiVersionException thrown if a request has an invalid "X-Broker-API-Version" header
+ *
  *
  * @author larsatzinger
  * @author jonashueg
