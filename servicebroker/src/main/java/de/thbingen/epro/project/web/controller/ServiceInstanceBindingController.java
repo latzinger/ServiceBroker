@@ -75,6 +75,11 @@ public class ServiceInstanceBindingController extends BaseController {
         if (parameters.get("service_id") == null || parameters.get("plan_id") == null)
             throw new InvalidRequestException("service_id or plan_id not provided");
 
+        String accepts_incomplete = parameters.get("accepts_incomplete");
+
+        if (!Boolean.parseBoolean(accepts_incomplete))
+            throw new RequiresAccpetsIncompleteException();
+
         if (serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId) == null)
             return new ResponseEntity<>(HttpStatus.GONE);
 
@@ -166,12 +171,6 @@ public class ServiceInstanceBindingController extends BaseController {
     private ResponseEntity<?> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingNotFoundException e) {
         log.debug(e.getMessage());
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ServiceInstanceBindingBadRequestException.class)
-    private ResponseEntity<ErrorMessage> handleServiceInstanceBindingBadRequestException(ServiceInstanceBindingBadRequestException e) {
-        log.debug(e.getMessage());
-        return getErrorMessageResponseEntity("ServiceInstanceBindingBadRequestException", e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }

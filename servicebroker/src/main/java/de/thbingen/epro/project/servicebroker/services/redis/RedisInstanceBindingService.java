@@ -12,18 +12,13 @@ import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.servicebroker.helm.HelmClient;
-import de.thbingen.epro.project.servicebroker.helm.Credentials;
 import de.thbingen.epro.project.servicebroker.helm.ServiceDetails;
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceBindingService;
 import de.thbingen.epro.project.web.exception.InvalidRequestException;
-import de.thbingen.epro.project.web.exception.ServiceInstanceBindingBadRequestException;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
-import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
-import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
-import io.fabric8.kubernetes.api.model.Secret;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +43,11 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
 
         if (serviceInstance == null)
-            throw new ServiceInstanceBindingBadRequestException(bindingId, request);
+            throw new InvalidRequestException();
 
 
         if (!(serviceInstance.getPlanId().equals(request.getPlanId())))
-            throw new ServiceInstanceBindingBadRequestException(bindingId, request);
+            throw new InvalidRequestException();
 
         ServiceInstanceBinding serviceInstanceBinding = new ServiceInstanceBinding(bindingId, serviceInstance);
         serviceInstanceBindingRepository.save(serviceInstanceBinding);
