@@ -60,6 +60,8 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
         Operation operation = createOperation(serviceInstance, serviceInstanceBinding);
 
         helmClient.getCredentialsAsync(instanceId + "-redis", secrets -> {
+            helmClient.waitForInstanceReady(instanceId);
+
             ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
             HashMap<String, String> credentials = new HashMap<>();
 

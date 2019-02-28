@@ -45,6 +45,8 @@ public class HelmClient {
 
     private ExecutorService executorService = Executors.newCachedThreadPool();
 
+    private Object waitLock = new Object();
+
     public void installTiller() {
         TillerInstaller tillerInstaller = new TillerInstaller();
         tillerInstaller.init();
@@ -134,13 +136,20 @@ public class HelmClient {
 
             InstallReleaseResponse installResponse = installResponseFuture.get();   //Throws InterruptedException and ExecutionException
             log.debug("Installation completed");
+
+//            synchronized (waitLock) {
+//                waitLock.notifyAll();
+//            }
+
             Release release = new Release(installResponse.getRelease());
             return release;
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
+            log.debug("Execute Install failed", e);
             throw new InstallFailedException("Execute installation failed (maybe instanceId (name) already exists?)", e);
         }
+
 
         throw new InstallFailedException("Unknown reason");
     }
@@ -200,19 +209,6 @@ public class HelmClient {
         getServiceDetailsAsync(serviceName, detailsConsumer, defaultBindingSuccessHandler(operation));
     }
 
-    private AsyncTask.AfterTaskRunnable defaultBindingSuccessHandler(Operation operation) {
-        return (success, exception) -> {
-            log.info("Binding Operation " + operation.getId() + " successfully: " + success);
-            if (success) {
-                operation.setState(Operation.OperationState.SUCCEEDED);
-                operation.setMessage("Binding  succeeded");
-            } else {
-                operation.setState(Operation.OperationState.FAILED);
-                operation.setMessage("Binding failed");
-            }
-            operationRepository.save(operation);
-        };
-    }
 
     public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, Operation operation) {
         operation.setMessage("Installation in progress");
@@ -226,29 +222,48 @@ public class HelmClient {
     }
 
     public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, ChartConfig chartConfig, AsyncTask.AfterTaskRunnable afterTask) {
-        AsyncTask asyncTask = new AsyncTask(() -> installChart(chart, instanceId, timeout, chartConfig).isInitialized(), afterTask);
+        AsyncTask asyncTask = new AsyncTask(() ->{
+            return installChart(chart, instanceId, timeout, chartConfig).isInitialized();
+        }, afterTask);
         Future<?> submit = executorService.submit(asyncTask);
         log.debug("Started async installation");
     }
 
     public void uninstallChartAsync(String instanceId, long timeout, Operation operation) {
-        operation.setMessage("Installation in progress");
+        operation.setMessage("Uninstallation in progress");
         operationRepository.save(operation);
         uninstallChartAsync(instanceId, timeout, defaultUninstallationSuccessHandler(operation));
     }
 
     public void uninstallChartAsync(String instanceId, long timeout, AsyncTask.AfterTaskRunnable afterTask) {
-        AsyncTask asyncTask = new AsyncTask(() -> uninstallChart(instanceId, timeout).hasDeleted(), afterTask);
+        AsyncTask asyncTask = new AsyncTask(() -> {
+            try {
+                waitForInstanceReady(instanceId);
+            } catch (Exception e){
+                e.printStackTrace();
+                log.error("===exception" ,e);
+            }
+            return uninstallChart(instanceId, timeout).hasDeleted();
+        }, afterTask);
         Future<?> submit = executorService.submit(asyncTask);
         log.debug("Started async uninstallation");
     }
 
     private AsyncTask.AfterTaskRunnable defaultInstallationSuccessHandler(Operation operation) {
         return (success, exception) -> {
-            log.info("Install Operation " + operation.getId() + " successfully: " + success);
+            log.info("Install Operation " + operation.getId() + " successfully: " + success + " exception: " + exception);
             if (success) {
                 operation.setState(Operation.OperationState.SUCCEEDED);
                 operation.setMessage("Installation  succeeded");
+                ServiceInstance serviceInstanceById = serviceInstanceRepository.getServiceInstanceById(operation.getServiceInstance().getId());
+                serviceInstanceById.setInitialized(true);
+
+                synchronized (waitLock){
+                    waitLock.notifyAll();
+                }
+
+                serviceInstanceRepository.save(serviceInstanceById);
+
             } else {
                 operation.setState(Operation.OperationState.FAILED);
                 operation.setMessage("Installation failed");
@@ -270,6 +285,39 @@ public class HelmClient {
             }
 
         };
+    }
+
+    private AsyncTask.AfterTaskRunnable defaultBindingSuccessHandler(Operation operation) {
+        return (success, exception) -> {
+            log.info("Binding Operation " + operation.getId() + " successfully: " + success);
+            if (success) {
+                operation.setState(Operation.OperationState.SUCCEEDED);
+                operation.setMessage("Binding  succeeded");
+            } else {
+                operation.setState(Operation.OperationState.FAILED);
+                operation.setMessage("Binding failed");
+            }
+            operationRepository.save(operation);
+        };
+    }
+
+    public void waitForInstanceReady(String instanceId){
+        ServiceInstance instance = serviceInstanceRepository.getServiceInstanceById(instanceId);
+        synchronized (waitLock){
+            Long start = System.currentTimeMillis();
+            while (!instance.isInitialized() && (System.currentTimeMillis() - start < 300000)){
+                log.debug("Instance initialized: " + instance.isInitialized());
+                try {
+                    waitLock.wait(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                instance = serviceInstanceRepository.getServiceInstanceById(instanceId);
+            }
+            if(!instance.isInitialized()){
+                throw new RuntimeException("waitForInstanceReady timeout");
+            }
+        }
     }
 
 //    public Release uninstallChart(String instanceId, long timeout) throws IOException, UninstallFailedException {

@@ -36,15 +36,12 @@ public class ServiceInstance extends AbstractEntity {
     @NonNull
     private String planId;
 
+    @Column(nullable = false)
+    private boolean initialized;
+
     @Column
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String dashboardURL;
-
-    public ServiceInstance(String instanceId, String serviceId, String planId) {
-        super(instanceId);
-        this.serviceId = serviceId;
-        this.planId = planId;
-    }
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "SERVICE_INSTANCE_PARAMETERS")
@@ -80,5 +77,11 @@ public class ServiceInstance extends AbstractEntity {
     @JsonIgnore
     public @NonNull String getId() {
         return super.getId();
+    }
+
+    public ServiceInstance(String instanceId, String serviceId, String planId) {
+        super(instanceId);
+        this.serviceId = serviceId;
+        this.planId = planId;
     }
 }
