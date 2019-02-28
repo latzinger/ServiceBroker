@@ -44,6 +44,13 @@ when both permit-all and use-db equals false, inMemory Authentication will be us
 
 * [OSB-Checker](https://github.com/evoila/osb-checker-kotlin) - Testing Framework
 
+use *[OSB-Checker application.yml](https://bitbucket.org/jhueg/epro-projekt/src/develop/testing/osb-checker/application.yml)* for testing.
+
+* [Postman](https://www.getpostman.com) - API Development Environment
+
+use *[Postman-Collection](https://bitbucket.org/jhueg/epro-projekt/src/develop/testing/postman/ServiceBroker.postman_collection.json)* for testing.
+
+
 ## Useful Links
 
 * [OpenServiceBrokerAPI](https://www.openservicebrokerapi.org) - Open Service Broker API
