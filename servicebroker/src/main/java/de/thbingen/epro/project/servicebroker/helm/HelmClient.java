@@ -65,11 +65,19 @@ public class HelmClient {
         try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
             io.fabric8.kubernetes.api.model.Service service = kubernetesClient.services().inNamespace("default").withName(serviceName).get();
 
-            if(service != null)
+            if (service != null)
                 return new ServiceDetails(service);
         }
 
         return null;
+    }
+
+    public String getHost() {
+
+        try (DefaultKubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
+            return kubernetesClient.getMasterUrl().getHost();
+        }
+
     }
 
     public Credentials getCredentials(String secretName) {

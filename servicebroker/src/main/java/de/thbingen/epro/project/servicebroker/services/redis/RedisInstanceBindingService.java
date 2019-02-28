@@ -24,11 +24,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
 
-@org.springframework.stereotype.Service
+@Service
 @Slf4j
 @RequiredArgsConstructor
 public class RedisInstanceBindingService extends AbstractInstanceBindingService {
@@ -40,23 +41,25 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
     @Override
     public CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request) {
 
-        ServiceDetails serviceDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
-        Credentials creds = helmClient.getCredentials(instanceId + "-redis");
+        ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
+        ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-redis-slave");
+        Credentials credentials = helmClient.getCredentials(instanceId + "-redis");
 
-        HashMap<String, String> credentials = new HashMap<>();
+        String password = credentials.getPassword("redis-password");
+        String host = helmClient.getHost();
+        String masterPort = masterDetails.getServicePorts().get(0).getNodePort().toString();
+        String slavePort = slaveDetails.getServicePorts().get(0).getNodePort().toString();
 
-        /*
-        credentials.put("uri", String.format("redis://%s@%s", creds.getPassword("redis-password"), ));
-        credentials.put("password", creds.getPassword("redis-password"));
-        credentials.put("host", );
-        credentials.put("port", );
-
-        */
+        HashMap<String, String> creds = new HashMap<>();
+        creds.put("uri", String.format("redis://%s@%s", password, host + ":" + masterPort));
+        creds.put("password", password);
+        creds.put("host", host);
+        creds.put("port", masterPort);
 
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
 
         ServiceInstanceBinding serviceInstanceBinding = new ServiceInstanceBinding(serviceInstance);
-        serviceInstanceBinding.setCredentials(credentials);
+        serviceInstanceBinding.setCredentials(creds);
         serviceInstanceBinding.setParameters(request.getParameters());
 
         serviceInstanceBindingRepository.save(serviceInstanceBinding);
@@ -64,7 +67,7 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
         CreateServiceInstanceBindingResponse response =
                 CreateServiceInstanceBindingResponse
                         .builder()
-                        .credentials(credentials)
+                        .credentials(creds)
                         .build();
 
         return response;
