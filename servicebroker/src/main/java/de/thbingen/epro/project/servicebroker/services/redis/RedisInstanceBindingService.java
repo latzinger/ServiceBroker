@@ -56,7 +56,6 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
 
         Operation operation = createOperation(serviceInstance);
 
-
         helmClient.getCredentialsAsync(instanceId + "-redis", secrets -> {
             ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
             HashMap<String, String> credentials = new HashMap<>();
@@ -86,7 +85,6 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
             serviceInstanceBinding.setParameters(request.getParameters());
 
             serviceInstanceBindingRepository.save(serviceInstanceBinding);
-
         }, operation);
 
         CreateServiceInstanceBindingResponse response =
