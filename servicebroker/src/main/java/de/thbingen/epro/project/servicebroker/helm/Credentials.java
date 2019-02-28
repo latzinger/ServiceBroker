@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
@@ -24,4 +25,10 @@ public class Credentials {
         return passwordDecoded;
     }
 
+    public Map<String, String> getData() {
+        Map<String, String> decodedMap = new HashMap<>();
+        secret.getData().entrySet().stream()
+                .forEach(entry -> decodedMap.put(entry.getKey(), new String(Base64.getDecoder().decode(entry.getValue()))));
+        return decodedMap;
+    }
 }

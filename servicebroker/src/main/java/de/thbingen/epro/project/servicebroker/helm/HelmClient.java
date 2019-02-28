@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
 
 @Slf4j
 @Service
@@ -173,6 +174,45 @@ public class HelmClient {
     }
 
     //ASYNC
+
+
+    public void getCredentialsAsync(String secretName, Consumer<Credentials> credentialsConsumer, AsyncTask.AfterTaskRunnable afterTask){
+        AsyncTask asyncTask = new AsyncTask(() -> {
+            credentialsConsumer.accept(getCredentials(secretName));
+            return true;
+        }, afterTask);
+        executorService.submit(asyncTask);
+    }
+
+    public void getCredentialsAsync(String secretName, Consumer<Credentials> credentialsConsumer, Operation operation){
+        getCredentialsAsync(secretName, credentialsConsumer, defaultBindingSuccessHandler(operation));
+    }
+
+    public void getServiceDetailsAsync(String serviceName, Consumer<ServiceDetails> detailsConsumer, AsyncTask.AfterTaskRunnable afterTask){
+        AsyncTask asyncTask = new AsyncTask(() -> {
+            detailsConsumer.accept(getServiceDetails(serviceName));
+            return true;
+        }, afterTask);
+        executorService.submit(asyncTask);
+    }
+
+    public void getServiceDetailsAsync(String serviceName, Consumer<ServiceDetails> detailsConsumer, Operation operation){
+        getServiceDetailsAsync(serviceName, detailsConsumer, defaultBindingSuccessHandler(operation));
+    }
+
+    private AsyncTask.AfterTaskRunnable defaultBindingSuccessHandler(Operation operation) {
+        return (success, exception) -> {
+            log.info("Binding Operation " + operation.getId() + " successfully: " + success);
+            if (success) {
+                operation.setState(Operation.OperationState.SUCCEEDED);
+                operation.setMessage("Binding  succeeded");
+            } else {
+                operation.setState(Operation.OperationState.FAILED);
+                operation.setMessage("Binding failed");
+            }
+            operationRepository.save(operation);
+        };
+    }
 
     public void installChartAsync(ChartBuilder chart, String instanceId, long timeout, Operation operation) {
         operation.setMessage("Installation in progress");
