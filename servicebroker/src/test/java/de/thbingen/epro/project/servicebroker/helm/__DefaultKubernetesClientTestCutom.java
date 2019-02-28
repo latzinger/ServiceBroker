@@ -10,6 +10,7 @@ import io.fabric8.kubernetes.api.model.Endpoints;
 import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.Inet4Address;
@@ -17,6 +18,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
+@Ignore
 public class __DefaultKubernetesClientTestCutom {
 
 

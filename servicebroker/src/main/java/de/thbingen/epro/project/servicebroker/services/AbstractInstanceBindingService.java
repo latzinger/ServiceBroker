@@ -48,7 +48,7 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     /**
      * @param instanceId instance_id of an existing {@link ServiceInstance}
      * @param bindingId  binding_id of an existing {@link ServiceInstanceBinding}
-     * @return {@link ServiceInstanceBinding} or throwing Exception.
+     * @return {@link ServiceInstanceBinding}
      */
     @Override
     public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId) {
@@ -65,7 +65,7 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     /**
      * @param bindingId  binding_id of an existing {@link ServiceInstanceBinding}
      * @param instanceId instance_id of an existing {@link ServiceInstance}
-     * @param request {@link LastOperationServiceInstanceBindingRequest} containing all necessary information
+     * @param request    {@link LastOperationServiceInstanceBindingRequest} containing all necessary information
      * @return {@link LastOperationServiceInstanceBindingResponse} containing all necessary information
      * @throws OperationNotFoundException
      */

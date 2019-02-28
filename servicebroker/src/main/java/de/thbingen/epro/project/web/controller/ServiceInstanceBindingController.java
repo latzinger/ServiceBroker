@@ -41,6 +41,17 @@ public class ServiceInstanceBindingController extends BaseController {
     @Autowired
     private ServiceInstanceRepository serviceInstanceRepository;
 
+    /**
+     * REST mapping for fetching an {@link ServiceInstanceBinding}
+     *
+     * @param httpHeaders
+     * @param instanceId
+     * @param bindingId
+     * @return
+     * @throws InvalidApiVersionException
+     * @throws ServiceInstanceBindingNotFoundException
+     * @throws ServiceNotFoundException
+     */
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> getServiceInstanceBinding(
             @RequestHeader HttpHeaders httpHeaders,
@@ -62,6 +73,19 @@ public class ServiceInstanceBindingController extends BaseController {
         return new ResponseEntity<>(serviceInstanceBinding, HttpStatus.OK);
     }
 
+    /**
+     * REST mapping for deleting an {@link ServiceInstanceBinding}
+     *
+     * @param httpHeaders
+     * @param instanceId
+     * @param bindingId
+     * @param parameters
+     * @return
+     * @throws InvalidApiVersionException
+     * @throws ServiceInstanceBindingNotFoundException
+     * @throws ServiceInstanceNotFoundException
+     * @throws ServiceNotFoundException
+     */
     @DeleteMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> deleteServiceInstanceBinding(
             @RequestHeader HttpHeaders httpHeaders,
@@ -101,6 +125,21 @@ public class ServiceInstanceBindingController extends BaseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * REST mapping for creating an {@link ServiceInstanceBinding}
+     *
+     * @param httpHeaders
+     * @param instanceId
+     * @param bindingId
+     * @param parameters
+     * @param request
+     * @return
+     * @throws InvalidApiVersionException
+     * @throws InvalidRequestException
+     * @throws ServiceInstanceBindingNotFoundException
+     * @throws ServiceInstanceNotFoundException
+     * @throws ServiceNotFoundException
+     */
     @PutMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> createServiceInstanceBinding(
             @RequestHeader HttpHeaders httpHeaders,
@@ -140,6 +179,20 @@ public class ServiceInstanceBindingController extends BaseController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    /**
+     * REST mapping for retrieving last {@link de.thbingen.epro.project.data.model.Operation}
+     *
+     * @param httpHeaders
+     * @param instanceId
+     * @param bindingId
+     * @param parameters
+     * @return
+     * @throws InvalidApiVersionException
+     * @throws ServiceInstanceBindingNotFoundException
+     * @throws ServiceInstanceNotFoundException
+     * @throws ServiceNotFoundException
+     * @throws OperationNotFoundException
+     */
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}/last_operation")
     public ResponseEntity<?> lastOperation(
             @RequestHeader HttpHeaders httpHeaders,
