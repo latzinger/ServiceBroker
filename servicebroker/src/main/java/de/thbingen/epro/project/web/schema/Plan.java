@@ -8,6 +8,7 @@
 
 package de.thbingen.epro.project.web.schema;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -36,6 +37,7 @@ public class Plan implements Serializable {
     private String description;
 
     @JsonProperty("metadata")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private PlanMetadata metadata;
 
     @JsonProperty("free")
@@ -44,8 +46,6 @@ public class Plan implements Serializable {
     @JsonProperty("bindable")
     private boolean bindable;
 
-    @JsonProperty("plan_updatable")
-    private boolean planUpdatable;
 
     @JsonProperty("schemas")
     private Schemas schemas;
