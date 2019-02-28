@@ -80,22 +80,22 @@ public abstract class BaseController {
     }
 
     @ExceptionHandler(InvalidApiVersionException.class)
-    public ResponseEntity handleInvalidApiVersionException(InvalidApiVersionException ex){
+    public ResponseEntity handleInvalidApiVersionException(InvalidApiVersionException ex) {
         return getErrorMessageResponseEntity("InvalidApiVersion", ex.getMessage(), HttpStatus.PRECONDITION_FAILED);
     }
 
     @ExceptionHandler(OperationNotFoundException.class)
-    public ResponseEntity handleOperationNotFoundException(OperationNotFoundException ex){
+    public ResponseEntity handleOperationNotFoundException(OperationNotFoundException ex) {
         return getErrorMessageResponseEntity("OperationNotFound", ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RequiresAccpetsIncompleteException.class)
-    public ResponseEntity handleRequiresAccpetsIncompleteException(RequiresAccpetsIncompleteException ex){
-        return getErrorMessageResponseEntity("RequiresAsync", ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity handleRequiresAccpetsIncompleteException(RequiresAccpetsIncompleteException ex) {
+        return getErrorMessageResponseEntity(ErrorMessage.ASYNC_REQUIRED, ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorMessage> handleJsonMappingException(HttpMessageNotReadableException ex){
+    public ResponseEntity<ErrorMessage> handleJsonMappingException(HttpMessageNotReadableException ex) {
         log.debug("Catched HttpMessageNotReadableException: " + ex.getMessage());
         return getErrorMessageResponseEntity("Missing or invalid fields: " + ex.getMessage(), ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
@@ -136,7 +136,7 @@ public abstract class BaseController {
         log.debug("checkAndComplete successfully");
     }
 
-    public OsbService getOsbService(String serviceId){
+    public OsbService getOsbService(String serviceId) {
         OsbService service = serviceManager.getService(serviceId);
 
         log.debug("Found service " + service.getClass());
@@ -148,14 +148,14 @@ public abstract class BaseController {
 
         try {
             id = Long.parseLong(operationId);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             id = -1L;
             log.debug("Provided id " + operationId + " is not a valid operation id (a Long)");
         }
 
         Operation operation = operationRepository.getOperation(instanceId, id);
 
-        if(operation == null)
+        if (operation == null)
             throw new OperationNotFoundException();
 
         return operation;
