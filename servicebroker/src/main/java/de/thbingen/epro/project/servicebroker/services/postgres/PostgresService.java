@@ -31,10 +31,10 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class PostgresService implements OsbService {
 
-    public static final String SERVICE_ID = "4a30cd4f-914b-4082-8818-e9e9691fa1ce";
-    public static final String PLAN_SMALL_ID = "d6a5721a-e022-4bba-8356-6d50692aef27";
-    public static final String PLAN_STANDARD_ID = "1bf2507c-7523-4383-bb9d-f79dee50941a";
-    public static final String PLAN_CLUSTER_ID = "0b1fbc27-8495-45a6-8858-0e28789026e9";
+    public static final String SERVICE_ID = "5989ec65-f04f-438d-9889-b5aec3c49bf4";
+    public static final String PLAN_SMALL_ID = "c7bc888e-8732-4e08-be25-5eb91d4b1589";
+    public static final String PLAN_STANDARD_ID = "085a6c92-ffa0-4901-a011-a7a8bd85dddc";
+    public static final String PLAN_CLUSTER_ID = "22f63649-983d-46d3-a921-f91ee16a14c1";
 
     @NonNull
     @Autowired
