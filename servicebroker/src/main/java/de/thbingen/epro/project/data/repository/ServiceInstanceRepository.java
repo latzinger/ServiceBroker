@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * TODO add description
+ * {@link Repository} for {@link ServiceInstance}'s
  *
  * @author larsatzinger
  * @version 1.0

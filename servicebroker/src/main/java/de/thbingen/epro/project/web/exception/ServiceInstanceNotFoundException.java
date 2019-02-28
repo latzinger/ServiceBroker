@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author jonashueg
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
 
 package de.thbingen.epro.project.web.exception;
 
@@ -13,6 +5,15 @@ package de.thbingen.epro.project.web.exception;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+/**
+ * Thrown when {@link de.thbingen.epro.project.data.model.ServiceInstance} not found for given id
+ *
+ * @author jonashueg
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @RequiredArgsConstructor
 @Getter

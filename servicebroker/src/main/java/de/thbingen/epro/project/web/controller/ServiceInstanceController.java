@@ -146,7 +146,6 @@ public class ServiceInstanceController extends BaseController {
 
         UpdateServiceInstanceResponse response = instanceService.updateServiceInstance(request);
 
-        //TODO implement method
         return ResponseEntity.ok(response);
     }
 

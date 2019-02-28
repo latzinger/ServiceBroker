@@ -1,5 +1,4 @@
 /**
- * TODO add description
  *
  * @author jonashueg
  * @version 1.0

@@ -12,7 +12,6 @@ import de.thbingen.epro.project.web.response.serviceinstance.LastOperationServic
 import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstanceResponse;
 
 /**
- * TODO add description
  * Interface for classes that provide functionality to create, update, delete {@link de.thbingen.epro.project.data.model.ServiceInstance} for concrete {@link OsbService}
  * @author jonashueg
  * @version 1.0
