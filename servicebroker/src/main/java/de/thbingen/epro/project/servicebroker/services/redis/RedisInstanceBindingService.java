@@ -14,6 +14,7 @@ import de.thbingen.epro.project.servicebroker.helm.HelmClient;
 import de.thbingen.epro.project.servicebroker.helm.Credentials;
 import de.thbingen.epro.project.servicebroker.helm.ServiceDetails;
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceBindingService;
+import de.thbingen.epro.project.web.exception.ServiceInstanceBindingBadRequestException;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
@@ -41,25 +42,49 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
     @Override
     public CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request) {
 
-        ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
-        ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-redis-slave");
-        Credentials credentials = helmClient.getCredentials(instanceId + "-redis");
-
-        String password = credentials.getPassword("redis-password");
-        String host = helmClient.getHost();
-        String masterPort = masterDetails.getServicePorts().get(0).getNodePort().toString();
-        String slavePort = slaveDetails.getServicePorts().get(0).getNodePort().toString();
-
-        HashMap<String, String> creds = new HashMap<>();
-        creds.put("uri", String.format("redis://%s@%s", password, host + ":" + masterPort));
-        creds.put("password", password);
-        creds.put("host", host);
-        creds.put("port", masterPort);
-
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
 
+        if (serviceInstance == null)
+            throw new ServiceInstanceBindingBadRequestException(bindingId, request);
+
+
+        if (!(serviceInstance.getPlanId().equals(request.getPlanId())))
+            throw new ServiceInstanceBindingBadRequestException(bindingId, request);
+
+
+        HashMap<String, Object> credentials = new HashMap<>();
+
+        ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
+        Credentials secrets = helmClient.getCredentials(instanceId + "-redis");
+        HashMap<String, String> masterCredentials = new HashMap<>();
+
+        String password = secrets.getPassword("redis-password");
+        String host = helmClient.getHost();
+        String masterPort = masterDetails.getServicePorts().get(0).getNodePort().toString();
+
+        masterCredentials.put("uri", String.format("redis://%s@%s", password, host + ":" + masterPort));
+        masterCredentials.put("host", host);
+        masterCredentials.put("port", masterPort);
+
+        credentials.put("password", password);
+        credentials.put("master", masterCredentials);
+
+        if (serviceInstance.getPlanId().equals(RedisService.PLAN_CLUSTER_ID)) {
+
+            ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-redis-slave");
+            HashMap<String, String> slaveCredentials = new HashMap<>();
+            String slavePort = slaveDetails.getServicePorts().get(0).getNodePort().toString();
+
+            slaveCredentials.put("uri", String.format("redis://%s@%s", password, host + ":" + slavePort));
+            slaveCredentials.put("host", host);
+            slaveCredentials.put("port", slavePort);
+
+            credentials.put("slave", slaveCredentials);
+
+        }
+
         ServiceInstanceBinding serviceInstanceBinding = new ServiceInstanceBinding(serviceInstance);
-        serviceInstanceBinding.setCredentials(creds);
+        serviceInstanceBinding.setCredentials(credentials);
         serviceInstanceBinding.setParameters(request.getParameters());
 
         serviceInstanceBindingRepository.save(serviceInstanceBinding);
@@ -67,7 +92,7 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
         CreateServiceInstanceBindingResponse response =
                 CreateServiceInstanceBindingResponse
                         .builder()
-                        .credentials(creds)
+                        .credentials(credentials)
                         .build();
 
         return response;

@@ -14,6 +14,7 @@ import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceBindingRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
+import de.thbingen.epro.project.web.exception.ServiceInstanceBindingBadRequestException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;

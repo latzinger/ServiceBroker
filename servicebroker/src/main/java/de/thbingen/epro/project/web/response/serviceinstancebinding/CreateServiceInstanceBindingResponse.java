@@ -30,7 +30,7 @@ public class CreateServiceInstanceBindingResponse {
     private String operation;
 
     @JsonProperty("credentials")
-    private Map<String, String> credentials = new HashMap<>();
+    private Map<String, Object> credentials = new HashMap<>();
 
     @JsonProperty("syslog_drain_url")
     private String syslogDrainUrl;
