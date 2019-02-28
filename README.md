@@ -29,6 +29,9 @@ osb-security.username = epro
 osb-security.password = epro
 ```
 
+when both permit-all and use-db equals false, inMemory Authentication will be used!
+
+
 ## Built With
 
 * [Spring](https://spring.io) - Spring Framework
