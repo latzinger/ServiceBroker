@@ -15,6 +15,7 @@ import de.thbingen.epro.project.servicebroker.helm.HelmClient;
 import de.thbingen.epro.project.servicebroker.helm.Credentials;
 import de.thbingen.epro.project.servicebroker.helm.ServiceDetails;
 import de.thbingen.epro.project.servicebroker.services.AbstractInstanceBindingService;
+import de.thbingen.epro.project.web.exception.InvalidRequestException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceBindingBadRequestException;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
@@ -98,16 +99,16 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
 
     @Override
     public DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(String bindingId, String instanceId, DeleteServiceInstanceBindingRequest request) {
-        
+
+        ServiceInstanceBinding serviceInstanceBinding = serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId);
+
+        if (!(serviceInstanceBinding.getParameters().get("service_id").equals(request.getRequestParameters().get("service_id")) ||
+                serviceInstanceBinding.getParameters().get("plan_id").equals(request.getRequestParameters().get("plan_id"))))
+            throw new InvalidRequestException();
+
         serviceInstanceBindingRepository.deleteById(bindingId);
 
-        DeleteServiceInstanceBindingResponse response =
-                DeleteServiceInstanceBindingResponse
-                        .builder()
-                        .operation(null)
-                        .build();
-
-        return response;
+        return new DeleteServiceInstanceBindingResponse();
     }
 
     @Override
