@@ -31,7 +31,7 @@ public class ServiceInstanceBinding extends AbstractEntity {
     @CollectionTable(name = "SERVICE_INSTANCE_BINDING_CREDENTIALS")
     @MapKeyJoinColumn(name = "CREDENTIALS_KEY")
     @Column(name = "CREDENTIALS_VALUE")
-    private Map<String, String> credentials = new HashMap<>();
+    private Map<String, Object> credentials = new HashMap<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "SERVICE_INSTANCE_BINDING_PARAMETERS")
