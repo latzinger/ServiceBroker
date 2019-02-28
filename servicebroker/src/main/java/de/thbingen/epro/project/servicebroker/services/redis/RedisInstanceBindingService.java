@@ -42,18 +42,19 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
     public CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request) {
 
         ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
-        ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-redis-salve");
+        ServiceDetails slaveDetails = helmClient.getServiceDetails(instanceId + "-redis-slave");
         Credentials credentials = helmClient.getCredentials(instanceId + "-redis");
 
         String password = credentials.getPassword("redis-password");
         String host = helmClient.getHost();
-        String port = masterDetails.getServicePorts().get(0).getNodePort().toString();
+        String masterPort = masterDetails.getServicePorts().get(0).getNodePort().toString();
+        String slavePort = slaveDetails.getServicePorts().get(0).getNodePort().toString();
 
         HashMap<String, String> creds = new HashMap<>();
-        creds.put("uri", String.format("redis://%s@%s", password, host));
+        creds.put("uri", String.format("redis://%s@%s", password, host + ":" + masterPort));
         creds.put("password", password);
         creds.put("host", host);
-        creds.put("port", port);
+        creds.put("port", masterPort);
 
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
 
