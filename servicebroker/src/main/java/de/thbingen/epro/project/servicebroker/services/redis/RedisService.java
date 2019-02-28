@@ -1,12 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.servicebroker.services.redis;
 
 import de.thbingen.epro.project.servicebroker.services.BindingService;
@@ -20,6 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+
+/**
+ * Representing a concrete Reds-Service.
+ *
+ * @author larsatzinger
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
+
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +39,9 @@ public class RedisService implements OsbService {
     @Autowired
     private RedisInstanceBindingService redisInstanceBindingService;
 
+    /**
+     * @return ServiceDefinition - Definition of this Service.
+     */
     @Override
     public ServiceDefinition getServiceDefiniton() {
 
@@ -72,16 +76,25 @@ public class RedisService implements OsbService {
         return serviceDefinition;
     }
 
+    /**
+     * @return the ServiceID
+     */
     @Override
     public String getServiceId() {
         return SERVICE_ID;
     }
 
+    /**
+     * @return InstanceService of this Service.
+     */
     @Override
     public InstanceService getInstanceService() {
         return redisInstanceService;
     }
 
+    /**
+     * @return BindingService of this Service.
+     */
     @Override
     public BindingService getBindingService() {
         return redisInstanceBindingService;

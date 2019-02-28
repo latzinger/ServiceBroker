@@ -1,10 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
 
 package de.thbingen.epro.project.servicebroker.services;
 
@@ -14,6 +7,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Interface defining an CatalogService.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 public interface CatalogService {
 

@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.schema;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,6 +6,14 @@ import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+
+/**
+ * Representing Plan defined by openservicebrokerapi
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Data
 @RequiredArgsConstructor

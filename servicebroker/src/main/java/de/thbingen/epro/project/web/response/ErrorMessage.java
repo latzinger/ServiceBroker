@@ -1,15 +1,15 @@
+package de.thbingen.epro.project.web.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 /**
- * TODO add description
+ * Representing Error Message defined by openservicebrokerapi
  *
  * @author larsatzinger
  * @version 1.0
  * @since 1.0
  */
-
-package de.thbingen.epro.project.web.response;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 @Data
 @AllArgsConstructor

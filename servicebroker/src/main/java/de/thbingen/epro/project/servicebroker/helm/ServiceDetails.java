@@ -8,37 +8,59 @@ import lombok.NonNull;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Storing Kubernetes Service for specified Service.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
+
 @Data
 public class ServiceDetails {
 
     @NonNull
     private Service service;
 
-    public String getUUID(){
+    /**
+     * @return UUID of the specified Service.
+     */
+    public String getUUID() {
         return service.getMetadata().getUid();
     }
 
-    public String getServiceName(){
+    /**
+     * @return Name of the specified Service.
+     */
+    public String getServiceName() {
         return service.getMetadata().getName();
     }
 
-    public String getClusterName(){
-        return service.getMetadata().getClusterName();
-    }
-
-    public String getServiceNameSpace(){
+    /**
+     * @return Namespace of the specified Service.
+     */
+    public String getServiceNameSpace() {
         return service.getMetadata().getNamespace();
     }
 
-    public Map<String, String> getServiceLabels(){
+    /**
+     * @return Map containing all Labels of the specified Service.
+     */
+    public Map<String, String> getServiceLabels() {
         return service.getMetadata().getLabels();
     }
 
-    public List<ServicePort> getServicePorts(){
+    /**
+     * @return List containing all Ports of the specified Service.
+     */
+    public List<ServicePort> getServicePorts() {
         return service.getSpec().getPorts();
     }
 
-    public String getServiceType(){
+    /**
+     * @return Type of the specified Service (ClusterIP, NodePort, LoadBalancer).
+     */
+    public String getServiceType() {
         return service.getSpec().getType();
     }
 

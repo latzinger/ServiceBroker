@@ -1,12 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.web.exception.ServiceNotFoundException;
@@ -18,6 +9,15 @@ import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * Handling and managing all Service Broker Services found.
+ *
+ * @author larsatzinger
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Service
 @Slf4j

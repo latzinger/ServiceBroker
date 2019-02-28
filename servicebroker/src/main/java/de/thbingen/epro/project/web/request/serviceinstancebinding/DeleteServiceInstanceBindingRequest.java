@@ -1,16 +1,16 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.request.serviceinstancebinding;
 
 import lombok.*;
 
 import java.util.Map;
+
+/**
+ * Representing an DeleteServiceInstanceBindingRequest containing all necessary information
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Data
 @EqualsAndHashCode(callSuper = true)

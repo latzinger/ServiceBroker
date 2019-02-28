@@ -6,5 +6,5 @@
 
 package de.thbingen.epro.project.web.exception;
 
-public class RequiresAccpetsIncompleteException extends RuntimeException {
+public class RequiresAcceptsIncompleteException extends RuntimeException {
 }

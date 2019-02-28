@@ -1,15 +1,5 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.controller;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
@@ -17,7 +7,6 @@ import de.thbingen.epro.project.servicebroker.services.ServiceManager;
 import de.thbingen.epro.project.web.exception.*;
 import de.thbingen.epro.project.web.request.OsbRequest;
 import de.thbingen.epro.project.web.response.ErrorMessage;
-import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +22,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+/**
+ * Defining default behavior of a REST-Controller.
+ *
+ * @author larsatzinger
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Log4j2
 public abstract class BaseController {
@@ -89,8 +87,8 @@ public abstract class BaseController {
         return getErrorMessageResponseEntity("OperationNotFound", ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(RequiresAccpetsIncompleteException.class)
-    public ResponseEntity handleRequiresAccpetsIncompleteException(RequiresAccpetsIncompleteException ex) {
+    @ExceptionHandler(RequiresAcceptsIncompleteException.class)
+    public ResponseEntity handleRequiresAccpetsIncompleteException(RequiresAcceptsIncompleteException ex) {
         return getErrorMessageResponseEntity(ErrorMessage.ASYNC_REQUIRED, ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 

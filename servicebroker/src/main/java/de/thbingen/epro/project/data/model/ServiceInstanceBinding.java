@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.data.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,6 +10,14 @@ import javax.persistence.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * Entity representing an ServiceInstanceBinding.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Entity
 @Data

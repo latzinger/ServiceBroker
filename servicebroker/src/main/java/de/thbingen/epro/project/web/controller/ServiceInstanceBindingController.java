@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.controller;
 
 import de.thbingen.epro.project.data.model.ServiceInstance;
@@ -18,7 +10,6 @@ import de.thbingen.epro.project.web.exception.*;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperationServiceInstanceBindingRequest;
-import de.thbingen.epro.project.web.response.ErrorMessage;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
@@ -31,6 +22,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Map;
+
+/**
+ * ServiceInstanceBinding Controller.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @RestController
 @RequestMapping("/v2/service_instances")
@@ -78,7 +77,7 @@ public class ServiceInstanceBindingController extends BaseController {
         String accepts_incomplete = parameters.get("accepts_incomplete");
 
         if (!Boolean.parseBoolean(accepts_incomplete))
-            throw new RequiresAccpetsIncompleteException();
+            throw new RequiresAcceptsIncompleteException();
 
         if (serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId) == null)
             return new ResponseEntity<>(HttpStatus.GONE);
@@ -133,21 +132,6 @@ public class ServiceInstanceBindingController extends BaseController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    private BindingService getBindingService(String instanceId, String bindingId) {
-        ServiceInstance serviceInstance = getServiceInstance(instanceId, bindingId);
-        OsbService service = getOsbService(serviceInstance.getServiceId());
-        return service.getBindingService();
-    }
-
-    private ServiceInstance getServiceInstance(String instanceId, String bindingId) {
-        ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
-
-        if (serviceInstance == null)
-            throw new ServiceInstanceBindingNotFoundException(bindingId);
-
-        return serviceInstance;
-    }
-
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}/last_operation")
     public ResponseEntity<?> lastOperation(
             @RequestHeader HttpHeaders httpHeaders,
@@ -171,6 +155,33 @@ public class ServiceInstanceBindingController extends BaseController {
     private ResponseEntity<?> handleServiceInstanceBindingNotFoundException(ServiceInstanceBindingNotFoundException e) {
         log.debug(e.getMessage());
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Returning BindingService of a concrete Service Broker Service
+     *
+     * @param instanceId instance_id of an existing ServiceInstance
+     * @param bindingId  binding_id of an existing ServiceInstanceBinding
+     * @return BindingService of concrete Service.
+     */
+    private BindingService getBindingService(String instanceId, String bindingId) {
+        ServiceInstance serviceInstance = getServiceInstance(instanceId, bindingId);
+        OsbService service = getOsbService(serviceInstance.getServiceId());
+        return service.getBindingService();
+    }
+
+    /**
+     * @param instanceId instance_id of an existing ServiceInstance
+     * @param bindingId  binding_if which should be used
+     * @return ServiceInstance to given instanceId
+     */
+    private ServiceInstance getServiceInstance(String instanceId, String bindingId) {
+        ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);
+
+        if (serviceInstance == null)
+            throw new ServiceInstanceBindingNotFoundException(bindingId);
+
+        return serviceInstance;
     }
 
 }

@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.security.userdetails;
 
 import de.thbingen.epro.project.data.model.UserInfo;
@@ -13,6 +5,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+
+/**
+ * Principal for User.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
+
 
 public class UserInfoPrincipal implements UserDetails {
 

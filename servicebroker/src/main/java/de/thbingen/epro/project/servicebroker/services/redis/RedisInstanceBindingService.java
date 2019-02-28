@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.servicebroker.services.redis;
 
 import de.thbingen.epro.project.data.model.Operation;
@@ -27,6 +19,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
+/**
+ * Redis-BindingService for handling binding requests.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Service
 @Slf4j
@@ -37,6 +36,12 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
     @NonNull
     private final HelmClient helmClient;
 
+    /**
+     * @param bindingId  binding_id for the ServiceInstanceBinding
+     * @param instanceId instance_id of an existing ServiceInstance
+     * @param request    CreateServiceInstanceBindingRequest containing necessary information
+     * @return CreateServiceInstanceBindingResponse or throwing an Exception
+     */
     @Override
     public CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request) {
 
@@ -94,6 +99,12 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
         return response;
     }
 
+    /**
+     * @param bindingId  binding_id of an existing ServiceInstanceBinding
+     * @param instanceId instance_id of an existing ServiceInstance
+     * @param request    DeleteServiceInstanceBindingRequest containing necessary information
+     * @return DeleteServiceInstanceBindingResponse or throwing an Exception
+     */
     @Override
     public DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(String bindingId, String instanceId, DeleteServiceInstanceBindingRequest request) {
 

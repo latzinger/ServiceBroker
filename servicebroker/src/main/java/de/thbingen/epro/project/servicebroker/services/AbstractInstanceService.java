@@ -15,7 +15,7 @@ import de.thbingen.epro.project.data.model.ServiceInstance;
 import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.web.exception.InvalidRequestException;
-import de.thbingen.epro.project.web.exception.RequiresAccpetsIncompleteException;
+import de.thbingen.epro.project.web.exception.RequiresAcceptsIncompleteException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceAlreadyExistsException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
 import de.thbingen.epro.project.web.request.OsbRequest;
@@ -101,7 +101,7 @@ public abstract class AbstractInstanceService implements InstanceService {
         log.debug("accepts_incomplete: " + accepts_incomplete);
 
         if (!Boolean.parseBoolean(accepts_incomplete))
-            throw new RequiresAccpetsIncompleteException();
+            throw new RequiresAcceptsIncompleteException();
     }
 
     public void checkSerivceIdAndPlanId(ServiceInstanceRequest request) {
