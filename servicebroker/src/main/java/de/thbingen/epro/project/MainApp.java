@@ -1,5 +1,12 @@
+
+package de.thbingen.epro.project;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 /**
- * TODO add description
+ * Service Broker based on the Open Service Broker API.
+ * Deploying on Kubernetes using the microbean helm api.
  *
  * @author larsatzinger
  * @author jonashueg
@@ -7,17 +14,13 @@
  * @since 1.0
  */
 
-package de.thbingen.epro.project;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class MainApp {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MainApp.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MainApp.class, args);
+    }
 
 }
 

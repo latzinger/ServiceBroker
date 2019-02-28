@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,6 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+
+/**
+ * Representing ServiceInstanceSchema defined by openservicebrokerapi
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Data
 @NoArgsConstructor

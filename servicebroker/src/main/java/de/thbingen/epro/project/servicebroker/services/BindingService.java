@@ -1,10 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
 
 package de.thbingen.epro.project.servicebroker.services;
 
@@ -17,6 +10,14 @@ import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperation
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
+
+/**
+ * Interface defining an BindingService.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 public interface BindingService {
 

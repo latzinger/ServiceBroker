@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.schema;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -18,6 +10,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+/**
+ * Representing ServiceDefinition defined by openservicebrokerapi
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Data
 @RequiredArgsConstructor

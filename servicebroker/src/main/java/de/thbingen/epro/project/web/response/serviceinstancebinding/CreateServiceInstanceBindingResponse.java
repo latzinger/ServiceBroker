@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.response.serviceinstancebinding;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -20,6 +12,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * Representing an CreateServiceInstanceBindingResponse containing all necessary information
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Data
 @NoArgsConstructor

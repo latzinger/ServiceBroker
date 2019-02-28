@@ -1,12 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,6 +8,15 @@ import lombok.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
+
+/**
+ * Defining default model of an Service Broker Request.
+ *
+ * @author larsatzinger
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Data
 @NoArgsConstructor

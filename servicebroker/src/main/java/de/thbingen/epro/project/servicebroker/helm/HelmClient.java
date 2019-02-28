@@ -31,6 +31,15 @@ import java.net.URL;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
+/**
+ * Implementation of MicroBean Helm API.
+ *
+ * @author larsatzinger
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor

@@ -10,7 +10,6 @@ package de.thbingen.epro.project.web.controller;
 
 import de.thbingen.epro.project.data.model.Operation;
 import de.thbingen.epro.project.data.model.ServiceInstance;
-import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
 import de.thbingen.epro.project.servicebroker.services.InstanceService;
 import de.thbingen.epro.project.servicebroker.services.OsbService;
@@ -23,8 +22,6 @@ import de.thbingen.epro.project.web.response.serviceinstance.UpdateServiceInstan
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -183,7 +180,7 @@ public class ServiceInstanceController extends BaseController {
         log.debug("accepts_incomplete: " + accepts_incomplete);
 
         if (!Boolean.parseBoolean(accepts_incomplete))
-            throw new RequiresAccpetsIncompleteException();
+            throw new RequiresAcceptsIncompleteException();
     }
 
     @ExceptionHandler(ServiceInstanceNotFoundException.class)

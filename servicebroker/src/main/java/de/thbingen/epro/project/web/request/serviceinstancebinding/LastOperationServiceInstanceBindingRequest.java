@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.request.serviceinstancebinding;
 
 import lombok.Builder;
@@ -14,6 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.Map;
+
+/**
+ * Representing an LastOperationServiceInstanceBindingRequest containing all necessary information
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Data
 @Builder

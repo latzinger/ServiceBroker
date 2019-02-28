@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.web.request.serviceinstancebinding;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,6 +6,14 @@ import lombok.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+/**
+ * Representing an ServiceInstanceBindingRequest containing all necessary information
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Data
 @EqualsAndHashCode(callSuper = true)

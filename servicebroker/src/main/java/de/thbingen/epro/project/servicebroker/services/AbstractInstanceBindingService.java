@@ -1,12 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.data.model.Operation;
@@ -26,6 +17,13 @@ import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperatio
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Abstract InstanceBindingService providing default behavior for a BindingService.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Slf4j
 public abstract class AbstractInstanceBindingService implements BindingService {
@@ -40,6 +38,19 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     protected OperationRepository operationRepository;
 
     @Override
+    public abstract CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request);
+
+
+    @Override
+    public abstract DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(String bindingId, String instanceId, DeleteServiceInstanceBindingRequest request);
+
+
+    /**
+     * @param instanceId instance_id of an existing ServiceInstance
+     * @param bindingId  binding_id of an existing ServiceInstanceBinding
+     * @return ServiceInstanceBinding or throwing Exception.
+     */
+    @Override
     public ServiceInstanceBinding getServiceInstanceBinding(String instanceId, String bindingId) {
         ServiceInstanceBinding serviceInstanceBinding = serviceInstanceBindingRepository.getServiceInstanceBinding(instanceId, bindingId);
 
@@ -51,27 +62,38 @@ public abstract class AbstractInstanceBindingService implements BindingService {
         return serviceInstanceBinding;
     }
 
-    @Override
-    public abstract CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request);
-
-    @Override
-    public abstract DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(String bindingId, String instanceId, DeleteServiceInstanceBindingRequest request);
-
+    /**
+     * @param bindingId  binding_id of an existing ServiceInstanceBinding
+     * @param instanceId instance_id of an existing ServiceInstance
+     * @param request
+     * @return
+     * @throws OperationNotFoundException
+     */
     @Override
     public LastOperationServiceInstanceBindingResponse lastOperation(String bindingId, String instanceId, LastOperationServiceInstanceBindingRequest request) throws OperationNotFoundException {
         Operation bindingOperation = operationRepository.getBindingOperation(instanceId, bindingId, request.getOperationId());
 
-        if(bindingOperation == null)
+        if (bindingOperation == null)
             throw new OperationNotFoundException();
 
         return new LastOperationServiceInstanceBindingResponse(bindingOperation.getState().toString(), bindingOperation.getMessage());
     }
 
+    /**
+     * @param instanceId instance_id of an existing ServiceInstance
+     * @param bindingId  binding_id of an existing ServiceInstanceBinding
+     * @return true if ServiceInstanceBinding already exists otherwise false.
+     */
     protected boolean serviceInstanceBindingExist(String instanceId, String bindingId) {
         return (getServiceInstanceBinding(instanceId, bindingId) != null);
     }
 
-    public Operation createOperation(ServiceInstance serviceInstance, ServiceInstanceBinding serviceInstanceBinding){
+    /**
+     * @param serviceInstance        an existing ServiceInstance
+     * @param serviceInstanceBinding an existing ServiceInstanceBinding
+     * @return an new Operation.
+     */
+    public Operation createOperation(ServiceInstance serviceInstance, ServiceInstanceBinding serviceInstanceBinding) {
         Operation operation = new Operation(serviceInstance, serviceInstanceBinding, Operation.OperationState.IN_PROGRESS, "Operation initialized");
         operationRepository.save(operation);
         return operation;

@@ -1,11 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.web.schema.Catalog;
@@ -19,6 +11,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Concrete implementation of CatalogService.
+ *
+ * @author larsatzinger
+ * @version 1.0
+ * @since 1.0
+ */
+
 @Service
 @Getter
 @Setter
@@ -30,6 +30,9 @@ public class CatalogServiceImpl implements CatalogService {
 
     private Catalog catalog;
 
+    /**
+     * @return Catalog containing List with all found ServiceDefinitions.
+     */
     @Override
     public Catalog getCatalog() {
 
@@ -41,6 +44,9 @@ public class CatalogServiceImpl implements CatalogService {
         return (catalog = new Catalog(serviceDefinitions));
     }
 
+    /**
+     * @return List containing all ServiceDefinitions.
+     */
     @Override
     public List<ServiceDefinition> getServiceDefinitions() {
         return catalog.getServiceDefinitions();

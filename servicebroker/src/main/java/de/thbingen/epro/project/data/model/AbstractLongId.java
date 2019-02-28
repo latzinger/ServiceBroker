@@ -1,12 +1,3 @@
-/**
- * TODO add description
- *
- * @author larsatzinger
- * @author jonashueg
- * @version 1.0
- * @since 1.0
- */
-
 package de.thbingen.epro.project.data.model;
 
 import lombok.Data;
@@ -18,6 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.SequenceGenerator;
 import java.io.Serializable;
+
+/**
+ * MappedSuperclass for default Database Entities.
+ *
+ * @author larsatzinger
+ * @author jonashueg
+ * @version 1.0
+ * @since 1.0
+ */
 
 @Data
 @MappedSuperclass
