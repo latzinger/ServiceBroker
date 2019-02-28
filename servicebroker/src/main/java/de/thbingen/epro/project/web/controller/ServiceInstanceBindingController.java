@@ -21,6 +21,7 @@ import de.thbingen.epro.project.web.request.serviceinstancebinding.LastOperation
 import de.thbingen.epro.project.web.response.ErrorMessage;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.CreateServiceInstanceBindingResponse;
 import de.thbingen.epro.project.web.response.serviceinstancebinding.DeleteServiceInstanceBindingResponse;
+import de.thbingen.epro.project.web.response.serviceinstancebinding.LastOperationServiceInstanceBindingResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -138,7 +139,7 @@ public class ServiceInstanceBindingController extends BaseController {
             @PathVariable String instanceId,
             @PathVariable String bindingId,
             @RequestParam Map<String, String> parameters)
-            throws InvalidApiVersionException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException {
+            throws InvalidApiVersionException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException, OperationNotFoundException {
 
         checkApiVersion(httpHeaders);
 
@@ -146,7 +147,9 @@ public class ServiceInstanceBindingController extends BaseController {
                 new LastOperationServiceInstanceBindingRequest(httpHeaders.toSingleValueMap(), instanceId, bindingId);
         request.setRequestParameters(parameters);
 
-        return null;
+        BindingService bindingService = getBindingService(instanceId, bindingId);
+        LastOperationServiceInstanceBindingResponse response = bindingService.lastOperation(bindingId, instanceId, request);
+        return ResponseEntity.ok(response);
     }
 
     @ExceptionHandler(ServiceInstanceBindingNotFoundException.class)

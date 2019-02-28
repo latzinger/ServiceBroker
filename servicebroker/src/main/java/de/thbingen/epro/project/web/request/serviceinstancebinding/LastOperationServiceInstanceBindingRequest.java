@@ -23,4 +23,17 @@ public class LastOperationServiceInstanceBindingRequest extends ServiceInstanceB
     public LastOperationServiceInstanceBindingRequest(@NonNull Map<String, String> httpHeaders, @NonNull String instanceId, @NonNull String bindingId) {
         super(httpHeaders, instanceId, bindingId);
     }
+
+    public Long getOperationId(){
+        Map<String, String> requestParameters = getRequestParameters();
+        String operation = requestParameters.get("operation");
+
+        Long id = -1L;
+
+        try{
+            id= Long.parseLong(operation);
+        } catch (NumberFormatException e){
+        }
+        return id;
+    }
 }

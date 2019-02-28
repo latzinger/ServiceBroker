@@ -9,6 +9,7 @@
 package de.thbingen.epro.project.servicebroker.services;
 
 import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
+import de.thbingen.epro.project.web.exception.OperationNotFoundException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.CreateServiceInstanceBindingRequest;
 import de.thbingen.epro.project.web.request.serviceinstancebinding.DeleteServiceInstanceBindingRequest;
@@ -25,6 +26,6 @@ public interface BindingService {
 
     DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(String bindingId, String instanceId, DeleteServiceInstanceBindingRequest request);
 
-    LastOperationServiceInstanceBindingResponse lastOperation(String bindingId, String instanceId, LastOperationServiceInstanceBindingRequest request);
+    LastOperationServiceInstanceBindingResponse lastOperation(String bindingId, String instanceId, LastOperationServiceInstanceBindingRequest request) throws OperationNotFoundException;
 
 }

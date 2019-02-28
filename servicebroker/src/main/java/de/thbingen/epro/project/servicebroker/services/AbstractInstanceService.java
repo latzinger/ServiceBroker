@@ -59,10 +59,10 @@ public abstract class AbstractInstanceService implements InstanceService {
         return serviceInstance;
     }
 
-    protected boolean serviceInstanceExists(String instanceId){
+    protected boolean serviceInstanceExists(String instanceId) {
         try {
             getServiceInstance(instanceId);
-        } catch (ServiceInstanceNotFoundException e){
+        } catch (ServiceInstanceNotFoundException e) {
             return false;
         }
 
@@ -70,7 +70,7 @@ public abstract class AbstractInstanceService implements InstanceService {
     }
 
     public ServiceInstance createServiceInstanceEntry(CreateServiceInstanceRequest request) throws ServiceInstanceAlreadyExistsException {
-        if(serviceInstanceExists(request.getInstanceId())) {
+        if (serviceInstanceExists(request.getInstanceId())) {
             log.debug("InstanceId already exists");
             throw new ServiceInstanceAlreadyExistsException();
         }
@@ -79,7 +79,8 @@ public abstract class AbstractInstanceService implements InstanceService {
         Map<String, Object> parameters = request.getParameters();
         Map<String, String> parameterStrings = new HashMap<>();
 
-        parameters.forEach((s, o) -> parameterStrings.put(s, o.toString()));
+        if (parameters != null)
+            parameters.forEach((s, o) -> parameterStrings.put(s, o != null ? o.toString() : null));
 
         serviceInstance.setParameters(parameterStrings);
 
@@ -87,34 +88,34 @@ public abstract class AbstractInstanceService implements InstanceService {
         return serviceInstance;
     }
 
-    public Operation createOperation(ServiceInstance serviceInstance){
+    public Operation createOperation(ServiceInstance serviceInstance) {
         Operation operation = new Operation(serviceInstance, Operation.OperationState.IN_PROGRESS, "Operation initialized");
         operationRepository.save(operation);
         return operation;
     }
 
-    public void checkAcceptIncomplete(ServiceInstanceRequest request){
+    public void checkAcceptIncomplete(ServiceInstanceRequest request) {
         Map<String, String> parameters = request.getRequestParameters();
         String accepts_incomplete = parameters.get("accepts_incomplete");
 
         log.debug("accepts_incomplete: " + accepts_incomplete);
 
-        if(!Boolean.parseBoolean(accepts_incomplete))
+        if (!Boolean.parseBoolean(accepts_incomplete))
             throw new RequiresAccpetsIncompleteException();
     }
 
-    public void checkSerivceIdAndPlanId(ServiceInstanceRequest request){
+    public void checkSerivceIdAndPlanId(ServiceInstanceRequest request) {
         ServiceInstance serviceInstance = getServiceInstance(request.getInstanceId());
 
         String serviceId = request.getRequestParameters().get("service_id");
         String planId = request.getRequestParameters().get("plan_id");
 
-        if(serviceId == null || planId == null || !serviceId.equals(serviceInstance.getServiceId()) || !planId.equals(serviceInstance.getPlanId())){
+        if (serviceId == null || planId == null || !serviceId.equals(serviceInstance.getServiceId()) || !planId.equals(serviceInstance.getPlanId())) {
             throw new InvalidRequestException("service_id or plan_id not provided or does not match instanceId");
         }
     }
 
-    public void checkPlanExists(OsbRequest request){
+    public void checkPlanExists(OsbRequest request) {
 
     }
 

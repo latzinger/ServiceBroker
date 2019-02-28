@@ -15,4 +15,7 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
 
     @Query("from Operation o where o.serviceInstance.id = :instanceId and o.id = :operationId")
     Operation getOperation(@Param("instanceId") String instanceId, @Param("operationId") Long operationId);
+
+    @Query("from Operation o where o.serviceInstance.id = :instanceId and o.id = :operationId and o.serviceInstanceBinding.id = :bindingId")
+    Operation getBindingOperation(@Param("instanceId") String instanceId, @Param("bindingId") String bindingId, @Param("operationId") Long operationId);
 }

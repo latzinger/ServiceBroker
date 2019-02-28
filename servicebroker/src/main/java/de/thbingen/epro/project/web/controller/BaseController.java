@@ -139,7 +139,7 @@ public abstract class BaseController {
     public OsbService getOsbService(String serviceId){
         OsbService service = serviceManager.getService(serviceId);
 
-        log.debug("Found service " + serviceId.getClass());
+        log.debug("Found service " + service.getClass());
         return service;
     }
 

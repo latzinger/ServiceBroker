@@ -41,7 +41,7 @@ public class HelmClientTest {
     public void setUp() throws Exception {
         helmClient.installTiller();
 
-        serviceInstance = new ServiceInstance("xxx-service-xxx", "xxx-plan-xxx");
+        serviceInstance = new ServiceInstance(instanceId, "xxx-service-xxx", "xxx-plan-xxx");
         serviceInstanceRepository.save(serviceInstance);
     }
 

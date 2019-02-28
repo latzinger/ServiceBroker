@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Entity
 @SequenceGenerator(name = "id_gen", sequenceName = "operation_seq", allocationSize = 10)
 public class Operation extends AbstractLongId{

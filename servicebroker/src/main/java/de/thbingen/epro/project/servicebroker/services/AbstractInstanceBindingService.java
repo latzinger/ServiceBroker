@@ -15,6 +15,7 @@ import de.thbingen.epro.project.data.model.ServiceInstanceBinding;
 import de.thbingen.epro.project.data.repository.OperationRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceBindingRepository;
 import de.thbingen.epro.project.data.repository.ServiceInstanceRepository;
+import de.thbingen.epro.project.web.exception.OperationNotFoundException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceBindingBadRequestException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceBindingNotFoundException;
 import de.thbingen.epro.project.web.exception.ServiceInstanceNotFoundException;
@@ -59,14 +60,21 @@ public abstract class AbstractInstanceBindingService implements BindingService {
     public abstract DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(String bindingId, String instanceId, DeleteServiceInstanceBindingRequest request);
 
     @Override
-    public abstract LastOperationServiceInstanceBindingResponse lastOperation(String bindingId, String instanceId, LastOperationServiceInstanceBindingRequest request);
+    public LastOperationServiceInstanceBindingResponse lastOperation(String bindingId, String instanceId, LastOperationServiceInstanceBindingRequest request) throws OperationNotFoundException {
+        Operation bindingOperation = operationRepository.getBindingOperation(instanceId, bindingId, request.getOperationId());
+
+        if(bindingOperation == null)
+            throw new OperationNotFoundException();
+
+        return new LastOperationServiceInstanceBindingResponse(bindingOperation.getState().toString(), bindingOperation.getMessage());
+    }
 
     protected boolean serviceInstanceBindingExist(String instanceId, String bindingId) {
         return (getServiceInstanceBinding(instanceId, bindingId) != null);
     }
 
-    public Operation createOperation(ServiceInstance serviceInstance){
-        Operation operation = new Operation(serviceInstance, Operation.OperationState.IN_PROGRESS, "Operation initialized");
+    public Operation createOperation(ServiceInstance serviceInstance, ServiceInstanceBinding serviceInstanceBinding){
+        Operation operation = new Operation(serviceInstance, serviceInstanceBinding, Operation.OperationState.IN_PROGRESS, "Operation initialized");
         operationRepository.save(operation);
         return operation;
     }

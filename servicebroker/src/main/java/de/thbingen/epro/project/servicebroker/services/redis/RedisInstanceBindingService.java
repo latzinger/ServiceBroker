@@ -53,8 +53,10 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
         if (!(serviceInstance.getPlanId().equals(request.getPlanId())))
             throw new ServiceInstanceBindingBadRequestException(bindingId, request);
 
+        ServiceInstanceBinding serviceInstanceBinding = new ServiceInstanceBinding(bindingId, serviceInstance);
+        serviceInstanceBindingRepository.save(serviceInstanceBinding);
 
-        Operation operation = createOperation(serviceInstance);
+        Operation operation = createOperation(serviceInstance, serviceInstanceBinding);
 
         helmClient.getCredentialsAsync(instanceId + "-redis", secrets -> {
             ServiceDetails masterDetails = helmClient.getServiceDetails(instanceId + "-redis-master");
@@ -80,7 +82,7 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
                 credentials.put("slave-port", slavePort);
             }
 
-            ServiceInstanceBinding serviceInstanceBinding = new ServiceInstanceBinding(bindingId, serviceInstance);
+
             serviceInstanceBinding.setCredentials(credentials);
             serviceInstanceBinding.setParameters(request.getParameters());
 
@@ -111,11 +113,6 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
                         .build();
 
         return response;
-    }
-
-    @Override
-    public LastOperationServiceInstanceBindingResponse lastOperation(String bindingId, String instanceId, LastOperationServiceInstanceBindingRequest request) {
-        return null;
     }
 
 }
