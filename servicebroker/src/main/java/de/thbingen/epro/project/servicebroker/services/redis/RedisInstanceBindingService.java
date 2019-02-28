@@ -37,10 +37,10 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
     private final HelmClient helmClient;
 
     /**
-     * @param bindingId  binding_id for the ServiceInstanceBinding
-     * @param instanceId instance_id of an existing ServiceInstance
-     * @param request    CreateServiceInstanceBindingRequest containing necessary information
-     * @return CreateServiceInstanceBindingResponse or throwing an Exception
+     * @param bindingId  binding_id for the {@link ServiceInstanceBinding}
+     * @param instanceId instance_id of an existing {@link ServiceInstance}
+     * @param request    {@link CreateServiceInstanceBindingRequest} containing necessary information
+     * @return {@link CreateServiceInstanceBindingResponse}  or throwing an Exception
      */
     @Override
     public CreateServiceInstanceBindingResponse createServiceInstanceBinding(String bindingId, String instanceId, CreateServiceInstanceBindingRequest request) {
@@ -56,6 +56,8 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
 
         ServiceInstanceBinding serviceInstanceBinding = new ServiceInstanceBinding(bindingId, serviceInstance);
         serviceInstanceBindingRepository.save(serviceInstanceBinding);
+
+        log.debug("ServiceInstanceBinding with binding_id: " + bindingId + " and instance_id: " + instanceId + " saved");
 
         Operation operation = createOperation(serviceInstance, serviceInstanceBinding);
 
@@ -89,6 +91,9 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
             serviceInstanceBinding.setCredentials(credentials);
             serviceInstanceBinding.setParameters(request.getParameters());
 
+            log.debug("set Credentials for binding_id: " + bindingId);
+            log.debug("set Parameters for binding_id: " + bindingId);
+
             serviceInstanceBindingRepository.save(serviceInstanceBinding);
         }, operation);
 
@@ -102,10 +107,10 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
     }
 
     /**
-     * @param bindingId  binding_id of an existing ServiceInstanceBinding
-     * @param instanceId instance_id of an existing ServiceInstance
-     * @param request    DeleteServiceInstanceBindingRequest containing necessary information
-     * @return DeleteServiceInstanceBindingResponse or throwing an Exception
+     * @param bindingId  binding_id of an existing {@link ServiceInstanceBinding}
+     * @param instanceId instance_id of an existing {@link ServiceInstance}
+     * @param request    {@link DeleteServiceInstanceBindingRequest} containing necessary information
+     * @return {@link DeleteServiceInstanceBindingResponse} or throwing an Exception
      */
     @Override
     public DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(String bindingId, String instanceId, DeleteServiceInstanceBindingRequest request) {
@@ -117,6 +122,8 @@ public class RedisInstanceBindingService extends AbstractInstanceBindingService 
             throw new InvalidRequestException();
 
         serviceInstanceBindingRepository.deleteById(bindingId);
+
+        log.debug("deleted ServiceInstanceBinding with binding_id: " + bindingId + " used by ServiceInstance with instance_id: " + instanceId);
 
         return new DeleteServiceInstanceBindingResponse();
     }

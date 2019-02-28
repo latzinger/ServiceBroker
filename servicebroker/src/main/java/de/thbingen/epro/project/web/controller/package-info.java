@@ -1,5 +1,5 @@
 /**
- * TODO add description
+ * REST-Controller
  *
  * @author larsatzinger
  * @author jonashueg

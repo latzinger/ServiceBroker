@@ -31,7 +31,7 @@ public class CatalogServiceImpl implements CatalogService {
     private Catalog catalog;
 
     /**
-     * @return Catalog containing List with all found ServiceDefinitions.
+     * @return Catalog containing List with all found {@link ServiceDefinition}
      */
     @Override
     public Catalog getCatalog() {
@@ -45,7 +45,7 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     /**
-     * @return List containing all ServiceDefinitions.
+     * @return List containing all {@link ServiceDefinition}
      */
     @Override
     public List<ServiceDefinition> getServiceDefinitions() {

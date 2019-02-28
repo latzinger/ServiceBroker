@@ -41,26 +41,51 @@ public class ServiceInstanceBindingController extends BaseController {
     @Autowired
     private ServiceInstanceRepository serviceInstanceRepository;
 
+    /**
+     * REST mapping for fetching an {@link ServiceInstanceBinding}
+     *
+     * @param httpHeaders
+     * @param instanceId
+     * @param bindingId
+     * @return
+     * @throws InvalidApiVersionException
+     * @throws ServiceInstanceBindingNotFoundException
+     * @throws ServiceNotFoundException
+     */
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> getServiceInstanceBinding(
             @RequestHeader HttpHeaders httpHeaders,
             @PathVariable String instanceId,
             @PathVariable String bindingId)
             throws InvalidApiVersionException, ServiceInstanceBindingNotFoundException, ServiceNotFoundException {
+
         instanceId = formatInstanceId(instanceId);
+
+        log.debug("GET: /v2/service_instances/" + instanceId + "/service_bindings/" + bindingId + " getServiceInstanceBinding()");
+
         checkApiVersion(httpHeaders);
         BindingService bindingService = getBindingService(instanceId, bindingId);
 
         ServiceInstanceBinding serviceInstanceBinding =
                 bindingService.getServiceInstanceBinding(instanceId, bindingId);
 
-        /*
-         * check if binding in progress (lastOperation) and throw 404 Not Found
-         */
 
         return new ResponseEntity<>(serviceInstanceBinding, HttpStatus.OK);
     }
 
+    /**
+     * REST mapping for deleting an {@link ServiceInstanceBinding}
+     *
+     * @param httpHeaders
+     * @param instanceId
+     * @param bindingId
+     * @param parameters
+     * @return
+     * @throws InvalidApiVersionException
+     * @throws ServiceInstanceBindingNotFoundException
+     * @throws ServiceInstanceNotFoundException
+     * @throws ServiceNotFoundException
+     */
     @DeleteMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> deleteServiceInstanceBinding(
             @RequestHeader HttpHeaders httpHeaders,
@@ -68,7 +93,11 @@ public class ServiceInstanceBindingController extends BaseController {
             @PathVariable String bindingId,
             @RequestParam Map<String, String> parameters)
             throws InvalidApiVersionException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException {
+
         instanceId = formatInstanceId(instanceId);
+
+        log.debug("DELETE: /v2/service_instances/" + instanceId + "/service_bindings/" + bindingId + " deleteServiceInstanceBinding()");
+
         checkApiVersion(httpHeaders);
 
         String accepts_incomplete = parameters.get("accepts_incomplete");
@@ -96,6 +125,21 @@ public class ServiceInstanceBindingController extends BaseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * REST mapping for creating an {@link ServiceInstanceBinding}
+     *
+     * @param httpHeaders
+     * @param instanceId
+     * @param bindingId
+     * @param parameters
+     * @param request
+     * @return
+     * @throws InvalidApiVersionException
+     * @throws InvalidRequestException
+     * @throws ServiceInstanceBindingNotFoundException
+     * @throws ServiceInstanceNotFoundException
+     * @throws ServiceNotFoundException
+     */
     @PutMapping(path = "/{instanceId}/service_bindings/{bindingId}")
     public ResponseEntity<?> createServiceInstanceBinding(
             @RequestHeader HttpHeaders httpHeaders,
@@ -104,7 +148,11 @@ public class ServiceInstanceBindingController extends BaseController {
             @RequestParam Map<String, String> parameters,
             @Valid @RequestBody CreateServiceInstanceBindingRequest request)
             throws InvalidApiVersionException, InvalidRequestException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException {
+
         instanceId = formatInstanceId(instanceId);
+
+        log.debug("PUT: /v2/service_instances/" + instanceId + "/service_bindings/" + bindingId + " createServiceInstanceBinding()");
+
         checkApiVersion(httpHeaders);
 
         if (request.getServiceId() == null || request.getPlanId() == null)
@@ -131,6 +179,20 @@ public class ServiceInstanceBindingController extends BaseController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    /**
+     * REST mapping for retrieving last {@link de.thbingen.epro.project.data.model.Operation}
+     *
+     * @param httpHeaders
+     * @param instanceId
+     * @param bindingId
+     * @param parameters
+     * @return
+     * @throws InvalidApiVersionException
+     * @throws ServiceInstanceBindingNotFoundException
+     * @throws ServiceInstanceNotFoundException
+     * @throws ServiceNotFoundException
+     * @throws OperationNotFoundException
+     */
     @GetMapping(path = "/{instanceId}/service_bindings/{bindingId}/last_operation")
     public ResponseEntity<?> lastOperation(
             @RequestHeader HttpHeaders httpHeaders,
@@ -138,7 +200,11 @@ public class ServiceInstanceBindingController extends BaseController {
             @PathVariable String bindingId,
             @RequestParam Map<String, String> parameters)
             throws InvalidApiVersionException, ServiceInstanceBindingNotFoundException, ServiceInstanceNotFoundException, ServiceNotFoundException, OperationNotFoundException {
+
         instanceId = formatInstanceId(instanceId);
+
+        log.debug("GET: /v2/service_instances/" + instanceId + "/service_bindings/" + bindingId + " lastOperation()");
+
         checkApiVersion(httpHeaders);
 
         LastOperationServiceInstanceBindingRequest request =
@@ -159,9 +225,9 @@ public class ServiceInstanceBindingController extends BaseController {
     /**
      * Returning BindingService of a concrete Service Broker Service
      *
-     * @param instanceId instance_id of an existing ServiceInstance
-     * @param bindingId  binding_id of an existing ServiceInstanceBinding
-     * @return BindingService of concrete Service.
+     * @param instanceId instance_id of an existing {@link ServiceInstance}
+     * @param bindingId  binding_id of an existing {@link ServiceInstanceBinding}
+     * @return {@link BindingService} of concrete Service.
      */
     private BindingService getBindingService(String instanceId, String bindingId) {
         ServiceInstance serviceInstance = getServiceInstance(instanceId, bindingId);
@@ -170,9 +236,9 @@ public class ServiceInstanceBindingController extends BaseController {
     }
 
     /**
-     * @param instanceId instance_id of an existing ServiceInstance
+     * @param instanceId instance_id of an existing {@link ServiceInstance}
      * @param bindingId  binding_if which should be used
-     * @return ServiceInstance to given instanceId
+     * @return {@link ServiceInstance} to given instanceId
      */
     private ServiceInstance getServiceInstance(String instanceId, String bindingId) {
         ServiceInstance serviceInstance = serviceInstanceRepository.getServiceInstanceById(instanceId);

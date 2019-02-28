@@ -1,5 +1,5 @@
 /**
- * TODO add description
+ * Repositories used by Database
  *
  * @author larsatzinger
  * @author jonashueg

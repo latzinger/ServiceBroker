@@ -1,0 +1,25 @@
+##Define the service broker connection here
+config:
+  url: http://localhost
+  port : 8080
+  apiVersion: 2.14
+  user: epro
+  password: epro
+##The following configuration are Optional
+  usingAppGuid: true
+
+  parameters:
+    provisionParameters:
+        d6a5721a-e022-4bba-8356-6d50692aef27:
+          parameter1 : 1
+          parameter2 : foo
+        1bf2507c-7523-4383-bb9d-f79dee50941a:
+          parameter1 : 2
+          parameter2 : bar
+        
+  services:
+    - id: 4a30cd4f-914b-4082-8818-e9e9691fa1ce
+      bindable: true
+      plans:
+        - id: d6a5721a-e022-4bba-8356-6d50692aef27
+        - id: 1bf2507c-7523-4383-bb9d-f79dee50941a

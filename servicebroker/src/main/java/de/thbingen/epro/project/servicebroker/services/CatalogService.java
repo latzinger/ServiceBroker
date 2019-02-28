@@ -18,8 +18,14 @@ import java.util.List;
 
 public interface CatalogService {
 
+    /**
+     * @return Catalog containing List with all found {@link ServiceDefinition}
+     */
     Catalog getCatalog();
 
+    /**
+     * @return List containing all {@link ServiceDefinition}
+     */
     List<ServiceDefinition> getServiceDefinitions();
 
 }

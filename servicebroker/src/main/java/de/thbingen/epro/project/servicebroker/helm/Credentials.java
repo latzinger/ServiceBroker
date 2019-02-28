@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Storing Kubernetes Secret for specified Service.
+ * Storing Kubernetes Secret for specified {@link de.thbingen.epro.project.servicebroker.services.OsbService}.
  *
  * @author larsatzinger
  * @version 1.0
