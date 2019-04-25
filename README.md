@@ -1,6 +1,7 @@
-# EPRO WS18/19: Service Broker
+# Service Broker
 
-The task for the project is to build a service broker which, according to the Open Service Broker API,  
+The implementation was part of the lecture Enterprise Programming.
+The task was to build a service broker which, according to the Open Service Broker API,  
 triggers the deployment of backend services (PostgreSQL, Redis and Co.) via Helm on a Kubernetes cluster.
 
 ## Supported Services
@@ -10,10 +11,19 @@ triggers the deployment of backend services (PostgreSQL, Redis and Co.) via Helm
 ## Service Catalog Options
 
 | Option     | Description    |
-| --------|---------|-------|
+| ------------- | ------------- |
 | Small  | single small container with low resources |
 | Standard | single container with many resources |
 | Cluster | clusters of containers |
+
+## Installation/Usage
+
+Configure Database: [application-default.yml](https://github.com/latzinger/ServiceBroker/blob/master/servicebroker/src/main/resources/application-default.yml)
+
+Build Project:
+```
+mvn clean install
+```
 
 ## Authentication Methods
 1. permit all
@@ -31,7 +41,6 @@ osb-security.password = epro
 
 when both permit-all and use-db equals false, inMemory Authentication will be used!
 
-
 ## Built With
 
 * [Spring](https://spring.io) - Spring Framework
@@ -42,13 +51,13 @@ when both permit-all and use-db equals false, inMemory Authentication will be us
 
 ## Testing
 
-* [OSB-Checker](https://github.com/evoila/osb-checker-kotlin) - Testing Framework
+* [OSB-Checker](https://github.com/evoila/osb-checker-kotlin) - Testing Framework by evoila GmbH
 
-use *[OSB-Checker application.yml](https://bitbucket.org/jhueg/epro-projekt/src/develop/testing/osb-checker/application.yml)* for testing.
+use *[OSB-Checker application.yml](https://bitbucket.org/jhueg/epro-projekt/src/develop/testing/osb-checker/application.yml)* for minimal testing.
 
 * [Postman](https://www.getpostman.com) - API Development Environment
 
-use *[Postman-Collection](https://bitbucket.org/jhueg/epro-projekt/src/develop/testing/postman/ServiceBroker.postman_collection.json)* for testing.
+use our *[Postman-Collection](https://bitbucket.org/jhueg/epro-projekt/src/develop/testing/postman/ServiceBroker.postman_collection.json)* for testing.
 
 
 ## Useful Links
@@ -59,5 +68,5 @@ use *[Postman-Collection](https://bitbucket.org/jhueg/epro-projekt/src/develop/t
 
 ## Authors
 
-* **Jonas Hueg** - *Main work* - [jhueg](https://bitbucket.org/jhueg/)
-* **Lars Atzinger** - *Main work* - [larsatzinger](https://bitbucket.org/larsatzinger/)
+* **Jonas Hueg** - *Main work* - [jhueg](https://github.com/jhueg)
+* **Lars Atzinger** - *Main work* - [larsatzinger](https://github.com/latzinger)
